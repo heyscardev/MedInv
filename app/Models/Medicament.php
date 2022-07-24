@@ -11,9 +11,9 @@ class Medicament extends Model
     protected $fillable = [
         'code',
         'name',
-        'unit_id',
         'price_sale',
-        'quantity_exist'
+        'quantity_exist',
+        'unit_id'
     ];
     public function unit(){
         return $this->belongsTo(Unit::class);

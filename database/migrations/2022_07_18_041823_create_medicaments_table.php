@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('code',25);
             $table->string('name',100);
             $table->unsignedBigInteger('unit_id');
-            $table->decimal('priceSale',11,2);
+            $table->decimal('price_sale',11,2);
             $table->integer('quantity_exist')->default(0);
             $table->timestamps();
             $table->foreign('unit_id')->references('id')->on('units');

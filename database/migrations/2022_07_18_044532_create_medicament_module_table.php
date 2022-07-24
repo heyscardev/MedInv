@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('module_id');
             $table->integer('quantity_exist')->default(0);
             $table->timestamps();
+            $table->foreign('medicament_id')->references('id')->on('medicaments');
+            $table->foreign('module_id')->references('id')->on('modules');
         });
     }
 

@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "dev": "vite",
+        "dev": "php artisan serve & vite",
         "build": "vite build"
     },
     "devDependencies": {

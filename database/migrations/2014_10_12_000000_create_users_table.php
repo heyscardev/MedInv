@@ -18,11 +18,14 @@ return new class extends Migration
             $table->string('c_i',10)->unique();
             $table->string('first_name',80);
             $table->string('last_name',80);
+            $table->date('birth_date');
+            $table->enum('gender',["MALE","FEMALE"]);
             $table->string('email')->unique();
-            $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('phone',25)->nullable();
+            $table->string('direction',250)->nullable();
             $table->timestamps();
         });
     }

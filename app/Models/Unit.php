@@ -10,7 +10,7 @@ class Unit extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
     public function medicaments(){
         return $this->hasMany(Medicaments::class);
