@@ -10,8 +10,8 @@ class Doctor extends Model
     use HasFactory;
     
     protected $printable = [
-        'n_history',
-        'identification',
+        'code',
+        'c_i',
         'first_name',
         'last_name',
         'birth_date',
@@ -23,6 +23,6 @@ class Doctor extends Model
 
     public function recipes()
     {
-        return $this->belongsToMany(Recipe::class);
+        return $this->hasMany(Recipe::class);
     }
 }

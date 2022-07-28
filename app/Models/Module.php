@@ -10,12 +10,13 @@ class Module extends Model
     use HasFactory;
     protected $fillable = [
         'code',
-        'name'
+        'name',
+        'user_id'
     ];
     public function medicaments(){
         return$this->belongsToMany(Medicament::class)->as('modules')->withPivot('quantity_exist')->withTimestamps()->wherePivot('quantity_exist','>',0);
     }
     public function manager(){
-        return $this->hasMany(Medicaments::class);
+        return $this->belongsTo(Medicaments::class);
     }
 }

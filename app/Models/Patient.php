@@ -10,8 +10,8 @@ class Patient extends Model
     use HasFactory;
 
     protected $printable = [
-        'code',
-        'identification',
+        'n_history',
+        'c_i',
         'first_name',
         'last_name',
         'birth_date',
