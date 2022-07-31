@@ -14,7 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('recipe_medicament_unit', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('recipe_id');
+            $table->unsignedBigInteger('medicament_id');
+            $table->unsignedBigInteger('unit_id');
+            $table->integer('prescribed_amount');
+            $table->integer('quantity_deliver');
+            $table->decimal('price',11,2);
+            $table->string('description',250)->nullable();
             $table->timestamps();
         });
     }

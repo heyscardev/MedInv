@@ -22,7 +22,7 @@ class DoctorFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'birth_date' => fake()->date(),
-            'gender' => fake()->randomElement(['FEMALE','MALE']),
+            'gender' => fake()->randomElement(['Female','Male']),
             'email' => fake()->safeEmail(),
             'phone'=> fake()->phoneNumber(),
             'direction'=> fake()->randomElement([fake()->address(),null])

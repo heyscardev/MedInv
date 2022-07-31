@@ -1,49 +1,98 @@
-import React, { useEffect } from 'react';
-import Button from '@/Components/Button';
-import Guest from '@/Layouts/Guest';
-import Input from '@/Components/Input';
-import Label from '@/Components/Label';
-import ValidationErrors from '@/Components/ValidationErrors';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import React, { useEffect } from "react";
+import ValidationErrors from "@/Components/ValidationErrors";
+import { Head, Link, useForm } from "@inertiajs/inertia-react";
+import { Field, Form } from "react-final-form";
+import Input from "@/Components/Inputs/InputText";
+import DatePicker from "@/Components/Inputs/DatePicker";
+import {validDate,composeValidators,required,dateGreaterOrEqual, dateLessOrEqual} from '@/Config/InputErrors'
+import { addYears } from "date-fns";
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-    });
+  const { data, setData, post, processing, errors, reset } = useForm({
+    c_i: "",
+    first_name: "hola",
+    last_name: "",
+    birth_date: "",
+    gender: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    phone: "",
+    direction: "",
+  });
 
-    useEffect(() => {
-        return () => {
-            reset('password', 'password_confirmation');
-        };
-    }, []);
-
-    const onHandleChange = (event) => {
-        setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
+  useEffect(() => {
+    return () => {
+      reset("password", "password_confirmation");
     };
+  }, []);
 
-    const submit = (e) => {
-        e.preventDefault();
+  const onHandleChange = (event) => {
+    setData(event.target.name, event.target.type === "checkbox" ? event.target.checked : event.target.value);
+  };
 
-        post(route('register'));
-    };
+  const submit = (e) => {
+    e.preventDefault();
 
-    return (
-        <Guest>
-            <Head title="Register" />
+    post(route("register"));
+  };
 
-            <ValidationErrors errors={errors} />
+  return (
+    <>
+      <Head title="RegistroUsuario" />
 
-            <form onSubmit={submit}>
+      <ValidationErrors errors={errors} />
+      <Form
+        initialValues={{birth_date: Date.now()}}
+        
+        onSubmit={()=>{console.log("submit")}}
+        render={({ handleSubmit, values }) => (
+          <form onSubmit={handleSubmit}>
+            {console.log(values)}
+       <Input 
+            name="last_name"
+            placeHolder="Apellido"
+            label="fecha de nacimiento"
+            validate={composeValidators(required)}
+            /> 
+            <DatePicker 
+            name="birth_date"
+            label="fecha de nacimiento"
+            maxDate={Date.now()}
+            minDate={addYears(Date.now(),-150)}
+            validate={composeValidators(required,validDate, dateGreaterOrEqual(addYears(Date.now(),-150)),dateLessOrEqual(Date.now()))}
+            />
+            <button type="submit" >submit</button>
+          </form>
+        )}
+      />
+      {/* <form onSubmit={submit}>
+            <Field 
+            name='input.hola'
+            render={({input})=>(
                 <div>
-                    <Label forInput="name" value="Name" />
+                <Label forInput="first_name" value="Nombre" />
+
+                <Input
+                    type="text"
+                    name="first_name"
+                    value={data.first_name}
+                    className="mt-1 block w-full"
+                    autoComplete="name"
+                    isFocused={true}
+                    handleChange={onHandleChange}
+                    required
+                />
+            </div>
+            )}
+            />   
+                <div>
+                    <Label forInput="last_name" value="Apellido" />
 
                     <Input
                         type="text"
-                        name="name"
-                        value={data.name}
+                        name="last_name"
+                        value={data.last_name}
                         className="mt-1 block w-full"
                         autoComplete="name"
                         isFocused={true}
@@ -102,7 +151,7 @@ export default function Register() {
                         Register
                     </Button>
                 </div>
-            </form>
-        </Guest>
-    );
+            </form> */}
+    </>
+  );
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('c_i',10)->unique();
             $table->string('first_name',80);
             $table->string('last_name',80);
-            $table->enum('gender',['MALE','FEMALE']);
+            $table->enum('gender',['Male','Female']);
             $table->date('birth_date');
             $table->boolean('child')->default(false);
             $table->string('email')->nullable();
