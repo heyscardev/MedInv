@@ -4,8 +4,9 @@ import { Head, Link, useForm } from "@inertiajs/inertia-react";
 import { Field, Form } from "react-final-form";
 import Input from "@/Components/Inputs/InputText";
 import DatePicker from "@/Components/Inputs/DatePicker";
-import {validDate,composeValidators,required,dateGreaterOrEqual, dateLessOrEqual} from '@/Config/InputErrors'
+import { validDate, composeValidators, required, dateGreaterOrEqual, dateLessOrEqual, email } from "@/Config/InputErrors";
 import { addYears } from "date-fns";
+import CheckBox from "@/Components/Inputs/CheckBox";
 
 export default function Register() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -43,29 +44,37 @@ export default function Register() {
 
       <ValidationErrors errors={errors} />
       <Form
-        initialValues={{birth_date: Date.now()}}
-        
-        onSubmit={()=>{console.log("submit")}}
+        initialValues={{ birth_date: Date.now() }}
+        onSubmit={() => {
+          console.log("submit");
+        }}
         render={({ handleSubmit, values }) => (
           <form onSubmit={handleSubmit}>
             {console.log(values)}
-       <Input 
-            name="last_name"
-            placeHolder="Apellido"
-            label="fecha de nacimiento"
-            validate={composeValidators(required)}
-            /> 
-            <DatePicker 
-            name="birth_date"
-            label="fecha de nacimiento"
-            maxDate={Date.now()}
-            minDate={addYears(Date.now(),-150)}
-            validate={composeValidators(required,validDate, dateGreaterOrEqual(addYears(Date.now(),-150)),dateLessOrEqual(Date.now()))}
+            <Input name="c_i" label="cedula" validate={composeValidators(required)} onlyNumbers maxLength={8} />
+            <Input name="first_name" label="Nombre" validate={composeValidators(required)} maxLength={80}/>
+            <Input name="last_name" label="Apellido" validate={composeValidators(required)} maxLength={80}/>
+            <Input name="email" label="Correo" validate={composeValidators(required,email)} />
+            <DatePicker
+              name="birth_date"
+              label="fecha de nacimiento"
+              maxDate={Date.now()}
+              minDate={addYears(Date.now(), -150)}
+              validate={composeValidators(
+                required,
+                validDate,
+                dateGreaterOrEqual(addYears(Date.now(), -150)),
+                dateLessOrEqual(Date.now())
+              )}
             />
-            <button type="submit" >submit</button>
+            <CheckBox name="gender" label="Hombre" value="Male" />
+            <CheckBox name="gender" label="Mujer" value="Female" />
+
+            <button type="submit">submit</button>
           </form>
         )}
       />
+
       {/* <form onSubmit={submit}>
             <Field 
             name='input.hola'
