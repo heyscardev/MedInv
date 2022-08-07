@@ -1,3 +1,4 @@
+import _ from 'lodash'
 //aproved
 import { format, isValid } from "date-fns";
 const email = (val) =>
@@ -45,6 +46,10 @@ const dateLessOrEqual = (max) => (value) => {
   }
   return null;
 };
+const passwordEqual = (fieldToValue) => (fieldFromValue, values) =>
+  !_.get(values, fieldToValue) || !fieldFromValue || fieldFromValue !== _.get(values, fieldToValue)
+    ?  "Contraseñas no coinciden"
+    :null;
 
 //it is not  verify
 const greaterThan = (fieldToValue) => (fieldFromValue, values) =>
@@ -111,6 +116,7 @@ export {
   dateLessOrEqual,
   email,
   equalTo,
+  passwordEqual,
   minLength,
   greaterThan,
   greaterThanValue,

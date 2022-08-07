@@ -4,9 +4,11 @@ const MedinvTheme = createTheme({
   palette: {
     primary: {
       main: "#18a1d4",
+      light:"#c7ebf6"
     },
     secondary: {
       main: "#eaeaea",
+      dark:"#808080"
     },
     error: {
       main: "#ff5f76",

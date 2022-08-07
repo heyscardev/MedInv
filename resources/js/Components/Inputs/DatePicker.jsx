@@ -11,7 +11,6 @@ const CustomDatePicker = ({ name, onChange, label, validate, inputFormat, maxDat
       {({ input, meta }) => (
         <FormControl sx={{ margin: 2 }}>
           <LocalizationProvider adapterLocale={es} dateAdapter={AdapterDateFns}>
-            {console.log(meta)}
             <DesktopDatePicker
               {...input}
               label={label}
