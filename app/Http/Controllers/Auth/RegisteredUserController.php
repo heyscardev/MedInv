@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
         $yesterday = date('Y-m-d', strtotime('1 days'));
         $nowMinus150years = date('Y-m-d', strtotime('-150 years'));
         $request->validate([
-            'c_i' =>['required', 'integer', 'digits:8','unique:users'],
+            'c_i' =>['required', 'numeric', 'digits_between:0,8','unique:users'],
             'first_name' => ['required', 'alpha', 'max:80'],
             'last_name' => ['required', 'alpha', 'max:80'],
             'birth_date' => ['required', 'date_format:Y-m-d','after:'.$nowMinus150years,'before:'.$yesterday],

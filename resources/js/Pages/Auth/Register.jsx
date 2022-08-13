@@ -3,9 +3,9 @@ import {parallel} from 'async'
 import _ from 'lodash'
 import { Head } from "@inertiajs/inertia-react";
 import { Form } from "react-final-form";
-import Input from "@/Components/Inputs/InputText";
-import PasswordField from "@/Components/Inputs/PasswordField";
-import DatePicker from "@/Components/Inputs/DatePicker";
+import Input from "@/Components/Common/Inputs/InputText";
+import PasswordField from "@/Components/Common/Inputs/PasswordField";
+import DatePicker from "@/Components/Common/Inputs/DatePicker";
 import {
   validDate,
   composeValidators,
@@ -17,7 +17,7 @@ import {
   passwordEqual,
 } from "@/Config/InputErrors";
 import { addYears, format } from "date-fns";
-import CheckBox from "@/Components/Inputs/CheckBox";
+import CheckBox from "@/Components/Common/Inputs/CheckBox";
 import { Inertia } from "@inertiajs/inertia";
 
 export default function Register() {

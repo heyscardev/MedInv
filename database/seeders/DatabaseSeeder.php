@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
         \App\Models\User::factory(20)->create();
         \App\Models\Doctor::factory(20)->create();
         \App\Models\Patient::factory(20)->create([
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            UserSeeder::class,
             UnitSeeder::class,
             MedicamentSeeder::class
         ]);

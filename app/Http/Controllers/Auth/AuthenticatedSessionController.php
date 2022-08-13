@@ -13,9 +13,9 @@ use Inertia\Inertia;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     *Mostrar la vista de inicio de sesión.
      *
-     * @return \Inertia\Response
+     *@return \Inercia\Respuesta
      */
     public function create()
     {
@@ -26,10 +26,10 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     *Manejar una solicitud de autenticación entrante.
      *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     *@param \App\Http\Requests\Auth\LoginRequest $solicitud
+     *@return\Illuminate\Http\RedirectResponse
      */
     public function store(LoginRequest $request)
     {
@@ -41,10 +41,10 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Destroy an authenticated session.
+     *Destruir una sesión autenticada.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     *@param \Illuminate\Http\Request $solicitud
+     *@return\Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request)
     {

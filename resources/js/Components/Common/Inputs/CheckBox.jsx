@@ -16,13 +16,15 @@ import { Field } from "react-final-form";
 export default ({
   name,
   value,
-  fullWidth = true,
+  fullWidth = false,
   label,
   onChange,
+  validate,
+  type = "checkbox",
 }) => (
-  <Field name={name} type="radio" value={value}>
+  <Field name={name} type={type} value={value} validate={validate}>
     {({ meta, input }) => (
-      <FormControl error={meta.submitFailed && !!meta.error} fullWidth={fullWidth}>
+      <FormControl error={meta.submitFailed && !!meta.error} fullWidth={fullWidth} >
         <FormControlLabel
           label={label}
           control={

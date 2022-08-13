@@ -14,7 +14,7 @@ const InputText = ({
   name,
   onChange,
   autoComplete = "on",
-  spellCheck=true,
+  spellCheck = true,
   label,
   validate,
   containerProps,
@@ -22,11 +22,14 @@ const InputText = ({
   onlyNumbers,
   inputProps,
   type,
+  fullWidth = false,
+  margin=10
 }) => {
   return (
     <Field name={name} validate={validate} type={type}>
       {({ input, meta }) => (
-        <FormControl sx={{ margin: 2 }}>
+        <div style={{margin}}>
+        <FormControl fullWidth={fullWidth}>
           <TextField
             {...input}
             inputProps={{ spellCheck, autoComplete, ...inputProps, maxLength }}
@@ -37,6 +40,7 @@ const InputText = ({
             helperText={meta.error && meta.submitFailed ? meta.error : ""}
           />
         </FormControl>
+        </div>
       )}
     </Field>
   );

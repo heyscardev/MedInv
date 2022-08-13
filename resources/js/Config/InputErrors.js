@@ -2,7 +2,7 @@ import _ from 'lodash'
 //aproved
 import { format, isValid } from "date-fns";
 const email = (val) =>
-  val ? (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val) ? null : "fieldError.email") : null;
+  val ? (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val) ? null : "este campo debe ser un email valido") : null;
 const equalTo = (fieldToValue) => (fieldFromValue, values) =>
   fieldFromValue === values[fieldToValue] ? null : "fieldError.equalTo";
 const validUrl = (val) => {
@@ -91,18 +91,18 @@ const minLength = (val, length) => (val && val.length >= length ? null : `${leng
 
 const required = (val) => {
   if (_.isBoolean(val)) {
-    return val ? null : "fieldError.required";
+    return val ? null : "Este Campo es Requerido";
   }
   if (_.isNumber(val)) {
-    return val || val === 0 ? null : "fieldError.required";
+    return val || val === 0 ? null : "Este Campo es Requerido";
   }
-  return val && val.toString().length ? null : "fieldError.required";
+  return val && val.toString().length ? null : "Este Campo es Requerido";
 };
 
 const passwordZulipValidation = (val) =>
   val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{10,14}$/) ? null : "fieldError.strongZulipPassword";
 
-const passwordWeakValidation = (val) => (val.match(/^[.!@#$%^&*0-9a-zA-Z]{7,14}$/) ? null : "fieldError.weakPassword");
+const passwordWeakValidation = (val) => (val.match(/^[.!@#$%^&*0-9a-zA-Z]{7,14}$/) ? null : "La contraseña debe tener de 7 a 14 caracteres");
 
 const validZip = (val) => (val && /^\d{4,5}(?:-\d{4})?$/.test(val) ? null : "This is not a valid zip");
 

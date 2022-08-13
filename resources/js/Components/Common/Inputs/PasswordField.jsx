@@ -26,7 +26,9 @@ const PasswordField = ({
   inputProps,
   showPassword = false,
   spellCheck=true,
-  autoComplete = "on"
+  autoComplete = "on",
+  fullWidth=false,
+  margin=10
 }) => {
   const [show, setShow] = useState(showPassword);
 
@@ -37,7 +39,8 @@ const PasswordField = ({
   return (
     <Field name={name} validate={validate} type={show ? "text" : "password"}>
       {({ input, meta }) => (
-        <FormControl sx={{ margin: 2 }}>
+        <div style={{margin}}>
+        <FormControl  fullWidth={fullWidth}>
         <InputLabel error={meta.error && meta.submitFailed ? true : false} htmlFor="outlined-adornment-password">{label}</InputLabel>
           <OutlinedInput
             {...input}
@@ -48,6 +51,7 @@ const PasswordField = ({
             error={meta.error && meta.submitFailed ? true : false}
             autoComplete = {autoComplete} 
             spellCheck ={spellCheck}
+            fullWidth
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -63,6 +67,7 @@ const PasswordField = ({
           />
           {meta.submitFailed && meta.error && <FormHelperText error>{meta.error}</FormHelperText>}
         </FormControl>
+        </div>
       )}
     </Field>
   );

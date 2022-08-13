@@ -1,51 +1,26 @@
-import React, { useState } from "react";
-import { Link, Head } from "@inertiajs/inertia-react";
-import { Box, Container, Grid, IconButton, Typography, useTheme, Zoom } from "@mui/material";
-import PrincipalImage from "@/assets/images/welcome-principal.jpg";
-import SkewOrnament from "@/Components/Ornaments/SkewOrnament";
-import { KeyboardArrowDown } from "@mui/icons-material";
-import Button from "@/Components/Button";
-const principalStyle = {
-  background: `url(${PrincipalImage})`,
-  height: "100vh",
-};
+import WelcomeViewFirst from "@/Components/Layouts/Welcome/WelcomeViewFirst";
+import { Head } from "@inertiajs/inertia-react";
+import { Grid, useTheme } from "@mui/material";
+import React from "react";
 
-export default function PrimarySearchAppBar() {
+const styleContainers={
+  position: "relative",
+  height:"100%"
+}
+
+
+export default function Welcome(props) {
   const {palette} = useTheme();
   return (
-    <Grid
-      container
-      sx={{
-        background: `linear-gradient(rgba(0,0,0,.25) 0%, rgba(0,0,0,.70) 100%),url(${PrincipalImage})`,
-        backgroundSize: "cover",
-        backgroundAttachment: "fixed",
-      }}
-      justifyContent="center"
-    >
-      <div style={{ position: "absolute", height: "100%", display: "flex", left: 0 }}>
-        <SkewOrnament color="rgba(199,235,246,.78)" />
-        <SkewOrnament />
-      </div>
-
-      <Grid xs={10} sm={8} md={6} container direction="column" item  zIndex={1} spacing={2} alignItems="center" justifyContent="flex-end" textAlign="center" marginBottom={12}>
-        <Grid >
-          <Typography gutterBottom={false} variant="h1" fontSize={170} color="primary" fontWeight="bolder" flexWrap="wrap" display="flex" >
-          <span style={{color:palette.primary.main}}>Med</span><span style={{color:palette.primary.light}}>Inv</span>
-          </Typography>
-        </Grid>
-        <Grid>
-          <Typography variant="h3"  gutterBottom color="secondary.dark" fontWeight="bolder" children="Medicament Inventory" />
-        </Grid>
-        <Grid>
-          <Typography variant="subtitle1"  fontWeight="normal" color="primary.light" children="Llevamos la organización de los Medicamentos
- a otro nivel" paragraph />
-        </Grid>
-        <Grid>
-          <IconButton size="large" sx={{ border: `3px solid`, borderColor: "primary.light" }}>
-            <KeyboardArrowDown color="primary" fontSize="large" />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </Grid>
+    <div style={{
+      position:"absolute",
+      width:"100%",
+      top: 0,
+      bottom: 0,
+      height: "100%"
+    }} >
+      <Head title="Bienvenido"/>
+   <WelcomeViewFirst styleContainer={styleContainers} auth={props.auth} />
+    </div>
   );
 }
