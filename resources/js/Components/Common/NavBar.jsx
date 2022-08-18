@@ -1,23 +1,16 @@
 import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import LogoTypography from "../LogoTypography";
-import { logout } from "@/Services/UserService";
-import { visit } from "@/HTTPProvider";
 import BtnUserSession from "../Auth/BtnUserSession";
 
 export default ({ auth }) => {
@@ -62,31 +55,36 @@ export default ({ auth }) => {
         </IconButton>
         <p>Notificaciones</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
       <BtnUserSession
               auth={auth}
+              transformOrigin={{
+                horizontal:"right",
+                vertical:"top"
+              } }
+              anchorOrigin={{
+                horizontal:"left",
+                vertical:"top"
+              }}
               BtnOpenMenu={({ onclickMenu }) => (
+                <MenuItem onClick={onclickMenu}>
                 <IconButton
                 size="large"
                 aria-label="account of current user"
                 aria-controls="primary-search-account-menu"
-                aria-haspopup="true"
-                color="inherit"
-                  onClick={onclickMenu}
                 >
-                  <AccountCircle color="info" />
+                  <AccountCircle color="primary" />
                 </IconButton>
+                <p>Perfil</p>
+                </MenuItem >
               )}
             />
-        <p>Profile</p>
-      </MenuItem>
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "primary.dark" }}>
-        <Toolbar variant="dense">
+        <Toolbar variant="regular">
           <IconButton size="large" edge="start" aria-label="open drawer" sx={{ mr: 2 }} color="info">
             <MenuIcon />
           </IconButton>

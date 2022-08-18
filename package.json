@@ -30,6 +30,7 @@
         "async": "^3.2.4",
         "date-fns": "^2.29.1",
         "final-form": "^4.20.7",
+        "material-react-table": "^0.36.0",
         "moment": "^2.29.4",
         "react-final-form": "^6.5.9",
         "react-hot-toast": "^2.3.0"
