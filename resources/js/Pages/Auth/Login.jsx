@@ -40,7 +40,6 @@ export default function Login({ status, canResetPassword }) {
             <ValidationErrors errors={errors} />
 
             <form onSubmit={submit}>
-                {console.log(data)}
                 <div>
                     <Label forInput="email" value="Email" />
 

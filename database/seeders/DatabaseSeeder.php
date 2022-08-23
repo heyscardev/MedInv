@@ -15,17 +15,19 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        \App\Models\User::factory(20)->create();
-        \App\Models\Doctor::factory(20)->create();
-        \App\Models\Patient::factory(20)->create([
-            'gender'=>'MALE'
-        ]);
+
 
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
             UnitSeeder::class,
             MedicamentSeeder::class
+        ]);
+
+        \App\Models\User::factory(2000)->create();
+        \App\Models\Doctor::factory(2000)->create();
+        \App\Models\Patient::factory(2000)->create([
+            'gender'=>'MALE'
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from "lodash";
 //aproved
 import { format, isValid } from "date-fns";
 const email = (val) =>
@@ -13,7 +13,7 @@ const validUrl = (val) => {
   }
   return null;
 };
-const validDate = (value) => (value && !isValid(value) ? "Fecha Invalida" : null);
+const validDate = (value) => (value && !isValid(new Date(value)) ? "Fecha Invalida" : null);
 const dateGreaterOrEqual = (min) => (value) => {
   if (isValid(min) && isValid(value)) {
     const valueFormated = new Date(value);
@@ -47,10 +47,8 @@ const dateLessOrEqual = (max) => (value) => {
   return null;
 };
 const passwordEqual = (fieldToValue) => (fieldFromValue, values) =>
-  !_.get(values, fieldToValue) || !fieldFromValue || fieldFromValue !== _.get(values, fieldToValue)
-    ?  "Contraseñas no coinciden"
-    :null;
-
+  fieldFromValue !== _.get(values, fieldToValue) ? "Contraseñas no coinciden" : null;
+const alpha = (value) => (value && value.match(/^[A-Z]+$/i) ? null : "campo solo letras.");
 //it is not  verify
 const greaterThan = (fieldToValue) => (fieldFromValue, values) =>
   !_.get(values, fieldToValue) || !fieldFromValue || Number(fieldFromValue) > _.get(values, fieldToValue)
@@ -102,7 +100,8 @@ const required = (val) => {
 const passwordZulipValidation = (val) =>
   val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{10,14}$/) ? null : "fieldError.strongZulipPassword";
 
-const passwordWeakValidation = (val) => (val.match(/^[.!@#$%^&*0-9a-zA-Z]{7,14}$/) ? null : "La contraseña debe tener de 7 a 14 caracteres");
+const passwordWeakValidation = (val) =>
+  !val || val.match(/^[.!@#$%^&*0-9a-zA-Z]{7,14}$/) ? null : "La contraseña debe tener de 7 a 14 caracteres";
 
 const validZip = (val) => (val && /^\d{4,5}(?:-\d{4})?$/.test(val) ? null : "This is not a valid zip");
 
@@ -111,6 +110,7 @@ const composeValidators = (...validators) => (value, values) =>
 
 export {
   required,
+  alpha,
   validDate,
   dateGreaterOrEqual,
   dateLessOrEqual,

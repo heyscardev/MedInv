@@ -5,7 +5,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { es } from "date-fns/locale";
 
-const CustomDatePicker = ({ name, onChange, label, validate, inputFormat, maxDate, minDate }) => {
+export default ({ name, onChange, label, validate, inputFormat, maxDate, minDate,fullWidth }) => {
   return (
     <Field name={name} validate={validate}>
       {({ input, meta }) => (
@@ -14,12 +14,14 @@ const CustomDatePicker = ({ name, onChange, label, validate, inputFormat, maxDat
             <DesktopDatePicker
               {...input}
               label={label}
+              
               inputFormat={inputFormat ? inputFormat : "dd/MM/yyyy"}
               onChange={!onchange ? input.onChange : (e) => onChange(e, input.onchange, meta)}
               minDate={minDate}
               maxDate={maxDate}
               renderInput={(params) => (
                 <TextField
+                fullWidth={fullWidth}
                   {...params}
                   error={meta.error && meta.submitFailed ? true : false}
                   helperText={meta.error && meta.submitFailed ? meta.error : ""}
@@ -32,5 +34,3 @@ const CustomDatePicker = ({ name, onChange, label, validate, inputFormat, maxDat
     </Field>
   );
 };
-
-export default CustomDatePicker;

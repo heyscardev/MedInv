@@ -1,10 +1,11 @@
-import GenericCrud from "@/Components/Common/GenericCrud";
+import { format } from "date-fns";
+import { useState, Fragment, useEffect } from "react";
+import _ from "lodash";
+import { PersonAdd } from "@mui/icons-material";
 import EditModal from "@/Components/Layouts/Users/EditModal";
 import { formatCiFromDataBase, formatDateFromDataBase, formatGenderFromDataBase } from "@/Utils/format";
-import { PersonAdd } from "@mui/icons-material";
-import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Fragment, useEffect, useState } from "react";
+import GenericCrud from "@/Components/Common/GenericCrud";
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date);
   return {
@@ -23,7 +24,7 @@ export default (props) => {
       <GenericCrud
         data={dataTable}
         columnVisibility={{ id: false, last_name: false, phone: false, direction: false }}
-        routeName="user"
+        routeName="doctor"
         EditModal={EditModal}
         multiButtonActions={[
           {
@@ -77,8 +78,7 @@ export default (props) => {
           {
             accessorKey: "created_at",
             header: "Fecha de Creacion",
-            accessorFn: ({ created_at }) =>
-              !created_at ? "00/00/0000 00:00:00" : format(new Date(created_at), "hh:mm dd MMMM yyyy", { locale: es }),
+            accessorFn: ({ created_at }) => (!created_at ? "00/00/0000 00:00:00" : created_at),
           },
           {
             accessorKey: "updated_at",

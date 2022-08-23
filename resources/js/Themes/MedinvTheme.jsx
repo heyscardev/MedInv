@@ -35,6 +35,25 @@ const MedinvTheme = createTheme({
       light: "rgba(24,161,212,.57)",
     },
   },
+  components: {
+    MuiSpeedDial:{
+      defaultProps:{
+        sx:{ position: "absolute", bottom: 16, right: 16 }
+        
+      }
+    },
+    MuiSpeedDialAction: {
+      defaultProps: {
+        sx:{
+          color:"primary.main",
+          ":hover":{
+            backgroundColor:"primary.dark",
+            color:"#fff"
+          }
+        }
+      },
+    },
+  },
 
 });
 export default MedinvTheme;

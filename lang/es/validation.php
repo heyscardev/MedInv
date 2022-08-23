@@ -18,7 +18,7 @@ return [
     'active_url' => 'The :attribute is not a valid URL.',
     'after' => 'The :attribute must be a date after :date.',
     'after_or_equal' => 'The :attribute must be a date after or equal to :date.',
-    'alpha' => 'The :attribute must only contain letters.',
+    'alpha' => 'El :attribute solo debe contener letras.',
     'alpha_dash' => 'The :attribute must only contain letters, numbers, dashes and underscores.',
     'alpha_num' => 'The :attribute must only contain letters and numbers.',
     'array' => 'The :attribute must be an array.',
@@ -35,7 +35,7 @@ return [
     'current_password' => 'The password is incorrect.',
     'date' => 'The :attribute is not a valid date.',
     'date_equals' => 'The :attribute must be a date equal to :date.',
-    'date_format' => 'The :attribute does not match the format :format.',
+    'date_format' => ':attribute no tiene formato de :format.',
     'declined' => 'The :attribute must be declined.',
     'declined_if' => 'The :attribute must be declined when :other is :value.',
     'different' => 'The :attribute and :other must be different.',
@@ -165,5 +165,14 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'first_name' => 'Nombre',
+        'last_name' => 'Apellido',
+        'birth_date' => 'Fecha de Nacimiento',
+        'c_i' => 'Cedula',
+        'direction' => 'Direccion',
+        'phone' => 'Telefono',
+        'email' => 'Correo',
+        'password' => 'Contraseña',
+    ],
 ];

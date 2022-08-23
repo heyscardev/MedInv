@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MedicamentController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +32,11 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('users', UserController::class)->names('users');
-require __DIR__.'/auth.php';
+Route::middleware('auth')->group(function () {
+    Route::resource('users', UserController::class)->only(['index', 'destroy', 'update','store'])->names('user');
+    Route::resource('medicaments', MedicamentController::class)->only(['index', 'destroy', 'update','store'])->names('medicament');
+    Route::resource('units', UnitController::class)->only(['index', 'destroy', 'update','store'])->names('unit');
+    Route::resource('doctors', DoctorController::class)->only(['index', 'destroy', 'update','store'])->names('doctor');
+    Route::resource('patitents', PatientController::class)->only(['index', 'destroy', 'update','store'])->names('patient');
+});
+require __DIR__ . '/auth.php';

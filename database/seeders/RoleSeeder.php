@@ -20,52 +20,58 @@ class RoleSeeder extends Seeder
         $managerRole = Role::create(['name' => 'gerente']);
         $employeeRole = Role::create(['name' => 'empleado']);
 
-        Permission::create(['name'=>'users.index']);
-        Permission::create(['name'=>'users.show']);
-        Permission::create(['name'=>'users.edit']);
-        Permission::create(['name'=>'users.create']);
-        Permission::create(['name'=>'users.destroy']);
+        Permission::create(['name'=>'user.index']);
+        Permission::create(['name'=>'user.show']);
+        Permission::create(['name'=>'user.update']);
+        Permission::create(['name'=>'user.store']);
+        Permission::create(['name'=>'user.destroy']);
 
-        Permission::create(['name'=>'medicaments.index'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'medicaments.show'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'medicaments.edit'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'medicaments.create'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'medicaments.destroy'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'medicament.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'medicament.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'medicament.update'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'medicament.store'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'medicament.destroy'])->syncRoles([$managerRole]);
 
-        Permission::create(['name'=>'modules.index'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'modules.show'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'modules.edit'])->syncRoles([$managerRole]);
-        Permission::create(['name'=>'modules.create'])->syncRoles([$managerRole]);
-        Permission::create(['name'=>'modules.destroy'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'module.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'module.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'module.update'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'module.store'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'module.destroy'])->syncRoles([$managerRole]);
 
-        Permission::create(['name'=>'doctors.index'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'doctors.show'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'doctors.edit'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'doctors.create'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'doctors.destroy'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'service.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'service.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'service.update'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'service.store'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'service.destroy'])->syncRoles([$managerRole]);
 
-        Permission::create(['name'=>'pathologies.index'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'pathologies.show'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'pathologies.edit'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'pathologies.create'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'pathologies.destroy'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'doctor.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'doctor.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'doctor.update'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'doctor.store'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'doctor.destroy'])->syncRoles([$managerRole]);
+
+        Permission::create(['name'=>'pathology.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'pathology.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'pathology.update'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'pathology.store'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'pathology.destroy'])->syncRoles([$managerRole]);
         
-        Permission::create(['name'=>'units.index'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'units.show'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'units.edit'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'units.create'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'units.destroy'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'unit.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'unit.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'unit.update'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'unit.store'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'unit.destroy'])->syncRoles([$managerRole]);
         
-        Permission::create(['name'=>'recipes.index'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'recipes.show'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'recipes.edit'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'recipes.create'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'recipes.destroy'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'recipe.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'recipe.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'recipe.update'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'recipe.store'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'recipe.destroy'])->syncRoles([$managerRole]);
 
-        Permission::create(['name'=>'patients.index'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'patients.show'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'patients.edit'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'patients.create'])->syncRoles([$managerRole,$employeeRole]);
-        Permission::create(['name'=>'patients.destroy'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'patient.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'patient.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'patient.update'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'patient.store'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'patient.destroy'])->syncRoles([$managerRole]);
 }
 }

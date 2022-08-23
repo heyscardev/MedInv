@@ -11,6 +11,7 @@ import { ThemeProvider } from "@mui/material";
 
 import { removeLoader } from "./Config/Loader";
 import NotificationContainer from "./Components/NotificationContainer";
+import NavBar from "./Components/Common/NavBar";
 const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
 createInertiaApp({
@@ -20,9 +21,18 @@ createInertiaApp({
     removeLoader();
     return render(
       <ThemeProvider theme={theme}>
-      <App {...props} />
-      <NotificationContainer />
-    </ThemeProvider>, el);
+        <App {...props}>
+          {({ Component, key, props }) => (
+            <div>
+              {(route().t.url !== props.ziggy.location && props.auth.user) && <NavBar auth={props.auth} />}
+              <Component {...props} />
+            </div>
+          )}
+        </App>
+        <NotificationContainer />
+      </ThemeProvider>,
+      el
+    );
   },
 });
 
