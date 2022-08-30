@@ -1,0 +1,17 @@
+{
+    "id": "ID",
+    "name": "Nombre",
+    "first_name": "Nombre",
+    "last_name": "Apellido",
+    "birth_date": "Fecha de Nacimiento",
+    "quantity_exist": "Cantidad Existente",
+    "created_at":"Fecha de Creacion",
+    "updated_at":"Ultima Actualizacion",
+    "description":"Descripcion",
+    "phone":"Telefono",
+    "direction":"Direccion",
+    "email_verified_at":"Verificiacion de correo",
+    "email":"Correo",
+    "gender":"Sexo",
+    "c_i":"C.I"
+}

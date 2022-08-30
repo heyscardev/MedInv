@@ -31,7 +31,7 @@ export default (props) => {
             name: "crear",
           },
         ]}
-        columns={[
+      /*   columns={[
           {
             accessorKey: "id",
             header: "ID",
@@ -85,7 +85,7 @@ export default (props) => {
             header: "Fecha de Ultima Modificacion",
             accessorFn: ({ updated_at }) => (!updated_at ? "00/00/0000 00:00:00" : updated_at),
           },
-        ]}
+        ]} */
       />
     </Fragment>
   );

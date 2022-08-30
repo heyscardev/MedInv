@@ -12,6 +12,9 @@ import { ThemeProvider } from "@mui/material";
 import { removeLoader } from "./Config/Loader";
 import NotificationContainer from "./Components/NotificationContainer";
 import NavBar from "./Components/Common/NavBar";
+import { IntlProvider } from "react-intl";
+import appLocale from '@/lngProvider'
+
 const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
 createInertiaApp({
@@ -21,14 +24,16 @@ createInertiaApp({
     removeLoader();
     return render(
       <ThemeProvider theme={theme}>
-        <App {...props}>
-          {({ Component, key, props }) => (
-            <div>
-              {(route().t.url !== props.ziggy.location && props.auth.user) && <NavBar auth={props.auth} />}
-              <Component {...props} />
-            </div>
-          )}
-        </App>
+        <IntlProvider locale="es" messages={appLocale.es}>
+          <App {...props}>
+            {({ Component, key, props }) => (
+              <div>
+                {route().t.url !== props.ziggy.location && props.auth.user && <NavBar auth={props.auth} />}
+                <Component {...props} />
+              </div>
+            )}
+          </App>
+        </IntlProvider>
         <NotificationContainer />
       </ThemeProvider>,
       el

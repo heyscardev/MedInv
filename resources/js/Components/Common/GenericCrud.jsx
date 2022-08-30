@@ -1,9 +1,10 @@
 import ConfirmModal from "@/Components/Common/ConfirmModal";
 import MultiButton from "@/Components/Common/MultiButton";
 import { destroy } from "@/HTTPProvider";
+import { generatorTableColumns } from "@/Utils/generators";
 import { PersonAdd } from "@mui/icons-material";
 import _ from "lodash";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Table from "./Table";
 
 export default ({ columns, EditModal, routeName, data, columnVisibility ={}, multiButtonActions }) => {
@@ -23,7 +24,7 @@ export default ({ columns, EditModal, routeName, data, columnVisibility ={}, mul
         onDelete={(id) => toggleConfirmDelete(id)}
         onEdit={(id) => toggleEdit(id)}
         data={data}
-        columns={columns}
+        columns={columns?columns:generatorTableColumns(data)}
       />
       <MultiButton
         actions={[

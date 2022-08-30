@@ -1,5 +1,6 @@
 import GenericCrud from "@/Components/Common/GenericCrud";
 import EditModal from "@/Components/Layouts/Users/EditModal";
+import { generatorTableColumns } from "@/Utils/generators";
 import { PersonAdd } from "@mui/icons-material";
 import { Fragment } from "react";
 
@@ -17,33 +18,7 @@ export default (props) => {
             name: "crear",
           },
         ]}
-        columns={[
-          {
-            accessorKey: "id",
-            header: "ID",
-            enableColumnOrdering: false,
-            enableEditing: false,
-            size: 80,
-          },
-          {
-            accessorKey: "name",
-            header: "Nombre",
-          },
-          {
-            accessorKey: "description",
-            header: "Descripción",
-          },
-          {
-            accessorKey: "created_at",
-            header: "Fecha de Creacion",
-            accessorFn: ({ created_at }) => (!created_at ? "00/00/0000 00:00:00" : created_at),
-          },
-          {
-            accessorKey: "updated_at",
-            header: "Fecha de Ultima Modificacion",
-            accessorFn: ({ updated_at }) => (!updated_at ? "00/00/0000 00:00:00" : updated_at),
-          },
-        ]}
+        columns={generatorTableColumns(props.data)}
       />
     </Fragment>
   );
