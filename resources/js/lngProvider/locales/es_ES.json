@@ -13,5 +13,13 @@
     "email_verified_at":"Verificiacion de correo",
     "email":"Correo",
     "gender":"Sexo",
-    "c_i":"C.I"
+    "c_i":"C.I",
+    "user":"Usuario",
+    "medicament":"Medicamento",
+    "unit":"unidad",
+    "deleteMessage":"`¿Esta Seguro de Eliminar a: {value} ?`",
+    "createUnit":"Crear Unidad",
+    "updateUnit":"Actualizar Unidad",
+    "cancelBtn":"Cancelar",
+    "saveBtn":"Guardar"
 }

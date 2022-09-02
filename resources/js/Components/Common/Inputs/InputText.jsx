@@ -1,6 +1,7 @@
 import React from "react";
 import { Field } from "react-final-form";
 import { FormControl, TextField } from "@mui/material";
+import { useIntl } from "react-intl";
 
 const onChangeDesicion = (e, inputOnchange, externalOnChange, meta, maxLength, onlyNumbers) => {
   let pass = true;
@@ -16,6 +17,7 @@ const InputText = ({
   autoComplete = "on",
   spellCheck = true,
   label,
+  noTranslateLabel,
   validate,
   containerProps,
   maxLength = 255,
@@ -23,23 +25,24 @@ const InputText = ({
   inputProps,
   type,
   fullWidth = false,
-  margin=10
+  margin = 10
 }) => {
+  const { formatMessage } = useIntl();
   return (
     <Field name={name} validate={validate} type={type}>
       {({ input, meta }) => (
-        <div style={{margin}}>
-        <FormControl fullWidth={fullWidth}>
-          <TextField
-            {...input}
-            inputProps={{ spellCheck, autoComplete, ...inputProps, maxLength }}
-            variant="outlined"
-            label={label}
-            onChange={(e) => onChangeDesicion(e, input.onChange, onChange, meta, maxLength, onlyNumbers)}
-            error={meta.error && meta.submitFailed ? true : false}
-            helperText={meta.error && meta.submitFailed ? meta.error : ""}
-          />
-        </FormControl>
+        <div style={{ margin }}>
+          <FormControl fullWidth={fullWidth}>
+            <TextField
+              {...input}
+              inputProps={{ spellCheck, autoComplete, ...inputProps, maxLength }}
+              variant="outlined"
+              label={!noTranslateLabel ? formatMessage({id:label}) : label}
+              onChange={(e) => onChangeDesicion(e, input.onChange, onChange, meta, maxLength, onlyNumbers)}
+              error={meta.error && meta.submitFailed ? true : false}
+              helperText={meta.error && meta.submitFailed ? meta.error : ""}
+            />
+          </FormControl>
         </div>
       )}
     </Field>

@@ -27,6 +27,10 @@ const post = (route, values, options = {}) =>
   Inertia.post(route, values, {
     ...options,
     ...defaultMethods(options),
+    onSuccess: (visit) => {
+      if (options.onSuccess)  options.onSuccess(visit);
+      toast.success("Recurso Guardado con Exito!");
+    },
   });
 const put = (route, values, options = {}) =>
   Inertia.put(route, values, {

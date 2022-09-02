@@ -5,9 +5,11 @@ import { generatorTableColumns } from "@/Utils/generators";
 import { PersonAdd } from "@mui/icons-material";
 import _ from "lodash";
 import { Fragment, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import Table from "./Table";
 
-export default ({ columns, EditModal, routeName, data, columnVisibility ={}, multiButtonActions }) => {
+export default ({ columns, EditModal, routeName, data, columnVisibility = {}, multiButtonActions, deleteKeyMessage }) => {
+  const { formatMessage } = useIntl();
   const [idToDelete, setIdToDelete] = useState(null);
   const toggleConfirmDelete = (id) => {
     setIdToDelete(id ? id : null);
@@ -24,7 +26,7 @@ export default ({ columns, EditModal, routeName, data, columnVisibility ={}, mul
         onDelete={(id) => toggleConfirmDelete(id)}
         onEdit={(id) => toggleEdit(id)}
         data={data}
-        columns={columns?columns:generatorTableColumns(data)}
+        columns={columns ? columns : generatorTableColumns(data)}
       />
       <MultiButton
         actions={[
@@ -37,6 +39,7 @@ export default ({ columns, EditModal, routeName, data, columnVisibility ={}, mul
           },
         ]}
       />
+
       <ConfirmModal
         open={_.find(data, { id: idToDelete }) ? true : false}
         onClose={() => toggleConfirmDelete(null)}
@@ -45,17 +48,17 @@ export default ({ columns, EditModal, routeName, data, columnVisibility ={}, mul
         }}
         message={
           _.find(data, { id: idToDelete })
-            ? `¿Esta Seguro de Eliminar al Usuario: ${_.find(data, { id: idToDelete }).first_name} ${
-                _.find(data, { id: idToDelete }).last_name
-              }?`
+            ? formatMessage({ id: "deleteMessage" }, { value: _.find(data, { id: idToDelete })[deleteKeyMessage ? deleteKeyMessage : 'id'] })
             : null
         }
       />
+
       <EditModal
         open={idToEdit ? true : false}
         onClose={() => toggleEdit(null)}
         item={{ ..._.find(data, { id: idToEdit }) }}
       />
+
     </Fragment>
   );
 };
