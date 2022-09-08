@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Medicament;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class MedicamentController extends Controller
@@ -22,42 +23,38 @@ class MedicamentController extends Controller
         return Inertia::render('Medicaments/index', ['data' => $items]);
     }
 
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $valido = $request->validate([
+            'id' => ['required', 'integer', 'exists:medicaments'],
+            'name' => ['alpha', 'max:80', Rule::unique('medicaments')->ignore($request->name)],
+            'description' => ['max:250']
+        ]);
+        $item = Medicament::find($request->id);
+        $item->update($valido);
+        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function store(Request $request)
+    {
+        $validData = $request->validate([
+            'code' => ['required', 'max:25','unique'],
+            'name' => ['required', 'max:100', 'unique'],
+            'unit_id' => ['required','numeric','exists:units'],
+            'price_sale' =>['numeric','max:99999999999.99'],
+            'quantity_exist'=> ['numeric'],
+        ]);
+        $item = new Medicament($validData);
+        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
+    }
+
     public function destroy($id)
     {
-        //
+        $item = Medicament::find($id);
+
+        if (!$item) {
+            return back()->withErrors(['noDelete' => 'Esta Unidad No existe']);
+        }
+        return $item->delete() ? back() : back(500)->withErrors('save', 'error al eliminar');
     }
 }

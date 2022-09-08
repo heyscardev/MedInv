@@ -15,10 +15,11 @@ class Module extends Model
     ];
     //this are the relations
     public function medicaments(){
-        return$this->belongsToMany(Medicament::class)->withPivot('quantity_exist')->withTimestamps()->wherePivot('quantity_exist','>',0);
+        return$this->belongsToMany(Medicament::class)->with(['unit:id,name'])->withPivot('quantity_exist')->withTimestamps();
+        //return$this->belongsToMany(Medicament::class)->withPivot('quantity_exist')->withTimestamps()->wherePivot('quantity_exist','>',0);
     }
-    public function manager(){
-        return $this->belongsTo(Medicaments::class);
+    public function user(){
+        return $this->belongsTo(User::class);
     }
     public function recipes(){
         return $this->hasMany(Recipe::class);

@@ -23,7 +23,7 @@ const list = (list) => (
         <LogoTypography variant="h4" WelcomeLink />
     </Box>
     <List>
-      {list.map((item) => (
+      {list.map((item) => item?(
         <React.Fragment key={item[0]}>
           <ListItem  key={item[0]} disablePadding>
            {/*  <ListItemButton sx={{backgroundColor:"primary.main"}} onClick={()=>visit(item[1])}>
@@ -36,7 +36,7 @@ const list = (list) => (
             </BtnLink>
           </ListItem>
         </React.Fragment>
-      ))}
+      ):null)}
           <Divider />
       </List>
   </Box>

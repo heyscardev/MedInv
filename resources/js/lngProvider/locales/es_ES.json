@@ -16,10 +16,16 @@
     "c_i":"C.I",
     "user":"Usuario",
     "medicament":"Medicamento",
-    "unit":"unidad",
+    "unit":"Unidad",
     "deleteMessage":"`¿Esta Seguro de Eliminar a: {value} ?`",
     "createUnit":"Crear Unidad",
     "updateUnit":"Actualizar Unidad",
     "cancelBtn":"Cancelar",
-    "saveBtn":"Guardar"
+    "saveBtn":"Guardar",
+    "transferMedications":"Transferir Medicamentos",
+    "newRecipe":"Nuevo Recipe",
+    "inventory":"Inventario",
+    "globalInventory":"Inventario Global",
+    "price":"Precio",
+    "code":"Codigo"
 }

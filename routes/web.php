@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicamentController;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -38,5 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('units', UnitController::class)->only(['index', 'destroy', 'update','store'])->names('unit');
     Route::resource('doctors', DoctorController::class)->only(['index', 'destroy', 'update','store'])->names('doctor');
     Route::resource('patitents', PatientController::class)->only(['index', 'destroy', 'update','store'])->names('patient');
+    Route::resource('modules',ModuleController::class)->only(['index','show'])->names('module');
+
 });
 require __DIR__ . '/auth.php';

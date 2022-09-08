@@ -2,6 +2,7 @@
     node v16.15.1
     composer v2.3.7
     npm v8.11.0
+    php 8.1
 ## Info app
 MedInv
 es una aplicacion de control de inventario de medicamentos

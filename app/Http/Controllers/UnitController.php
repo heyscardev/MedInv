@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -19,6 +20,8 @@ class UnitController extends Controller
 
     public function index()
     {
+        $data = User::with('modules')->find(auth()->user()->id);
+        dd($data);
         $items = Unit::get();
         return Inertia::render('Units/index', ['data' => $items]);
     }
@@ -46,7 +49,7 @@ class UnitController extends Controller
     public function store(Request $request )
     {
         $validData = $request->validate([
-            'name'=>[ 'required','alpha', 'max:80', Rule::unique('units')->ignore($request->name)],
+            'name'=>[ 'required','alpha', 'max:80','uniques'],
             'description' => ['max:250']
         ]);
         $item = new Unit($validData);

@@ -16,20 +16,35 @@ import { IntlProvider } from "react-intl";
 import appLocale from '@/lngProvider'
 
 const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
+const can = (permissions, user) => (PermissionName) => {
+  if (user.roles && user.roles.reduce((previus, value) => !previus ? value.name === 'administrador' : previus, null)) return true;
+  if (permissions && permissions.includes(PermissionName)) return true;
+  return false;
+}
+
 
 createInertiaApp({
   title: (title) => `${title} - ${appName}`,
   resolve: (name) => resolvePageComponent(`./Pages/${name}.jsx`, import.meta.glob("./Pages/**/*.jsx")),
   setup({ el, App, props }) {
     removeLoader();
+
     return render(
       <ThemeProvider theme={theme}>
         <IntlProvider locale="es" messages={appLocale.es}>
           <App {...props}>
             {({ Component, key, props }) => (
               <div>
-                {route().t.url !== props.ziggy.location && props.auth.user && <NavBar auth={props.auth} />}
-                <Component {...props} />
+                {route().t.url !== props.ziggy.location && props.auth.user && (
+                  <NavBar
+                    auth={props.auth}
+                    can={can(props.auth.permissions, props.auth.user)}
+                  />
+                )}
+                <Component
+                  {...props}
+                  can={can(props.auth.permissions, props.auth.user)}
+                />
               </div>
             )}
           </App>

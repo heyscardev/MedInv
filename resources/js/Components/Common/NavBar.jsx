@@ -1,4 +1,4 @@
-import { Dashboard, Home, Masks, Medication, People, Scale, Sick } from "@mui/icons-material";
+import { Dashboard, Home, Masks, Medication, People, Scale, Sick, Store } from "@mui/icons-material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -16,19 +16,23 @@ import LogoTypography from "../LogoTypography";
 import BtnLink from "./BtnLink";
 import SideBar from "./SideBar";
 
-export default ({ auth }) => {
+export default ({ auth ,can}) => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [openSideBar, setOpenSideBar] = React.useState(false);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const { permissions: p } = auth;
+
   const pages = [
-    ["Inicio", route().t.url, <Home  />],
-    ["Dashboard", route("dashboard"), <Dashboard  />],
-    ["Usuarios", route("user.index"), <People  />],
-    ["Medicamentos", route("medicament.index"), <Medication  />],
-    ["Unidades", route("unit.index"), <Scale  />],
-    ["Doctores", route("doctor.index"), <Masks  />],
-    ["Pacientes", route("patient.index"), <Sick  />],
+    ["Inicio", route().t.url, <Home />],
+    ["Dashboard", route("dashboard"), <Dashboard />],
+    can('user.index') ? ["Usuarios", route("user.index"), <People />] : null,
+    can('medicament.index') ? ["Medicamentos", route("medicament.index"), <Medication />] : null,
+    can('unit.index') ? ["Unidades", route("unit.index"), <Scale />] : null,
+    can('doctor.index') ? ["Doctores", route("doctor.index"), <Masks />] : null,
+    can('patient.index') ? ["Pacientes", route("patient.index"), <Sick />] : null,
+    can('module.index') ? ["Modulos", route("module.index"), <Store />] : null,
   ];
+
   const toggleSideBar = (event) => {
     setOpenSideBar(!openSideBar)
   };
@@ -104,11 +108,11 @@ export default ({ auth }) => {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map((page) => page ? (
               <BtnLink startIcon={page[2]} key={page[0]} href={page[1]} sx={{ m: "0 10px", my: 2 }}>
                 {page[0]}
               </BtnLink>
-            ))}
+            ) : null)}
           </Box>
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -148,7 +152,7 @@ export default ({ auth }) => {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      <SideBar listBtn={pages} open={openSideBar} onClose={toggleSideBar}/>
+      <SideBar listBtn={pages} open={openSideBar} onClose={toggleSideBar} />
     </Box>
   );
 };
