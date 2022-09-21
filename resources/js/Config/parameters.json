@@ -1,0 +1,6 @@
+{
+    "validationParams": {
+        "maxDecimalPrice": 99999999999.99,
+        "minDecimalPrice":0.00
+    }
+}

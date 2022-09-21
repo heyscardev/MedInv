@@ -39,9 +39,9 @@ class ModuleController extends Controller
     public function show($id)
     {
         $item = Module::find($id);
-        if ( !isset($item) ) return abort('404');
-        if (  $item->user->id !== auth()->user()->id) return abort('403');
-        return Inertia::render('Modules/show.employee',['module' => $item,'data'=>$item->medicaments]);
+        if (!isset($item)) return abort('404');
+        if ($item->user->id !== auth()->user()->id) return abort('403');
+        return Inertia::render('Modules/show.employee', ['module' => $item, 'medicaments' => Medicament::all(), 'data' => $item->medicaments]);
     }
 
     public function update(Request $request, $id)

@@ -16,12 +16,13 @@ return new class extends Migration
         Schema::create('recipe_medicament_unit', function (Blueprint $table) {
             $table->unsignedBigInteger('recipe_id');
             $table->unsignedBigInteger('medicament_id');
-            $table->unsignedBigInteger('unit_id');
             $table->integer('prescribed_amount');
             $table->integer('quantity_deliver');
             $table->decimal('price',11,2);
             $table->string('description',250)->nullable();
             $table->timestamps();
+            $table->foreign('recipe_id')->references('id')->on('recipes');
+            $table->foreign('medicament_id')->references('id')->on('medicaments');
         });
     }
 
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recipe_medicament_unit');
+        Schema::dropIfExists('recipe_medicament');
     }
 };

@@ -49,6 +49,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     //this are the relations
+    public function Transfers()
+    {
+        return $this->hasMany(Transfer::class);
+    }
     public function modules()
     {
         return $this->hasMany(Module::class);

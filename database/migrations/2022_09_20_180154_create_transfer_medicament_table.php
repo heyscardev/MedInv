@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('medicaments', function (Blueprint $table) {
+        Schema::create('transfer_medicament', function (Blueprint $table) {
             $table->id();
-            $table->string('code',25)->unique();
-            $table->string('name',100);
-            $table->unsignedBigInteger('unit_id');
-            $table->decimal('price_sale',11,2)->default(0.00);
+            $table->unsignedBigInteger('transfer_id');
+            $table->unsignedBigInteger('medicament_id');
+            $table->integer('quantity');
             $table->timestamps();
-            $table->foreign('unit_id')->references('id')->on('units');
+            $table->foreign('transfer_id')->references('id')->on('transfers');
+            $table->foreign('medicament_id')->references('id')->on('medicaments');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('medicaments');
+        Schema::dropIfExists('transfer_medicament');
     }
 };

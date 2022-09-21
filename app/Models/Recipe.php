@@ -46,9 +46,6 @@ class Recipe extends Model
         return $this->belongsTo(User::class);
     }
     public function medicaments(){
-        return $this->belongsToMany(Medicament::class,'recipe_medicament_unit')->withPivot('unit_id','prescribed_amount','quantity_deliver','price','description');
-    }
-    public function units(){
-        return $this->belongsToMany(Unit::class,'recipe_medicament_unit')->withPivot('medicaments_id','prescribed_amount','quantity_deliver','price','description');
+        return $this->belongsToMany(Medicament::class,'recipe_medicament')->withPivot('prescribed_amount','quantity_deliver','price','description');
     }
 }

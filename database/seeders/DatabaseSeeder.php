@@ -2,6 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Medicament;
+use App\Models\Module;
+use App\Models\Transfer;
+use App\Models\User;
+use Database\Factories\ModuleFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -25,13 +30,23 @@ class DatabaseSeeder extends Seeder
             MedicamentSeeder::class
         ]);
 
-        \App\Models\User::factory(200)->afterCreating(function($user){
+        User::factory(200)->afterCreating(function($user){
             $user->assignRole('empleado');
         })->create();
         \App\Models\Doctor::factory(200)->create();
         \App\Models\Patient::factory(200)->create([
             'gender'=>'MALE'
         ]);
+ 
+        Module::factory(200)->create();
+        Transfer::factory(2000)->hasAttached(
+            Medicament::orderByRaw("RAND()")->limit(rand(1,20))->get(),
+            ['quantity' => 10]
+        )->create();
+        
+      
+
+
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

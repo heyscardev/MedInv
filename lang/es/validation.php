@@ -27,7 +27,7 @@ return [
     'between' => [
         'array' => 'The :attribute must have between :min and :max items.',
         'file' => 'The :attribute must be between :min and :max kilobytes.',
-        'numeric' => 'The :attribute must be between :min and :max.',
+        'numeric' => 'El :attribute debe estar entre :min y :max.',
         'string' => 'The :attribute must be between :min and :max characters.',
     ],
     'boolean' => 'The :attribute field must be true or false.',
@@ -100,7 +100,7 @@ return [
     'multiple_of' => 'The :attribute must be a multiple of :value.',
     'not_in' => 'The selected :attribute is invalid.',
     'not_regex' => 'The :attribute format is invalid.',
-    'numeric' => 'The :attribute must be a number.',
+    'numeric' => 'El :attribute debe ser un numero.',
     'password' => [
         'letters' => 'The :attribute must contain at least one letter.',
         'mixed' => 'The :attribute must contain at least one uppercase and one lowercase letter.',
@@ -174,5 +174,7 @@ return [
         'phone' => 'Telefono',
         'email' => 'Correo',
         'password' => 'Contraseña',
+        'medicaments.*.price'=>'precio de medicamento',
+        'medicaments.*.quantity'=>'cantidad de medicamento',
     ],
 ];

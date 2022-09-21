@@ -89,19 +89,19 @@ const minLength = (val, length) => (val && val.length >= length ? null : `${leng
 
 const required = (val) => {
   if (_.isBoolean(val)) {
-    return val ? null : "Este Campo es Requerido";
+    return val ? null : "fieldError.required";
   }
   if (_.isNumber(val)) {
-    return val || val === 0 ? null : "Este Campo es Requerido";
+    return val || val === 0 ? null : "fieldError.required";
   }
-  return val && val.toString().length ? null : "Este Campo es Requerido";
+  return val && val.toString().length && val.toString().replaceAll(" ","").length !== 0? null : "fieldError.required";
 };
 
 const passwordZulipValidation = (val) =>
   val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{10,14}$/) ? null : "fieldError.strongZulipPassword";
 
 const passwordWeakValidation = (val) =>
-  !val || val.match(/^[.!@#$%^&*0-9a-zA-Z]{7,14}$/) ? null : "La contraseña debe tener de 7 a 14 caracteres";
+  !val || val.match(/^[.!@#$%^&*0-9a-zA-Z]{7,14}$/) ? null : "fieldError.weakPassword";
 
 const validZip = (val) => (val && /^\d{4,5}(?:-\d{4})?$/.test(val) ? null : "This is not a valid zip");
 

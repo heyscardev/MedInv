@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MedicamentRequest;
 use App\Models\Medicament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -35,17 +38,14 @@ class MedicamentController extends Controller
         return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
     }
 
-    public function store(Request $request)
+    public function store(MedicamentRequest $request)
     {
-        $validData = $request->validate([
-            'code' => ['required', 'max:25','unique'],
-            'name' => ['required', 'max:100', 'unique'],
-            'unit_id' => ['required','numeric','exists:units'],
-            'price_sale' =>['numeric','max:99999999999.99'],
-            'quantity_exist'=> ['numeric'],
-        ]);
+        $validData = $request->validated();
+        $validData['code'] = strtoupper($validData['code']);
+        $validData['name'] = strtoupper($validData['name']);
         $item = new Medicament($validData);
-        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
+        $item->save();
+        return $item->save() ? Redirect::back() : back(500)->withErrors('save', 'error al guardar');
     }
 
     public function destroy($id)
