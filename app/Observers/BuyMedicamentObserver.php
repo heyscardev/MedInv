@@ -15,7 +15,8 @@ class BuyMedicamentObserver
      */
     public function created(BuyMedicament $buyMedicament)
     {
-        $buyMedicament->buy->module->addMedicament($buyMedicament->medicament->id,$buyMedicament->quantity);  
+        $buyMedicament->buy->module->addMedicament($buyMedicament->medicament->id, $buyMedicament->quantity);
+        logger($buyMedicament->medicament->module);
     }
 
     /**

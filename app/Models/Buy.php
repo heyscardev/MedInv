@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Buy extends Model
 {
     use HasFactory;
-    protected $fillable = ['module_id','description'];
+    protected $fillable = ['module_id','user_id','description'];
 
     public function module(){
         return $this->belongsTo(Module::class);

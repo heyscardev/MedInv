@@ -45,7 +45,6 @@ export default (props) => {
         <div>
             <MaterialReactTable
                 enableStickyHeader
-                manualPagination
                 {...props}
                 icons={{
                     SearchIcon: (prop1) => <Search sx={iconStyle} {...prop1} />,
@@ -134,7 +133,7 @@ export default (props) => {
                     ...props.initialState,
                     // sorting: [{ id: 'state', desc: false }], //sort by state by default
                 }}
-                
+
                 columns={[
                     /* {
             id: "actions",
@@ -142,8 +141,8 @@ export default (props) => {
             columnDefType: "display",
             header: "Acciones",
             size: 80,
-            
-            
+
+
             Cell: ({ cell }) => (
               <Fragment>
                 <Tooltip arrow placement="right" title="Eliminar">

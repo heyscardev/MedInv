@@ -8,6 +8,7 @@ use App\Models\Medicament;
 use App\Models\Module;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -28,13 +29,12 @@ class BuyController extends Controller
     {
         $data = $request->validated();
         $module = Module::find($id);
-        $buy = new Buy(['module_id' => $id, 'description' => isset($data['description']) ? $data['description'] : null]);
+        $buy = new Buy(['module_id' => $id,'user_id'=>auth()->user()->id, 'description' => isset($data['description']) ? $data['description'] : null]);
         $buy->save();
         array_map(function ($value) use ( $buy,$module) {
             $buy->medicaments()->attach($value['id'], ['quantity' => $value['quantity'], 'price' => $value['price']]);
             //$module->addMedicament($value['id'],$value['quantity']);
         }, $data['medicaments']);
-dd($module->medicaments);
-        return $buy->medicaments;
+       return redirect(route('module.show',$id));
     }
 }

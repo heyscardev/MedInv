@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Buy;
 use App\Models\Medicament;
 use App\Models\Module;
 use App\Models\Transfer;
@@ -29,22 +30,30 @@ class DatabaseSeeder extends Seeder
             UnitSeeder::class,
             MedicamentSeeder::class
         ]);
-
-        User::factory(200)->afterCreating(function($user){
+        //seders de prueba
+        /* User::factory(20)->afterCreating(function ($user) {
             $user->assignRole('empleado');
         })->create();
         \App\Models\Doctor::factory(200)->create();
         \App\Models\Patient::factory(200)->create([
-            'gender'=>'MALE'
+            'gender' => 'MALE'
         ]);
- 
-        Module::factory(200)->create();
+ */
+        Module::factory(20)->create();
         Transfer::factory(2000)->hasAttached(
-            Medicament::orderByRaw("RAND()")->limit(rand(1,20))->get(),
+            Medicament::orderByRaw("RAND()")->limit(rand(1, 20))->get(),
             ['quantity' => 10]
         )->create();
-        
-      
+
+        Buy::factory(2000)->hasAttached(
+            Medicament::orderByRaw('RAND()')->limit(rand(1, 12))->get(),
+            function () {
+                return [
+                    'price' => rand(0, 999999),
+                    'quantity' => rand(0, 10)
+                ];
+            },
+        )->create();
 
 
         // \App\Models\User::factory()->create([
