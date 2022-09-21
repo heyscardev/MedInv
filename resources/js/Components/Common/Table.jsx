@@ -135,6 +135,7 @@ export default (props) => {
                 }}
 
                 columns={[
+
                     /* {
             id: "actions",
             accessorKey: "id",
