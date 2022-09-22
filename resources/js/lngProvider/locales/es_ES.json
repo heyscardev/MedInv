@@ -63,6 +63,7 @@
     "registerUser":"Registrar Usuario",
     "updateUser":"Actualizar Usuario",
     "newMedicament":"Nuevo Medicamento",
-    "updateMedicament":"Actualizar Medicamento"
+    "updateMedicament":"Actualizar Medicamento",
+    "newUnit":"Nueva Unidad"
 
 }

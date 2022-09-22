@@ -1,5 +1,6 @@
 import {
     ArrowRight,
+    BorderAllOutlined,
     CheckBox,
     ClearAll,
     Close,
@@ -30,19 +31,19 @@ import {
     ViewColumn,
     VisibilityOff,
 } from "@mui/icons-material";
-import { IconButton, Tooltip, useTheme } from "@mui/material";
+import { IconButton, Paper, Tooltip, useTheme } from "@mui/material";
 import MaterialReactTable from "material-react-table";
 import { Fragment } from "react";
 import { useIntl } from "react-intl";
 
 //nested data is ok, see accessorKeys in ColumnDef below
 
-export default (props) => {
+export default ({sx={margin:2},elevation=2,...props}) => {
     const { primary, error } = useTheme().palette;
     const iconStyle = { color: primary.dark };
     const { formatMessage } = useIntl();
     return (
-        <div>
+        <Paper  elevation={elevation} sx={sx}>
             <MaterialReactTable
                 enableStickyHeader
                 {...props}
@@ -133,6 +134,8 @@ export default (props) => {
                     ...props.initialState,
                     // sorting: [{ id: 'state', desc: false }], //sort by state by default
                 }}
+muiTableContainerProps={{sx:{backgroundColor:"primary.light"}}}
+muiTablePaginationProps={{sx:{backgroundColor:"primary.dark",color:"white.main"}}}
 
                 columns={[
 
@@ -216,6 +219,6 @@ export default (props) => {
                     move: "Mover",
                 }}
             />
-        </div>
+        </Paper>
     );
 };

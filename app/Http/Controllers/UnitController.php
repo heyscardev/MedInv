@@ -20,22 +20,20 @@ class UnitController extends Controller
 
     public function index()
     {
-        $data = User::with('modules')->find(auth()->user()->id);
+      /*   $data = User::with('modules')->find(auth()->user()->id);
         dd($data);
         $items = Unit::get();
-        return Inertia::render('Units/index', ['data' => $items]);
+        return Inertia::render('Units/index', ['data' => $items]); */
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Unit $unit)
     {
-        $valido = $request->validate([
-            'id' => ['required', 'integer', 'exists:units'],
-            'name' => [ 'alpha', 'max:80', Rule::unique('units')->ignore($request->name)],
+        $validData = $request->validate([
+            'name'=>[ 'alpha', 'max:80',Rule::unique('units')->ignore($unit->id),],
             'description' => ['max:250']
         ]);
-        $item = Unit::find($request->id);
-        $item->update($valido);
-        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
+        $unit->update($validData);
+        return $unit->save() ? back() : back(500)->withErrors('save', 'error al guardar');
     }
     public function destroy($id)
     {
@@ -49,7 +47,7 @@ class UnitController extends Controller
     public function store(Request $request )
     {
         $validData = $request->validate([
-            'name'=>[ 'required','alpha', 'max:80','uniques'],
+            'name'=>[ 'required','alpha', 'max:80','unique:units'],
             'description' => ['max:250']
         ]);
         $item = new Unit($validData);

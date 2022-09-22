@@ -1,6 +1,9 @@
 {
     "validationParams": {
         "maxDecimalPrice": 99999999999.99,
-        "minDecimalPrice":0.00
+        "minDecimalPrice":0.00,
+        "maxLengthStringGlobal":250,
+        "maxLengthStringDescription":250,
+        "maxLengthStringName":250
     }
 }

@@ -27,7 +27,7 @@ class MedicamentController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
+    {/*
         $valido = $request->validate([
             'id' => ['required', 'integer', 'exists:medicaments'],
             'name' => ['alpha', 'max:80', Rule::unique('medicaments')->ignore($request->name)],
@@ -35,14 +35,12 @@ class MedicamentController extends Controller
         ]);
         $item = Medicament::find($request->id);
         $item->update($valido);
-        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
+        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar'); */
     }
 
     public function store(MedicamentRequest $request)
     {
         $validData = $request->validated();
-        $validData['code'] = strtoupper($validData['code']);
-        $validData['name'] = strtoupper($validData['name']);
         $item = new Medicament($validData);
         $item->save();
         return $item->save() ? Redirect::back() : back(500)->withErrors('save', 'error al guardar');

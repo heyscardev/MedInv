@@ -27,7 +27,7 @@ class Medicament extends Model
     }
     public function setNameAttribute($value)
     {
-        $this->attributes['code'] = strtoupper($value);
+        $this->attributes['name'] = strtoupper($value);
     }
     public function getNameAttribute($value)
     {

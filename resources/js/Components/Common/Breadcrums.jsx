@@ -12,7 +12,7 @@ export default ({ links }) => {
             color="primary"
             separator={<NavigateNext fontSize="small" />}
             aria-label="breadcrumb"
-            sx={{ marginTop: 3, marginBottom: 3 }}
+            sx={{ marginTop: 3, marginBottom: 3, marginLeft:2 }}
         >
             {links.map((item) => (
                 <Link

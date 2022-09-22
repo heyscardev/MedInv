@@ -7,7 +7,7 @@ import EditMedicamentModal from "@/Components/Layouts/Medicaments/EditMedicament
 import {
     composeValidators,
     greaterOrEqualValue,
-    required,
+    required
 } from "@/Config/InputErrors";
 import { post } from "@/HTTPProvider";
 import { Add, Clear } from "@mui/icons-material";
@@ -21,7 +21,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    TextField,
+    TextField
 } from "@mui/material";
 import { Box } from "@mui/system";
 import arrayMutators from "final-form-arrays";
@@ -132,7 +132,6 @@ export default (props) => {
                                                     values,
                                                     fieldName
                                                 );
-                                                console.log(itemMed);
                                                 return (
                                                     <TableRow key={itemMed.id}>
                                                         <TableCell>

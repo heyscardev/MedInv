@@ -21,7 +21,7 @@ class BuyController extends Controller
         if (!isset($item)) return abort('404');
         if ($item->user->id !== auth()->user()->id) return abort('403');
         $Medicaments = Medicament::get(['id', 'code', 'name']);
-        $units = Unit::all();
+        $units = Unit::orderBy('name')->get();
         return Inertia::render('Modules/buy.employee', ['module' => $item, 'medicaments' => $Medicaments,'units'=>$units]);
     }
 
