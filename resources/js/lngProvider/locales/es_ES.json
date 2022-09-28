@@ -64,6 +64,12 @@
     "updateUser":"Actualizar Usuario",
     "newMedicament":"Nuevo Medicamento",
     "updateMedicament":"Actualizar Medicamento",
-    "newUnit":"Nueva Unidad"
+    "newUnit":"Nueva Unidad",
+    "buys":"Compras",
+    "modules":"Modulos",
+    "transfers":"Transferencias",
+    "reports":"Reportes",
+    "medicaments":"Medicamentos",
+    "quantityGlobal":"Cantidad Universal"
 
 }

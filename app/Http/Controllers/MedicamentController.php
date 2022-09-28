@@ -20,10 +20,17 @@ class MedicamentController extends Controller
         $this->middleware('can:medicament.update')->only(['update']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $items = Medicament::get();
-        return Inertia::render('Medicaments/index', ['data' => $items]);
+        $search = $request->search ?  $request->search : "";
+        $items = Medicament::with('unit:id,name')
+            ->where('id', 'LIKE', "{$search}%")
+            ->orWhere('name', 'LIKE', "{$search}%")
+            ->orWhere('code', 'LIKE', "{$search}%")
+            ->orWhere('price_sale', 'LIKE', "{$search}%")
+            ->orWhere('name', 'LIKE', "{$search}%")
+            ->get();
+        return Inertia::render('Medicaments/index.employee', ['data' => $items]);
     }
 
     public function update(Request $request, $id)

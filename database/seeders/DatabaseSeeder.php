@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
             ['quantity' => 10]
         )->create();
 
-        Buy::factory(2000)->hasAttached(
+        Buy::factory(20)->hasAttached(
             Medicament::orderByRaw('RAND()')->limit(rand(1, 12))->get(),
             function () {
                 return [

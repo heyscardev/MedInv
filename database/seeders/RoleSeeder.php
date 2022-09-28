@@ -38,6 +38,18 @@ class RoleSeeder extends Seeder
         Permission::create(['name'=>'module.store'])->syncRoles([$managerRole]);
         Permission::create(['name'=>'module.destroy'])->syncRoles([$managerRole]);
 
+        Permission::create(['name'=>'buy.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'buy.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'buy.update'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'buy.store'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'buy.destroy'])->syncRoles([$managerRole]);
+
+        Permission::create(['name'=>'transfer.index'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'transfer.show'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'transfer.update'])->syncRoles([$managerRole]);
+        Permission::create(['name'=>'transfer.store'])->syncRoles([$managerRole,$employeeRole]);
+        Permission::create(['name'=>'transfer.destroy'])->syncRoles([$managerRole]);
+        
         Permission::create(['name'=>'service.index'])->syncRoles([$managerRole,$employeeRole]);
         Permission::create(['name'=>'service.show'])->syncRoles([$managerRole,$employeeRole]);
         Permission::create(['name'=>'service.update'])->syncRoles([$managerRole]);

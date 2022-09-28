@@ -43,5 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('modules', ModuleController::class)->only(['index', 'show'])->names('module');
     Route::get('modules/{id}/buy', [BuyController::class, 'create'])->name('module.buy');
     Route::post('modules/{id}/buy', [BuyController::class, 'store'])->name('module.buy.store');
+    
+    Route::get('buys',[BuyController::class,'index'])->name('buy.index');
 });
 require __DIR__ . '/auth.php';

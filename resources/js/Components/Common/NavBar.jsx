@@ -1,4 +1,4 @@
-import { Dashboard, Home, Store } from "@mui/icons-material";
+import { Dashboard, Home, Masks, Medication, People, Scale, Sick, Store } from "@mui/icons-material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -25,11 +25,11 @@ export default ({ auth, can }) => {
     const pages = [
         ["Inicio", route().t.url, <Home />],
         ["Dashboard", route("dashboard"), <Dashboard />],
-        /*    can('user.index') ? ["Usuarios", route("user.index"), <People />] : null,
+           can('user.index') ? ["Usuarios", route("user.index"), <People />] : null,
     can('medicament.index') ? ["Medicamentos", route("medicament.index"), <Medication />] : null,
     can('unit.index') ? ["Unidades", route("unit.index"), <Scale />] : null,
     can('doctor.index') ? ["Doctores", route("doctor.index"), <Masks />] : null,
-    can('patient.index') ? ["Pacientes", route("patient.index"), <Sick />] : null, */
+    can('patient.index') ? ["Pacientes", route("patient.index"), <Sick />] : null,
         can("module.index")
             ? ["Modulos", route("module.index"), <Store />]
             : null,
@@ -108,7 +108,7 @@ export default ({ auth, can }) => {
                     <IconButton
                         size="large"
                         edge="start"
-                        sx={{ display: { md: "none" }, mr: 2 }}
+                        sx={{ display: { lg: "none" }, mr: 2 }}
                         color="info"
                         onClick={toggleSideBar}
                     >
@@ -120,7 +120,7 @@ export default ({ auth, can }) => {
                     <Box
                         sx={{
                             flexGrow: 1,
-                            display: { xs: "none", md: "flex" },
+                            display: { xs: "none", lg: "flex" },
                         }}
                     >
                         {pages.map((page) =>

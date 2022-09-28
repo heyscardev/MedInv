@@ -7,6 +7,7 @@ use App\Models\Buy;
 use App\Models\Medicament;
 use App\Models\Module;
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,21 @@ class BuyController extends Controller
         $units = Unit::orderBy('name')->get();
         return Inertia::render('Modules/buy.employee', ['module' => $item, 'medicaments' => $Medicaments,'units'=>$units]);
     }
+    public function index(Request $request){
+        $valid = $request->validate([
+            'filters'=>'array|min:1',
+            'filter.medicament'=>'numeric|min:1',
+            'filter.module'=>'numeric|min:1',
+            'filter.unit'=>'numeric|min:1'
+        ]);
+        $data = auth()->user()->buys;
+        return inertia('Buys/index.employee',['data'=>$data]);
+        
+        if(isset($valid['filters'])){
 
+        };
+
+    }
     public function store(CreateBuyRequest $request, $id)
     {
         $data = $request->validated();

@@ -135,7 +135,6 @@ export default ({sx={margin:2},elevation=2,...props}) => {
                     // sorting: [{ id: 'state', desc: false }], //sort by state by default
                 }}
 muiTableContainerProps={{sx:{backgroundColor:"primary.light"}}}
-muiTablePaginationProps={{sx:{backgroundColor:"primary.dark",color:"white.main"}}}
 
                 columns={[
 

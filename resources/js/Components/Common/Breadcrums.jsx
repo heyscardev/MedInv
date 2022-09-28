@@ -14,17 +14,18 @@ export default ({ links }) => {
             aria-label="breadcrumb"
             sx={{ marginTop: 3, marginBottom: 3, marginLeft:2 }}
         >
-            {links.map((item) => (
+            {links.map(({route:routeHref,item,name,id,...rest}) => (
                 <Link
+                {...rest}
                     underline="hover"
                     key="1"
                     color="inherit"
                     href={
-                        item.id ? route(item.route, item.id) : route(item.route)
+                        id ? route(routeHref, id) : route(routeHref)
                     }
                     onClick={handdleClick}
                 >
-                    {item.name}
+                    {name}
                 </Link>
             ))}
         </Breadcrumbs>
