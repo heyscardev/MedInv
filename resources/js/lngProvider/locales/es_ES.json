@@ -70,6 +70,11 @@
     "transfers":"Transferencias",
     "reports":"Reportes",
     "medicaments":"Medicamentos",
-    "quantityGlobal":"Cantidad Universal"
+    "quantityGlobal":"Cantidad Universal",
+    "dashboard":"Dashboard",
+    "totalMedicaments":"Medicamentos Totales",
+    "totalQuantity":"Cantidad Total",
+    "date":"Fecha",
+    "showBuys":"Mostrar Compras"
 
 }

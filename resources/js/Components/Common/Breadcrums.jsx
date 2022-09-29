@@ -1,12 +1,14 @@
 import { visit } from "@/HTTPProvider";
 import { NavigateNext } from "@mui/icons-material";
 import { Breadcrumbs, Link, Typography, Container } from "@mui/material";
+import { useIntl } from "react-intl";
 
 const handdleClick = (e) => {
     e.preventDefault();
     visit(e.target.href);
 };
 export default ({ links }) => {
+    const {formatMessage} = useIntl();
     return (
         <Breadcrumbs
             color="primary"
@@ -14,7 +16,7 @@ export default ({ links }) => {
             aria-label="breadcrumb"
             sx={{ marginTop: 3, marginBottom: 3, marginLeft:2 }}
         >
-            {links.map(({route:routeHref,item,name,id,...rest}) => (
+            {links.map(({route:routeHref,item,name,id,noTranslate,...rest}) => (
                 <Link
                 {...rest}
                     underline="hover"
@@ -25,7 +27,7 @@ export default ({ links }) => {
                     }
                     onClick={handdleClick}
                 >
-                    {name}
+                    {noTranslate?name:formatMessage({id:name})}
                 </Link>
             ))}
         </Breadcrumbs>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicamentController;
+use App\Http\Controllers\ModuleBuyController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\UnitController;
@@ -41,9 +42,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('doctors', DoctorController::class)->only(['index', 'destroy', 'update', 'store'])->names('doctor');
     Route::resource('patitents', PatientController::class)->only(['index', 'destroy', 'update', 'store'])->names('patient');
     Route::resource('modules', ModuleController::class)->only(['index', 'show'])->names('module');
-    Route::get('modules/{id}/buy', [BuyController::class, 'create'])->name('module.buy');
-    Route::post('modules/{id}/buy', [BuyController::class, 'store'])->name('module.buy.store');
-    
-    Route::get('buys',[BuyController::class,'index'])->name('buy.index');
+
+    Route::get('modules/{module}/buy/create', [ModuleBuyController::class, 'create'])->name('module.buy.create');
+    Route::post('modules/{module}/buy', [ModuleBuyController::class, 'store'])->name('module.buy.store');
+    Route::get('modules/{module}/buy', [ModuleBuyController::class, 'index'])->name('module.buy.index');
+   Route::get('buys',[BuyController::class,'index'])->name('buy.index');
 });
 require __DIR__ . '/auth.php';

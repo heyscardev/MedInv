@@ -36,12 +36,19 @@ class ModuleController extends Controller
         //
     }
 
-    public function show($id)
+    public function show(Request $request,$id)
     {
+        $paginate = max(min($request->get('page_size'),100),10);
+      //  $id = $request->get('id');
+        $name = $request->get('name');
+        $code = $request->get('code');
+        $code = $request->get('price');
+       // $unit_id = $request->get('id');
         $item = Module::find($id);
         if (!isset($item)) return abort('404');
         if ($item->user->id !== auth()->user()->id) return abort('403');
-        return Inertia::render('Modules/show.employee', ['module' => $item, 'medicaments' => Medicament::all(), 'data' => $item->medicaments]);
+        $dataToSend = $item->medicaments()->latest()->ordercode("heloo")->paginate($paginate);
+        return Inertia::render('Modules/show.employee', ['module' => $item, 'data' => $dataToSend]);
     }
 
     public function update(Request $request, $id)

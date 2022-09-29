@@ -1,10 +1,11 @@
+import AsyncTable from "@/Components/Common/AsyncTable";
 import Breadcrums from "@/Components/Common/Breadcrums";
 import Table from "@/Components/Common/Table";
 import IconButton from "@/Components/Custom/IconButton";
 import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
 import IntlFormatNumber from "@/Components/Custom/IntlFormatNumber";
 import { visit } from "@/HTTPProvider";
-import { AddShoppingCart, MoveUp, PostAdd } from "@mui/icons-material";
+import { AddShoppingCart, MoveUp, PostAdd, ShoppingCart } from "@mui/icons-material";
 import { Box, Container } from "@mui/material";
 import { Fragment } from "react";
 
@@ -13,9 +14,10 @@ export default (props) => {
         <Fragment>
             <Breadcrums
                 links={[
-                    { name: "Dashboard", route: "dashboard" },
-                    { name: "Modulos", route: "module.index" },
+                    { name: "dashboard", route: "dashboard" },
+                    { name: "modules", route: "module.index" },
                     {
+                        noTranslate:true,
                         name: props.module.name,
                         route: "module.show",
                         id: props.module.id,
@@ -36,7 +38,7 @@ export default (props) => {
                     title="buyMedicaments"
                     onClick={() => {
                         visit(
-                            route("module.buy", {
+                            route("module.buy.create", {
                                 id: props.module.id,
                             })
                         );
@@ -44,8 +46,21 @@ export default (props) => {
                 >
                     <AddShoppingCart size="large" />
                 </IconButton>
+                <IconButton
+                    color="primary"
+                    title="showBuys"
+                    onClick={() => {
+                        visit(
+                            route("module.buy.index", {
+                                id: props.module.id,
+                            })
+                        );
+                    }}
+                >
+                    <ShoppingCart size="large" />
+                </IconButton>
             </Container>
-            <Table
+            <AsyncTable
                 data={props.data}
                 columns={[
                     { accessorKey: "code", header: "code" },

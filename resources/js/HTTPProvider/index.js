@@ -19,7 +19,7 @@ const defaultMethods = (options) => ({
   },
   onStart: (visit) => {
     if (options.onStart) options.onStart(visit);
-    showLoader();
+    if(options && !options.noLoader )showLoader();
   },
 });
 

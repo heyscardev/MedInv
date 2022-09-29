@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class BuyMedicament extends Pivot
 {
     protected $table = "buy_medicament";
+    protected $fillable = ['quantity','price'];
 
     public function medicament(){
         return $this->belongsTo(Medicament::class);

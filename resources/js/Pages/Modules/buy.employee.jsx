@@ -43,16 +43,18 @@ export default (props) => {
         <Fragment>
             <Breadcrums
                 links={[
-                    { name: "Dashboard", route: "dashboard" },
-                    { name: "Modulos", route: "module.index" },
+                    { name: "dashboard", route: "dashboard" },
+                    { name: "modules", route: "module.index" },
                     {
+                        noTranslate:true,
                         name: props.module.name,
                         route: "module.show",
                         id: props.module.id,
                     },
                     {
-                        name: "Comprar Medicamentos",
-                        route: "module.buy",
+                        noTranslate:true,
+                        name: "buyMedicaments",
+                        route: "module.buy.create",
                         id: props.module.id,
                     },
                 ]}
@@ -71,7 +73,6 @@ export default (props) => {
                                         bgcolor="white.main"
                                         borderRadius={2}
                                         padding={1}
-                                        ele
                                     >
                                         <AutocompleteMedicaments
                                             medicamentsOptions={
