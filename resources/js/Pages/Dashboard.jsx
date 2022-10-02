@@ -1,4 +1,5 @@
 import DashboardButton from "@/Components/Common/DashboardButton";
+import { Head } from "@inertiajs/inertia-react";
 import { Assessment, Medication, MoveUp, ShoppingCart, Store } from "@mui/icons-material";
 import { Grid, Paper } from "@mui/material";
 import { Fragment } from "react";
@@ -41,6 +42,7 @@ export default ({ can, auth }) => {
   ];
   return (
     <Fragment>
+       <Head title="DashBoard"/>
       <Paper>{`Bienvenido a medinv ${auth.user.first_name} ${auth.user.last_name}`}</Paper>
       <Grid container spacing={4} justifyContent="space-between" alignItems="center" padding={4}>
         {pages.map((page) =>
