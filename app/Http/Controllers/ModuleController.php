@@ -41,17 +41,13 @@ class ModuleController extends Controller
 
     public function show(ModuleRequest $request, Module $module)
     {
-        $search = $request->get('search',"");
+        $search = $request->get('search');
         $paginate = max(min($request->get('page_size'), 100), 10);
         $orderBy = $request->get('orderBy', [['id' => "pivot.updated_at", 'desc' => false]]);
         $filters = $request->get('filters', []);
 
         //start building of query
-        $query = $module->medicaments()
-        ->where('id', 'LIKE', "%{$search}%")
-        ->orWhere('name', 'LIKE', "%{$search}%")
-        ->orWhere('code', 'LIKE', "%{$search}%")
-        ->orWhere('price_sale', 'LIKE', "%{$search}%");
+        $query = $module->medicaments();
 
         //fliters iteration
         array_map(function ($filter) use ($query) {
