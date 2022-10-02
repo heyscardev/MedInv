@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ModuleRequest;
 use App\Models\Medicament;
 use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class ModuleController extends Controller
@@ -36,19 +39,44 @@ class ModuleController extends Controller
         //
     }
 
-    public function show(Request $request,$id)
+    public function show(ModuleRequest $request, Module $module)
     {
-        $paginate = max(min($request->get('page_size'),100),10);
-      //  $id = $request->get('id');
-        $name = $request->get('name');
-        $code = $request->get('code');
-        $code = $request->get('price');
-       // $unit_id = $request->get('id');
-        $item = Module::find($id);
-        if (!isset($item)) return abort('404');
-        if ($item->user->id !== auth()->user()->id) return abort('403');
-        $dataToSend = $item->medicaments()->latest()->ordercode("heloo")->paginate($paginate);
-        return Inertia::render('Modules/show.employee', ['module' => $item, 'data' => $dataToSend]);
+        $search = $request->get('search',"");
+        $paginate = max(min($request->get('page_size'), 100), 10);
+        $orderBy = $request->get('orderBy', [['id' => "pivot.updated_at", 'desc' => false]]);
+        $filters = $request->get('filters', []);
+
+        //start building of query
+        $query = $module->medicaments()
+        ->where('id', 'LIKE', "%{$search}%")
+        ->orWhere('name', 'LIKE', "%{$search}%")
+        ->orWhere('code', 'LIKE', "%{$search}%")
+        ->orWhere('price_sale', 'LIKE', "%{$search}%");
+
+        //fliters iteration
+        array_map(function ($filter) use ($query) {
+            $id = $filter['id'];
+            $value = $filter['value'];
+
+            if (str_contains($id, "pivot.")) {
+                if (is_array($value)) return $query->wherePivot(str_replace("pivot.", "", $id), ">=",   $value[0] ? $value[0] : 0)->wherePivot(str_replace("pivot.", "", $id), "<=",   $value[1] ? $value[1] : 9999999999.2);
+                return $query->wherePivot(str_replace("pivot.", "", $id), "LIKE", "%" . $value . "%");
+            }
+            if (str_contains($id, "unit.")) return $query->unit(str_replace('unit.', '', $id), $value);
+            return $query->LikeOrBeetween('medicaments.' . $id, $value);
+        }, $filters);
+        //fliters orders
+        array_map(function ($by) use ($query) {
+            $id = $by['id'];
+            $sorting = $by['desc'] == true ? "DESC" : 'ASC';
+
+            if (str_contains($id, "pivot.")) return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
+
+            if (str_contains($id, "unit.")) return $query->orderByUnit(str_replace('unit.', '', $id), $sorting);
+            if($id === 'quantity_global')return $query->orderByGlobalInventory($sorting);
+            return $query->orderBy('medicaments.' . $id, $sorting);
+        }, $orderBy);
+        return Inertia::render('Modules/show.employee', ['module' => $module, 'data' => $query->paginate($paginate)]);
     }
 
     public function update(Request $request, $id)

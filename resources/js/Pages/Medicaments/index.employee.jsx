@@ -1,96 +1,93 @@
+import AsyncTable from "@/Components/Common/AsyncTable";
 import Breadcrums from "@/Components/Common/Breadcrums";
-import GenericCrud from "@/Components/Common/GenericCrud";
-import SearchInput from "@/Components/Common/SearchInput";
-import MedicamentButton from "@/Components/Layouts/Medicaments/MedicamentButton";
-import EditModal from "@/Components/Layouts/Users/EditModal";
-import { visit } from "@/HTTPProvider";
-import { PersonAdd } from "@mui/icons-material";
-import { Autocomplete, Grid } from "@mui/material";
-import { Fragment, useState } from "react";
-import { useIntl } from "react-intl";
+import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
+import IntlFormatNumber from "@/Components/Custom/IntlFormatNumber";
+import { Box } from "@mui/material";
+import { Fragment } from "react";
 
-export default ({ data, ...props }) => {
-    const { formatMessage } = useIntl();
+export default (props) => {
+  return (
+    <Fragment>
+       <Breadcrums
+        links={[
+          { name: "dashboard", route: "dashboard" },
+          { name: "medicaments", route: "medicament.index" },
 
-    return (
-        <Fragment>
-            <Breadcrums
-                links={[
-                    { name: "Dashboard", route: "dashboard" },
-                    {
-                        name: formatMessage({ id: "medicaments" }),
-                        route: "medicament.index",
-                    },
-                ]}
-            />
-
-            <Grid container padding={2} spacing={2}>
-                <Grid item xs={12}>
-                    <SearchInput
-                        onSubmit={(search) =>
-                            visit(
-                                route(
-                                    "medicament.index",
-                                    { search },
-                                    { only: ["data"] }
-                                )
-                            )
-                        }
-                    />
-                </Grid>
-                {data.map((medicament) => (
-                    <Grid key={medicament.id} item sx={12} sm={6} xl={4}>
-                        <MedicamentButton medicament={medicament} />
-                    </Grid>
-                ))}
-            </Grid>
-            {/*  <GenericCrud
-        data={props.data}
-        columnVisibility={{}}
-        routeName="medicament"
-        EditModal={EditModal}
-        multiButtonActions={[
-          {
-            icon: <PersonAdd />,
-            name: "crear",
-          },
         ]}
+      />
+
+      <AsyncTable
+        routeName="medicament.index"
+        routeParams={{ }}
+       // onAsync={tableUpdate}
+        data={props.data}
         columns={[
-          {
-            accessorKey: "id",
-            header: "ID",
-            enableColumnOrdering: false,
-            enableEditing: false,
-            size: 80,
-          },
-          {
-            accessorKey: "code",
-            header: "Codigo",
-          },
-          {
-            accessorKey: "name",
-            header: "Nombre",
-          },
-          {
+          { accessorKey: "id", header: "id" },
+          { accessorKey: "name", header: "name" },
+           {
             accessorKey: "price_sale",
-            header: "Precio de venta",
+            header: "price",
+            filterVariant: "range",
+            Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
           },
+        /*
+
           {
             accessorKey: "quantity_exist",
-            header: "Cantidad Existente",
+            header: "inventory",
+            filterVariant: "range",
+            Cell: ({ cell }) => (
+              <Box
+                sx={(theme) => ({
+                  backgroundColor:
+                    cell.getValue() < 10
+                      ? theme.palette.error.main
+                      : cell.getValue() >= 10 && cell.getValue() < 500
+                      ? theme.palette.primary.main
+                      : theme.palette.primary.dark,
+                  borderRadius: "0.25rem",
+                  color: "#fff",
+                  p: "0.25rem",
+                  textAlign: "right",
+                })}
+              >
+                <IntlFormatNumber value={cell.getValue()} />
+              </Box>
+            ),
           },
+
           {
-            accessorKey: "created_at",
-            header: "Fecha de Creacion",
-            accessorFn: ({ created_at }) => (!created_at ? "00/00/0000 00:00:00" : created_at),
-          },
+            accessorKey: "pivot.updated_at",
+            header: "updated_at",
+
+          }, */
           {
-            accessorKey: "updated_at",
-            header: "Fecha de Ultima Modificacion",
-            accessorFn: ({ updated_at }) => (!updated_at ? "00/00/0000 00:00:00" : updated_at),
+
+            enableColumnFilter:false,
+            accessorKey: "quantity_global",
+            header: "globalInventory",
+            filterVariant: "range",
+            Cell: ({ cell }) => (
+              <Box
+                sx={(theme) => ({
+                  backgroundColor:
+                    cell.getValue() < 100
+                      ? theme.palette.error.main
+                      : cell.getValue() >= 100 && cell.getValue() < 1000
+                      ? theme.palette.primary.main
+                      : theme.palette.primary.dark,
+                  borderRadius: "0.25rem",
+                  color: "#fff",
+                  p: "0.25rem",
+                  textAlign: "right",
+                })}
+              >
+                <IntlFormatNumber value={cell.getValue()} />
+              </Box>
+            ),
           },
         ]}
-      /> */}
-        </Fragment>
-    );
+      />
+    </Fragment>
+  );
 };

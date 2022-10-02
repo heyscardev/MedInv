@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const defaultMethods = (options) => ({
   onError: (errors) => {
     if (options.onError) options.onError(errors);
-    else {
+    if(!options.preventDefaultOnErrors) {
       for (const key in errors) {
         if (Object.hasOwnProperty.call(errors, key)) {
           toast.error(errors[key]);
@@ -83,6 +83,7 @@ const visit = (
     ...options,
     ...defaultMethods(options),
     onBefore: (visit) => {},
+
   });
 
 export { post, get, put, visit, destroy };

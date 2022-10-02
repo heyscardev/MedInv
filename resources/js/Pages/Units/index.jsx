@@ -1,5 +1,5 @@
 import GenericCrud from "@/Components/Common/GenericCrud";
-import EditModal from "@/Components/Layouts/Units/EditModal";
+import EditModal from "@/Components/Layouts/Units/EditUnitModal";
 import { formatCrtUpdtAt } from "@/Utils/format";
 import { generatorTableColumns } from "@/Utils/generators";
 import { PersonAdd } from "@mui/icons-material";

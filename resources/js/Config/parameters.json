@@ -4,6 +4,6 @@
         "minDecimalPrice":0.00,
         "maxLengthStringGlobal":250,
         "maxLengthStringDescription":250,
-        "maxLengthStringName":250
+        "maxLengthStringName":80
     }
 }

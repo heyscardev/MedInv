@@ -10,8 +10,8 @@ export default (props) => {
     return (
         <Container sx={{ padding: 1 }}>
            <Breadcrums links={[
-            {name:"Dashboard",route:"dashboard"},
-            {name:"Modulos",route:"module.index"}
+            {name:"dashboard",route:"dashboard"},
+            {name:"modules",route:"module.index"}
            ]}/>
 
             <Grid container spacing={4}   >
