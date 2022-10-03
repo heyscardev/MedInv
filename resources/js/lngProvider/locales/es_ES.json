@@ -76,6 +76,7 @@
     "totalQuantity":"Cantidad Total",
     "date":"Fecha",
     "showBuys":"Mostrar Compras",
+    "transferSelectedMedicaments":"Transferir Medicamentos Seleccionados",
 
     "actions": "Acciones",
     "cancel": "Cancelar",

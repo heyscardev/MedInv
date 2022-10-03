@@ -4,6 +4,7 @@ import Table from "@/Components/Common/Table";
 import IconButton from "@/Components/Custom/IconButton";
 import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
 import IntlFormatNumber from "@/Components/Custom/IntlFormatNumber";
+import ActionsTableShow from "@/Components/Layouts/Modules/ActionsTableShow";
 import { visit } from "@/HTTPProvider";
 import { AddShoppingCart, MoveUp, PostAdd, ShoppingCart } from "@mui/icons-material";
 import { Box, Container } from "@mui/material";
@@ -81,6 +82,7 @@ export default (props) => {
       <AsyncTable
         routeName="module.show"
         routeParams={{ module: props.module.id }}
+        renderTopToolbarCustomActions={ActionsTableShow(module)}
         // onAsync={tableUpdate}
         data={props.data}
         initialState={{ columnVisibility:{id:false} }}

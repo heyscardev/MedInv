@@ -67,6 +67,7 @@ const visit = (
     only: [],
     headers: {},
     errorBag: null,
+    noLoader:false,
     forceFormData: false,
     onCancelToken: (cancelToken) => {},
     onCancel: () => {},

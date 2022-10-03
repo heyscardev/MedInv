@@ -27,6 +27,7 @@ class ModuleBuyRequest extends FormRequest
     public function rules()
     {
         if ($this->method() == 'POST') return $this->storeRules();
+        if($this->url()=== route('module.buy.create',$this->route('module')->id))return $this->createRules();
         return [];
     }
     private function storeRules()
@@ -37,6 +38,12 @@ class ModuleBuyRequest extends FormRequest
             'medicaments.*.id' => 'required|distinct:strict',
             'medicaments.*.price' => 'required|numeric|between:0,99999999999,99',
             'medicaments.*.quantity' => 'required|integer|min:0',
+        ];
+    }
+    private function createRules()
+    {
+        return [
+           'search'=>['string','nullable']
         ];
     }
 }

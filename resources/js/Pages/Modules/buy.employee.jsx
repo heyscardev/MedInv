@@ -9,7 +9,7 @@ import {
     greaterOrEqualValue,
     required
 } from "@/Config/InputErrors";
-import { post } from "@/HTTPProvider";
+import { post, visit } from "@/HTTPProvider";
 import { Add, Clear } from "@mui/icons-material";
 import {
     Autocomplete,
@@ -78,6 +78,9 @@ export default (props) => {
                                             medicamentsOptions={
                                                 props.medicaments
                                             }
+                                            onChangeTextField={(e,value)=>{
+                                                visit(route('module.buy.create',{module:props.module.id,search:value?value:""}),{noLoader:true,preserveState:true,only:['medicaments']})
+                                            }}
                                             units={props.units}
                                             pushMedicament={fields.push}
                                             onChange={(e, value) => {
@@ -240,6 +243,7 @@ const AutocompleteMedicaments = ({
     onChange,
     can,
     pushMedicament,
+    onChangeTextField
 }) => {
     const [openEdit, setOpenEdit] = useState(false);
     return (
@@ -254,14 +258,13 @@ const AutocompleteMedicaments = ({
                 <Autocomplete
                     id="medicamentAutocomplete"
                     options={medicamentsOptions}
-                    autoHighlight
-                    clearOnEscape
                     openOnFocus
+                    onInputChange={onChangeTextField}
                     onChange={onChange}
-                    getOptionLabel={(option) => option.code + option.name}
+                    getOptionLabel={(option) => option.code + option.name + option.unit}
                     renderOption={(props, option) => (
                         <Box component="li" {...props}>
-                            {option.code} ({option.name})
+                            {option.code} ({option.name}) {option.unit.name}
                         </Box>
                     )}
                     renderInput={(params) => (

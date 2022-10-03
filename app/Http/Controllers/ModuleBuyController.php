@@ -13,7 +13,9 @@ class ModuleBuyController extends Controller
 {
     public function create(ModuleBuyRequest $request,Module $module)
     {
-        $Medicaments = Medicament::get(['id', 'code', 'name']);
+
+$search=$request->get('search',null);
+        $Medicaments =$search? Medicament::whereRelation('unit','name','LIKE',"%$search%")->orWhere('name','LIKE','%'.$search.'%')->orWhere('code','LIKE','%'.$search.'%')->orderBy('name')->with('unit')->distinct('medicaments.id')->get():[];
         $units = Unit::orderBy('name')->get();
         return inertia('Modules/buy.employee', ['module' => $module, 'medicaments' => $Medicaments, 'units' => $units]);
     }
