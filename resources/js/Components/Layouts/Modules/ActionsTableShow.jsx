@@ -8,6 +8,7 @@ export default (module)=>({ table }) => {
       const rows= table.getSelectedRowModel().flatRows.map((row) => {
        return row.original.id;
       });
+      visit(route('transfer.create',{module:module.id,selected_medicaments:rows}))
     };
 
     const handleActivate = () => {

@@ -5,5 +5,7 @@
         "maxLengthStringGlobal":250,
         "maxLengthStringDescription":250,
         "maxLengthStringName":80
-    }
+    },
+    "minInventory":10,
+    "maxInventory":1000
 }

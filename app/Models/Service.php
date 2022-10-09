@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Service extends Model
 {
     use HasFactory;
-    protected $printable = ['name'];
+    protected $fillable = ['name'];
 
     public function recipes(){
         return $this->hasMany(Recipe::class);

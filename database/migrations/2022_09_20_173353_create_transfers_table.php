@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('module_send_id');
             $table->unsignedBigInteger('module_receive_id');
-            $table->string('description', 250);
+            $table->string('description', 250)->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('module_send_id')->references('id')->on('modules');
@@ -33,6 +33,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('transfers', function (Blueprint $table) {
+            $table->dropForeign('transfers_module_receive_id_foreign');
+            $table->dropForeign('transfers_module_send_id_foreign');
+      });
         Schema::dropIfExists('transfers');
     }
 };

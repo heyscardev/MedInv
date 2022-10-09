@@ -44,10 +44,10 @@ export default ({ can, auth }) => {
     <Fragment>
        <Head title="DashBoard"/>
       <Paper>{`Bienvenido a medinv ${auth.user.first_name} ${auth.user.last_name}`}</Paper>
-      <Grid container spacing={4} justifyContent="space-between" alignItems="center" padding={4}>
+      <Grid container spacing={4} display="flex" justifyContent={{xs:"center",sm:"left"}} alignItems="center"  padding={4}>
         {pages.map((page) =>
           page ? (
-            <Grid key={page.route} item xs={12} sm={6} md={3} xl={2} justifyContent="center" display="flex">
+            <Grid key={page.route} item xs={10} sm={6} md={3} xl={2} >
               <DashboardButton {...page} />
             </Grid>
           ) : null

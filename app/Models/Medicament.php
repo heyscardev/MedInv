@@ -52,7 +52,7 @@ class Medicament extends Model
     }
     public function recipes()
     {
-        return $this->belongsToMany(Recipe::class, 'recipe_medicament')->withPivot('prescribed_amount', 'quantity_deliver', 'price', 'description');
+        return $this->belongsToMany(Recipe::class)->withPivot('prescribed_amount', 'quantity_deliver', 'price', 'description');
     }
 
     public function buys()
@@ -61,7 +61,7 @@ class Medicament extends Model
     }
     public function transfers()
     {
-        return $this->belongsToMany(Transfer::class, 'transfer_medicament')->withPivot('quantity');
+        return $this->belongsToMany(Transfer::class)->withPivot('quantity')->using(MedicamentTransfer::class);
     }
 
     //query scopes

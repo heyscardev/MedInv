@@ -12,7 +12,7 @@ class Buy extends Model
     protected $fillable = ['module_id','user_id','description'];
     protected $appends = ['total_quantity','total_medicaments','total_price'];
 
-    
+
     protected function totalQuantity():Attribute{
         return new Attribute(get:fn()=>$this->medicaments->sum('pivot.quantity'));
     }
@@ -28,5 +28,5 @@ class Buy extends Model
     public function medicaments(){
         return $this->belongsToMany(Medicament::class)->withPivot('price','quantity')->withTimestamps()->using(BuyMedicament::class);
     }
-   
+
 }

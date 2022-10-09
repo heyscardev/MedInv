@@ -26,8 +26,7 @@ class ModuleRequest extends FormRequest
      */
     public function rules()
     {
-        $module = $this->route('module');
-        if ($this->url() === route('module.show', $module->id)) return $this->showRules();
+        if ($this->routeIs('module.show')) return $this->showRules();
         return [
             //
         ];

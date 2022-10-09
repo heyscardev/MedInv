@@ -121,6 +121,14 @@
     "sortedByColumnDesc": "Ordenar por {column} Descendente",
     "and": "&",
     "clickToCopy": "copiar al portapapeles",
-    "move": "Mover"
-
+    "move": "Mover",
+    "available":"Disponible",
+    "transferTo":"Transferir a",
+    "noModule":"no Hay Modulo",
+    "responsible":"responsable",
+    "transfer":"Transferencia",
+    "selectModule":"Seleccione Modulo",
+    "selectModuleFromTransfer":"Seleccione modulo a enviar",
+    "selectModuleToTransfer":"Seleccione modulo a recibir",
+    "afterTransfer":"Despues de transferencia"
 }

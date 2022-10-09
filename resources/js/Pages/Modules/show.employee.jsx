@@ -1,5 +1,6 @@
 import AsyncTable from "@/Components/Common/AsyncTable";
 import Breadcrums from "@/Components/Common/Breadcrums";
+import CellNumberBox from "@/Components/Common/CellNumberBox";
 import Table from "@/Components/Common/Table";
 import IconButton from "@/Components/Custom/IconButton";
 import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
@@ -82,10 +83,10 @@ export default (props) => {
       <AsyncTable
         routeName="module.show"
         routeParams={{ module: props.module.id }}
-        renderTopToolbarCustomActions={ActionsTableShow(module)}
+        renderTopToolbarCustomActions={ActionsTableShow(props.module)}
         // onAsync={tableUpdate}
         data={props.data}
-        initialState={{ columnVisibility:{id:false} }}
+        initialState={{ columnVisibility: { id: false } }}
         columns={[
           { accessorKey: "id", header: "id" },
           { accessorKey: "code", header: "code", enableClickToCopy: true },
@@ -104,48 +105,14 @@ export default (props) => {
             accessorKey: "pivot.quantity_exist",
             header: "inventory",
             filterVariant: "range",
-            Cell: ({ cell }) => (
-              <Box
-                sx={(theme) => ({
-                  backgroundColor:
-                    cell.getValue() < 10
-                      ? theme.palette.error.main
-                      : cell.getValue() >= 10 && cell.getValue() < 500
-                      ? theme.palette.primary.main
-                      : theme.palette.primary.dark,
-                  borderRadius: "0.25rem",
-                  color: "#fff",
-                  p: "0.25rem",
-                  textAlign: "right",
-                })}
-              >
-                <IntlFormatNumber value={cell.getValue()} />
-              </Box>
-            ),
+            Cell: ({ cell }) => <CellNumberBox value={cell.getValue()} />,
           },
           {
             enableColumnFilter: false,
             accessorKey: "quantity_global",
             header: "globalInventory",
             filterVariant: "range",
-            Cell: ({ cell }) => (
-              <Box
-                sx={(theme) => ({
-                  backgroundColor:
-                    cell.getValue() < 100
-                      ? theme.palette.error.main
-                      : cell.getValue() >= 100 && cell.getValue() < 1000
-                      ? theme.palette.primary.main
-                      : theme.palette.primary.dark,
-                  borderRadius: "0.25rem",
-                  color: "#fff",
-                  p: "0.25rem",
-                  textAlign: "right",
-                })}
-              >
-                <IntlFormatNumber value={cell.getValue()} />
-              </Box>
-            ),
+            Cell: ({ cell }) => <CellNumberBox value={cell.getValue()} />,
           },
           {
             accessorKey: "pivot.updated_at",

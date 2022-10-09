@@ -43,7 +43,7 @@ class ModuleController extends Controller
     {
         $search = $request->get('search');
         $paginate = max(min($request->get('page_size'), 100), 10);
-        $orderBy = $request->get('orderBy', [['id' => "pivot.updated_at", 'desc' => false]]);
+        $orderBy = $request->get('orderBy', [['id' => "pivot.updated_at", 'desc' => true]]);
         $filters = $request->get('filters', []);
 
         //start building of query

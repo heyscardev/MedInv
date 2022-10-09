@@ -14,7 +14,7 @@ export default (props) => {
             {name:"modules",route:"module.index"}
            ]}/>
 
-            <Grid container spacing={4}   >
+            <Grid container spacing={4} display="flex" justifyContent={{sm:"center",md:"left"}}   >
                 {props.data.map((module) => (
                     <Grid key={module.id} item xs={12} sm={8} md={6} lg={4} >
                         <ModuleButton module={module} />

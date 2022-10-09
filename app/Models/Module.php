@@ -13,7 +13,7 @@ class Module extends Model
         'name',
         'user_id'
     ];
-    
+
     public function medicaments()
     {
         return $this->belongsToMany(Medicament::class)->with(['unit:id,name'])->withPivot('quantity_exist')->withTimestamps();
@@ -31,14 +31,17 @@ class Module extends Model
     {
         return $this->hasMany(Buy::class);
     }
-    public function transferReceives(){
-        return $this->hasMany(Transfer::class,'module_receive_id');
+    public function transferReceives()
+    {
+        return $this->hasMany(Transfer::class, 'module_receive_id');
     }
-    public function transferSends(){
-        return $this->hasMany(Transfer::class,'module_send_id');
+    public function transferSends()
+    {
+        return $this->hasMany(Transfer::class, 'module_send_id');
     }
-    public function transfersAll(){
-        return $this->hasMany(Transfer::class,'module_receive_id')->orWhere('module_send_id','=',$this->id);
+    public function transfersAll()
+    {
+        return $this->hasMany(Transfer::class, 'module_receive_id')->orWhere('module_send_id', '=', $this->id);
     }
     public function addMedicament($medicamentId, $increment = 0)
     {
@@ -49,5 +52,16 @@ class Module extends Model
             return $this->medicaments()->attach($medicamentId, ['quantity_exist' => $increment]);
 
         return $oldMedicament->pivot->increment('quantity_exist', $increment);
+    }
+    public function removeMedicament($medicamentId, $decrement = 0)
+    {
+        $oldMedicament = $this->medicaments()
+            ->where('medicament_id', $medicamentId)->first();
+
+        if (!isset($oldMedicament))
+            return $this->medicaments()->attach($medicamentId, ['quantity_exist' => 0]);
+        if ($oldMedicament->pivot->quantity_exist >= $decrement)
+            return $oldMedicament->pivot->decrement('quantity_exist', $decrement);
+        else $oldMedicament->pivot->quantity_exist;
     }
 }

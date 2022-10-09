@@ -48,4 +48,5 @@ Route::middleware('auth')->group(function () {
     Route::get('modules/{module}/buy', [ModuleBuyController::class, 'index'])->name('module.buy.index');
    Route::get('buys',[BuyController::class,'index'])->name('buy.index');
 });
+require __DIR__.'/medinv/TransfersRoute.php';
 require __DIR__ . '/auth.php';

@@ -9,7 +9,7 @@ class Patient extends Model
 {
     use HasFactory;
 
-    protected $printable = [
+    protected $fillable = [
         'n_history',
         'c_i',
         'first_name',

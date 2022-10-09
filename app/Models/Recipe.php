@@ -10,7 +10,7 @@ class Recipe extends Model
 {
     use HasFactory;
 
-    protected $printable = [
+    protected $fillable = [
         'recipe_type',
         'state',
         'patient_id',
@@ -46,6 +46,6 @@ class Recipe extends Model
         return $this->belongsTo(User::class);
     }
     public function medicaments(){
-        return $this->belongsToMany(Medicament::class,'recipe_medicament')->withPivot('prescribed_amount','quantity_deliver','price','description');
+        return $this->belongsToMany(Medicament::class)->withPivot('prescribed_amount','quantity_deliver','price','description');
     }
 }

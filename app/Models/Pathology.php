@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pathology extends Model
 {
     use HasFactory;
-    protected $printable = ['code','name'];
+    protected $fillable = ['code','name'];
 
     public function recipes(){
         return $this->hasMany(Recipe::class);

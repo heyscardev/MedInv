@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recipe_medicament_unit', function (Blueprint $table) {
+        Schema::create('medicament_recipe', function (Blueprint $table) {
             $table->unsignedBigInteger('recipe_id');
             $table->unsignedBigInteger('medicament_id');
             $table->integer('prescribed_amount');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recipe_medicament');
+        Schema::dropIfExists('medicament_recipe');
     }
 };
