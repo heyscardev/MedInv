@@ -24,10 +24,8 @@ export default ({ can, auth }) => {
     can("transfer.index")
       ? {
           name: "transfers",
-          route: route("buy.index"),
+          route: route("transfer.index"),
           Icon: MoveUp,
-          outlined: true,
-          disabled: true,
         }
       : null,
     can("report.index")

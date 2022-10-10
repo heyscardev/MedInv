@@ -21,11 +21,18 @@ class TransferRequest extends FormRequest
         $module = $this->route('module', null);
         if ($module && $module->user_id !== auth()->user()->id) return false;
         if ($this->routeIs('transfer.store')) return $this->storeAuthorize();
+        if ($this->routeIs('transfer.index')) return $this->indexAuthorize();
         return true;
     }
     private function storeAuthorize()
     {
         $module = Module::find($this->post('module_send_id', null));
+        if ($module && $module->user_id !== auth()->user()->id) return false;
+        return true;
+    }
+    private function indexAuthorize()
+    {
+        $module = Module::find($this->get('module', null));
         if ($module && $module->user_id !== auth()->user()->id) return false;
         return true;
     }
@@ -39,16 +46,24 @@ class TransferRequest extends FormRequest
     {
         if ($this->routeIs('transfer.create')) return $this->createRules();
         if ($this->routeIs('transfer.store')) return $this->storeRules();
+        if ($this->routeIs('transfer.index')) return $this->indexRules();
         return [
             //
+        ];
+    }
+
+    private function indexRules()
+    {
+        return [
+            'module' => ['numeric', 'exists:modules,id'],
         ];
     }
     private function createRules()
     {
         return [
             //'searchMedicaments' => ['string', 'nullable'],
-            'selected_medicaments'=>['array'],
-            'selected_medicaments.*'=>['required','distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
+            'selected_medicaments' => ['array'],
+            'selected_medicaments.*' => ['required', 'distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
                 return $query->where('module_id', $this->route("module")->id);
             })]
         ];
@@ -58,9 +73,9 @@ class TransferRequest extends FormRequest
         return [
             'module_send_id' => ['required', 'exists:modules,id',],
             'module_receive_id' => ['required', 'exists:modules,id', "different:module_send_id"],
-            'description'=>['string','nullable','max:250'],
+            'description' => ['string', 'nullable', 'max:250'],
             'medicaments' => ['required', 'array', 'min:1'],
-            'medicaments.*.id' => ['required','distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
+            'medicaments.*.id' => ['required', 'distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
                 return $query->where('module_id', $this->post("module_send_id"));
             })],
             'medicaments.*.quantity' => ['required', 'integer', "min:1", function ($attribute, $value, $fail) {

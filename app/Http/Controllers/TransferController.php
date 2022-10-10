@@ -11,20 +11,25 @@ use Illuminate\Support\Facades\Redirect;
 
 class TransferController extends Controller
 {
+    public function index(TransferRequest $request)
+    {
+        $data = Transfer::with(['moduleSend', 'moduleReceive','user'])->latest('created_at')->paginate(10);
+        return inertia('Transfers/index', compact('data'));
+    }
     public function create(TransferRequest $request, Module $module)
     {
         $moduleSelected = null;
         $medicaments = [];
-        $selectedMedicaments =[];
+        $selectedMedicaments = [];
         if ($module->exists) {
 
             $moduleSelected = $module;
             $medicaments = $module->medicaments()->wherePivot('quantity_exist', ">", 0)->get();
-            $selectedMedicaments =  $module->medicaments()->wherePivot('quantity_exist',">",0)->findMany($request->get('selected_medicaments'));
+            $selectedMedicaments =  $module->medicaments()->wherePivot('quantity_exist', ">", 0)->findMany($request->get('selected_medicaments'));
         }
         $moduleFromTransfers = User::find(auth()->user()->id)->modules()->with('user')->get();
         $moduleToTransfers = Module::with('user')->get();
-        return inertia('Transfers/Create', compact('moduleToTransfers', 'moduleFromTransfers', 'moduleSelected','selectedMedicaments', 'medicaments'));
+        return inertia('Transfers/Create', compact('moduleToTransfers', 'moduleFromTransfers', 'moduleSelected', 'selectedMedicaments', 'medicaments'));
     }
     public function store(TransferRequest $request)
     {
@@ -41,6 +46,6 @@ class TransferController extends Controller
             fn ($value) => $transfer->medicaments()->attach($value['id'], ['quantity' => $value['quantity']]),
             $request->input('medicaments', [])
         );
-        return Redirect(route('transfer.create',$request->input('module_send_id')));
+        return Redirect(route('transfer.create', $request->input('module_send_id')));
     }
 }
