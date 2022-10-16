@@ -15,7 +15,6 @@ class Recipe extends Model
         'state',
         'patient_id',
         'doctor_id',
-        'service_id',
         'pathology_id',
         'module_id',
         'user_id',
@@ -28,10 +27,6 @@ class Recipe extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
-    }
-    public function service()
-    {
-        return $this->belongsTo(Service::class);
     }
     public function pathology()
     {

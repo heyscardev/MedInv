@@ -11,7 +11,7 @@ class Service extends Model
     use HasFactory;
     protected $fillable = ['name'];
 
-    public function recipes(){
-        return $this->hasMany(Recipe::class);
+    public function doctors(){
+        return $this->hasMany(Doctor::class);
     }
 }

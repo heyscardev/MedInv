@@ -23,8 +23,9 @@ return new class extends Migration
             $table->date('birth_date');
             $table->string('email')->nullable();
             $table->string('phone',20);
-            $table->string('direction',250)->nullable();
+            $table->unsignedBigInteger('service_id');
             $table->timestamps();
+            $table->foreign('service_id')->references('id')->on('services');
         });
     }
 

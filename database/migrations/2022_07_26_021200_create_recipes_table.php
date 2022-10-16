@@ -19,7 +19,6 @@ return new class extends Migration
             $table->enum('state',['DELIVER','PENDING','CANCELLED']);
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('service_id');
             $table->unsignedBigInteger('pathology_id')->nullable();
             $table->unsignedBigInteger('module_id');
             $table->unsignedBigInteger('user_id');
@@ -27,7 +26,6 @@ return new class extends Migration
 
             $table->foreign('patient_id')->references('id')->on('patients');
             $table->foreign('doctor_id')->references('id')->on('doctors');
-            $table->foreign('service_id')->references('id')->on('services');
             $table->foreign('pathology_id')->references('id')->on('pathologies');
             $table->foreign('module_id')->references('id')->on('modules');
             $table->foreign('user_id')->references('id')->on('users');

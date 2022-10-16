@@ -18,11 +18,16 @@ class Doctor extends Model
         'gender',
         'email',
         'phone',
-        'direction'
+        'direction',
+        'service_id'
     ];
 
     public function recipes()
     {
         return $this->hasMany(Recipe::class);
+    }
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
     }
 }
