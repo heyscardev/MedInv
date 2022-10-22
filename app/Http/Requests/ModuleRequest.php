@@ -39,7 +39,8 @@ class ModuleRequest extends FormRequest
             'orderBy.*.desc' => ['required','boolean'],
             'filters'=>['array'],
             'filters.*.id'=>['required',Rule::in(['id','code', 'name', 'price_sale', 'unit.name','pivot.quantity_exist', 'pivot.created_at', 'pivot.updated_at'])],
-            'filters.*.value'=>['required','nullable']
+            'filters.*.value'=>['required','nullable'],
+            'page_size'=>['integer','in:10,20,50,100']
         ];
     }
 

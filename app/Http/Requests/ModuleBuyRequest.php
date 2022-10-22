@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Module;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ModuleBuyRequest extends FormRequest
 {
@@ -35,9 +36,17 @@ class ModuleBuyRequest extends FormRequest
         return [
             'description' => 'max:250',
             'medicaments' => 'required|array',
-            'medicaments.*.id' => 'required|distinct:strict',
-            'medicaments.*.price' => 'required|numeric|between:0,99999999999,99',
-            'medicaments.*.quantity' => 'required|integer|min:0',
+            'medicaments.*.id' => 'required|distinct:strict|exists:medicaments',
+            'medicaments.*.price' => 'required|numeric|between:1,99999999999.99',
+            'medicaments.*.quantity' => ['required','integer','min:1','max:1000000000',function ($attribute, $value, $fail) {
+                $index = explode('.', $attribute)[1];
+                $quantity = $this->input("medicaments.{$index}.quantity", null);
+                $medicament_id = $this->input("medicaments.{$index}.id", null);
+                $module = $this->route('module');
+                $medicament = $module->medicaments()->where('medicament_id',$medicament_id)->first();
+                if(isset($medicament->pivot) && ($medicament->pivot->quantity_exist + $quantity)>2000000000) $fail("Al comprar {$medicament->name} excede el maximo por modulo (2.000.000.000). Maximo de compra ".(2000000000 -$medicament->pivot->quantity_exist));
+              
+            }],
         ];
     }
     private function createRules()

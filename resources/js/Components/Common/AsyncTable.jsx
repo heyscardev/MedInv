@@ -1,4 +1,4 @@
-import {
+/* import {
   ArrowRight,
   BorderAllOutlined,
   CheckBox,
@@ -30,12 +30,18 @@ import {
   Sort,
   ViewColumn,
   VisibilityOff,
-} from "@mui/icons-material";
-import React, { useEffect, useMemo, useState } from "react";
-import MaterialReactTable from "material-react-table";
-import { get, visit } from "@/HTTPProvider";
-import { useIntl } from "react-intl";
-import { orderBy } from "lodash";
+} from '@mui/icons-material' */
+import React, { useEffect, useMemo, useState } from 'react'
+import MaterialReactTable from 'material-react-table'
+import { get, visit } from '@/HTTPProvider'
+import { useIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import { orderBy } from 'lodash'
+import DatePicker from './Inputs/DatePicker'
+import { isValid } from 'date-fns'
+import { Stack } from '@mui/material'
+import DatePickerRangeFilter from './FiltersTable/DatePickerRangeFilter'
+import NumberBoxOutput from './FiltersTable/NumberBoxOutput'
 /* import { IconButton, Paper, Tooltip, useTheme } from "@mui/material";
 import MaterialReactTable from "material-react-table";
 import { Fragment } from "react";
@@ -272,42 +278,90 @@ muiTableContainerProps={{sx:{backgroundColor:"primary.light"}}}
     unpinAll: formatMessage({id:''}),
     unsorted: formatMessage({id:''}),
   }} */
-
-
-const onAsyncDefault = ({ pagination, sorting, columnFilters, globalFilter, setIsLoading, routeName, routeParams }) => {
-  setIsLoading(true);
+const columnsFormat = (columns, formatMessage) => {
+  return columns.map((item) => {
+    const dataToColumn = {
+      enableClickToCopy: true,
+      ...item,
+    }
+    if (item.typeColumn === 'date') {
+      dataToColumn.Filter = DatePickerRangeFilter
+    }
+    if (item.typeColumn === 'numberBox') {
+      dataToColumn.Cell = ({ cell }) => (
+        <NumberBoxOutput value={cell.getValue()} />
+      )
+      dataToColumn.muiTableBodyCellProps = { align: 'right' }
+    }
+    if (!item.noTranslate && item.header)
+      dataToColumn.header = formatMessage({ id: item.header })
+    return dataToColumn
+  })
+}
+const onAsyncDefault = ({
+  pagination,
+  sorting,
+  columnFilters,
+  globalFilter,
+  setIsLoading,
+  routeName,
+  routeParams,
+}) => {
+  setIsLoading(true)
   visit(
     route(routeName, {
       page: pagination.pageIndex + 1,
       page_size: pagination.pageSize,
-      orderBy:sorting,
-      search:globalFilter,
-      filters:columnFilters,
+      orderBy: sorting,
+      search: globalFilter,
+      filters: columnFilters,
       ...routeParams,
     }),
     {
       onFinish: () => {
-        setIsLoading(false);
+        setIsLoading(false)
       },
       replace: true,
       preserveScroll: true,
       noLoader: true,
-      only: ["data","errors"],
-    }
-  );
-};
+      only: ['data', 'errors'],
+    },
+  )
+}
 
-export default ({ initialState={},data, columns, onAsync, routeName, routeParams = {}, ...materialTableProps }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRefetching, setIsRefetching] = useState(false);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [sorting, setSorting] = useState([]);
-  const {formatMessage}= useIntl();
+const AsyncTable = ({
+  initialState = {},
+  data,
+  columns = [
+    {
+      header: null,
+      accessorFn: null,
+      accessorKey: null,
+      accessor: null,
+      enableClickToCopy: true,
+      enableColumnFilter: true,
+      typeColumn: null,
+      enableColumnSorting: null,
+      noTranslate:false,
+      enableColumnOrdering:null,
+    },
+  ],
+  onAsync,
+  routeName,
+  enableRowSelection = true,
+  routeParams = {},
+  ...materialTableProps
+}) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isRefetching, setIsRefetching] = useState(false)
+  const [columnFilters, setColumnFilters] = useState([])
+  const [globalFilter, setGlobalFilter] = useState('')
+  const [sorting, setSorting] = useState([])
+  const { formatMessage } = useIntl()
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
-  });
+  })
   useEffect(() => {
     if (!isLoading) {
       const params = {
@@ -318,32 +372,36 @@ export default ({ initialState={},data, columns, onAsync, routeName, routeParams
         sorting,
         routeName,
         routeParams,
-      };
+      }
 
-      if (onAsync) return onAsync(params);
-      onAsyncDefault(params);
+      if (onAsync) return onAsync(params)
+      onAsyncDefault(params)
     }
-  }, [pagination.pageIndex, pagination.pageSize, columnFilters, globalFilter, sorting, routeName]);
+  }, [
+    pagination.pageIndex,
+    pagination.pageSize,
+    columnFilters,
+    globalFilter,
+    sorting,
+    routeName,
+  ])
 
   return (
     <MaterialReactTable
-    enableStickyHeader
-      {...materialTableProps}
-      columns={[
-        ...columns.map((item) =>
-          item.header && !item.noTranslate
-            ? {
-                ...item,
-                header: formatMessage({ id: item.header }),
-              }
-            : item
-        ),
-      ]}
 
+      enableStickyHeader
+      enableColumnOrdering
+      {...materialTableProps}
+      columns={[...columnsFormat(columns, formatMessage)]}
       data={data.data}
-      enableRowSelection
-      getRowId={(row) => row.phoneNumber}
-      initialState={{ showColumnFilters: true,columnVisibility:{id:false} }}
+      enableRowSelection={enableRowSelection}
+      getRowId={(originalRow) => originalRow.id}
+      initialState={{
+        density: 'compact',
+        showColumnFilters: true,
+        columnVisibility: { id: false },
+      }}
+      enableGlobalFilter={false}
       manualFiltering
       manualPagination
       manualSorting
@@ -364,51 +422,54 @@ export default ({ initialState={},data, columns, onAsync, routeName, routeParams
         sorting,
       }}
       localization={{
-        actions: "Acciones",
-        cancel: "Cancelar",
-        changeFilterMode: "Cambia el modo de filtro",
-        clearFilter: "Filtro claro",
-        clearSearch: "Borrar búsqueda",
-        clearSort: "Ordenar claro",
-        columnActions: "Acciones de columna",
-        edit: "Editar",
-        expand: "Expandir",
-        expandAll: "Expandir todo",
-        filterByColumn: "Filtrar por {column}",
-        filterMode: "Modo de filtro: {filterType}",
-        grab: "Agarrar",
-        groupByColumn: "Agrupar por {column}",
-        groupedBy: "Agrupados por ",
-        hideAll: "Ocultar todo",
-        hideColumn: "Ocultar columna de {column}",
-        rowActions: "Acciones de fila",
-        pinToLeft: "Alfile a la izquierda",
-        pinToRight: "Alfile a la derecha",
-        save: "Salvar",
-        search: "Búsqueda",
-        selectedCountOfRowCountRowsSelected: "{selectedCount} de {rowCount} fila(s) seleccionadas",
-        showAll: "Mostrar todo",
-        showAllColumns: "Mostrar todas las columnas",
-        showHideColumns: "Mostrar/Ocultar columnas",
-        showHideFilters: "Alternar filtros",
-        showHideSearch: "Alternar búsqueda",
-        sortByColumnAsc: "Ordenar por {column} ascendente",
-        sortByColumnDesc: "Ordenar por {column} descendiendo",
-        thenBy: ", entonces por ",
-        toggleDensity: "Alternar relleno denso",
-        toggleFullScreen: "Alternar pantalla completa",
-        toggleSelectAll: "Seleccionar todo",
-        toggleSelectRow: "Seleccionar fila",
-        ungroupByColumn: "Desagrupar por {column}",
-        unpin: "Quitar pasador",
-        unpinAll: "Afilar todo",
-        unsorted: "Sin clasificar",
-        sortedByColumnAsc: "Ordenar por {column} Ascendente",
-        sortedByColumnDesc: "Ordenar por {column} Descendente",
-        and: "&",
-        clickToCopy: "copiar al portapapeles",
-        move: "Mover",
+        actions: 'Acciones',
+        cancel: 'Cancelar',
+        changeFilterMode: 'Cambia el modo de filtro',
+        clearFilter: 'Filtro claro',
+        clearSearch: 'Borrar búsqueda',
+        clearSort: 'Ordenar claro',
+        columnActions: 'Acciones de columna',
+        edit: 'Editar',
+        expand: 'Expandir',
+        expandAll: 'Expandir todo',
+        filterByColumn: 'Filtrar por {column}',
+        filterMode: 'Modo de filtro: {filterType}',
+        grab: 'Agarrar',
+        groupByColumn: 'Agrupar por {column}',
+        groupedBy: 'Agrupados por ',
+        hideAll: 'Ocultar todo',
+        hideColumn: 'Ocultar columna de {column}',
+        rowActions: 'Acciones de fila',
+        pinToLeft: 'Alfile a la izquierda',
+        pinToRight: 'Alfile a la derecha',
+        save: 'Salvar',
+        search: 'Búsqueda',
+        selectedCountOfRowCountRowsSelected:
+          '{selectedCount} de {rowCount} fila(s) seleccionadas',
+        showAll: 'Mostrar todo',
+        showAllColumns: 'Mostrar todas las columnas',
+        showHideColumns: 'Mostrar/Ocultar columnas',
+        showHideFilters: 'Alternar filtros',
+        showHideSearch: 'Alternar búsqueda',
+        sortByColumnAsc: 'Ordenar por {column} ascendente',
+        sortByColumnDesc: 'Ordenar por {column} descendiendo',
+        thenBy: ', entonces por ',
+        toggleDensity: 'Alternar relleno denso',
+        toggleFullScreen: 'Alternar pantalla completa',
+        toggleSelectAll: 'Seleccionar todo',
+        toggleSelectRow: 'Seleccionar fila',
+        ungroupByColumn: 'Desagrupar por {column}',
+        unpin: 'Quitar pasador',
+        unpinAll: 'Afilar todo',
+        unsorted: 'Sin clasificar',
+        sortedByColumnAsc: 'Ordenar por {column} Ascendente',
+        sortedByColumnDesc: 'Ordenar por {column} Descendente',
+        and: '&',
+        clickToCopy: 'copiar al portapapeles',
+        move: 'Mover',
       }}
     />
-  );
-};
+  )
+}
+
+export default AsyncTable

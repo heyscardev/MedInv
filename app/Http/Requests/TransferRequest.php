@@ -54,8 +54,16 @@ class TransferRequest extends FormRequest
 
     private function indexRules()
     {
+        $validColumns = ['id','user.first_name', 'module_send.name', 'module_receive.name','created_at'];
         return [
             'module' => ['numeric', 'exists:modules,id'],
+            'page_size'=>['integer','in:10,20,50,100'],
+            'orderBy' => ['array'],
+            'orderBy.*.id' => ['required',Rule::in($validColumns)],
+            'orderBy.*.desc' => ['required','boolean'],
+            'filters'=>['array'],
+            'filters.*.id'=>['required',Rule::in($validColumns)],
+            'filters.*.value'=>['required','nullable'],
         ];
     }
     private function createRules()

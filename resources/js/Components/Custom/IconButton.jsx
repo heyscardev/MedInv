@@ -3,10 +3,10 @@ import { IconButton } from "@mui/material";
 import { useIntl } from "react-intl";
 import Tooltip from "./Tooltip";
 
-export default ({title,onClick,...rest}) => {
+export default ({title,placement,onClick,...rest}) => {
     const { formatMessage } = useIntl();
     return title ? (
-        <Tooltip title={formatMessage({ id: title })}>
+        <Tooltip title={formatMessage({ id: title })} placement={placement}>
             <IconButton onClick={onClick}{...rest} title={null} />
         </Tooltip>
     ) : (

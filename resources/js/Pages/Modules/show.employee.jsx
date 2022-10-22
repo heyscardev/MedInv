@@ -105,14 +105,16 @@ export default (props) => {
             accessorKey: "pivot.quantity_exist",
             header: "inventory",
             filterVariant: "range",
-            Cell: ({ cell }) => <CellNumberBox value={cell.getValue()} />,
+            
+            typeColumn:"numberBox"
           },
           {
             enableColumnFilter: false,
             accessorKey: "quantity_global",
             header: "globalInventory",
             filterVariant: "range",
-            Cell: ({ cell }) => <CellNumberBox value={cell.getValue()} />,
+           
+            typeColumn:"numberBox"
           },
           {
             accessorKey: "pivot.updated_at",

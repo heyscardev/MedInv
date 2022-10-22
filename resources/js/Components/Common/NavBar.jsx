@@ -103,7 +103,7 @@ export default ({ auth, can }) => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: "primary.dark" }}>
+            <AppBar position="fixed" sx={{ backgroundColor: "primary.dark" }}>
                 <Toolbar variant="regular">
                     <IconButton
                         size="large"
@@ -183,6 +183,8 @@ export default ({ auth, can }) => {
                 open={openSideBar}
                 onClose={toggleSideBar}
             />
+            
+      <Toolbar />
         </Box>
     );
 };

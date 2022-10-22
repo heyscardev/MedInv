@@ -130,5 +130,11 @@
     "selectModule":"Seleccione Modulo",
     "selectModuleFromTransfer":"Seleccione modulo a enviar",
     "selectModuleToTransfer":"Seleccione modulo a recibir",
-    "afterTransfer":"Despues de transferencia"
+    "afterTransfer":"Despues de transferencia",
+    "moduleReceive":"Modulo Recibe",
+    "moduleSend":"Modulo Envia",
+    "quantityMedicaments": "Cantidad de Medicamentos",
+    "totalQuantityMedicaments": "Cantidad Total de Medicamentos",
+    "show":"Mostrar"
+    
 }

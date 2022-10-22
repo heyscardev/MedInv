@@ -7,7 +7,7 @@ import { createInertiaApp } from "@inertiajs/inertia-react";
 import { InertiaProgress } from "@inertiajs/progress";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import theme from "./Themes/MedinvTheme";
-import { ThemeProvider } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 
 import { removeLoader } from "./Config/Loader";
 import NotificationContainer from "./Components/NotificationContainer";
@@ -41,10 +41,12 @@ createInertiaApp({
                     can={can(props.auth.permissions, props.auth.user)}
                   />
                 )}
+                <Box sx={{margin:1,marginBottom:3 }}>
                 <Component
                   {...props}
                   can={can(props.auth.permissions, props.auth.user)}
                 />
+                </Box>
               </div>
             )}
           </App>

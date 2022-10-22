@@ -24,12 +24,10 @@ class MedicamentRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->url() === route('medicament.index')) return $this->indexRules();
+        if ($this->routeIs('medicament.index')) return $this->indexRules();
+        if ($this->routeIs('medicament.store')) return $this->storeRules();
         return [
-        'code'=>'required|unique:medicaments|max:25',
-        'name'=>'required|max:100',
-        'price_sale'=>'required|numeric|min:0.00|max:99999999999.99',
-        'unit_id'=>'required|integer|exists:units,id'
+        
         ];
     }
     protected function indexRules()
@@ -40,7 +38,17 @@ class MedicamentRequest extends FormRequest
             'orderBy.*.desc' => ['required','boolean'],
             'filters'=>['array'],
             'filters.*.id'=>['required',Rule::in(['id','name', 'price_sale', 'unit.name','created_at','updated_at'])],
-            'filters.*.value'=>['required','nullable']
+            'filters.*.value'=>['required','nullable'],
+            'page_size'=>['integer','in:10,20,50,100']
+        ];
+    }
+    protected function storeRules()
+    {
+        return [
+            'code'=>'required|unique:medicaments|max:25',
+            'name'=>'required|max:100',
+            'price_sale'=>'required|numeric|min:0.00|max:99999999999.99',
+            'unit_id'=>'required|integer|exists:units,id'
         ];
     }
 }

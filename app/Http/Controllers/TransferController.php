@@ -13,7 +13,35 @@ class TransferController extends Controller
 {
     public function index(TransferRequest $request)
     {
-        $data = Transfer::with(['moduleSend', 'moduleReceive','user'])->latest('created_at')->paginate(10);
+        $orderBy = $request->get('orderBy', [['id' => "created_at", 'desc' => true]]);
+        $filters = $request->get('filters', []);
+        $paginate = max(min($request->get('page_size'), 100), 10);
+        $query  = Transfer::with('moduleSend', 'moduleReceive', 'user')->where('transfers.user_id',auth()->user()->id);
+
+        array_map(function ($filter) use ($query) {
+            $id = $filter['id'];
+            $value = $filter['value'];
+
+            if (str_contains($id, "module_send."))  return $query->whereModuleSend(str_replace('module_send.', '', $id), $value);
+            if (str_contains($id, "module_receive."))  return $query->whereModuleReceive(str_replace('module_receive.', '', $id), $value);
+            if (str_contains($id, "user."))  return $query->whereUser(str_replace('user.', '', $id), $value);
+
+            return $query->LikeOrBeetween('transfers.' . $id, $value);
+        }, $filters);
+
+        //fliters orders
+        array_map(function ($by) use ($query) {
+            $id = $by['id'];
+            $sorting = $by['desc'] == true ? "DESC" : 'ASC';
+
+            if (str_contains($id, "module_send.")) return $query->orderByModuleSend(str_replace('module_send.', '', $id), $sorting);
+            if (str_contains($id, "user.")) return $query->orderByUser(str_replace('user.', '', $id), $sorting);
+            if (str_contains($id, "module_receive.")) return $query->orderByModuleReceive(str_replace('module_receive.', '', $id), $sorting);
+
+            return $query->orderBy('transfers.' . $id, $sorting);
+        }, $orderBy);
+        $data = $query->paginate($paginate);
+
         return inertia('Transfers/index', compact('data'));
     }
     public function create(TransferRequest $request, Module $module)
@@ -31,6 +59,7 @@ class TransferController extends Controller
         $moduleToTransfers = Module::with('user')->get();
         return inertia('Transfers/Create', compact('moduleToTransfers', 'moduleFromTransfers', 'moduleSelected', 'selectedMedicaments', 'medicaments'));
     }
+
     public function store(TransferRequest $request)
     {
         $transfer = new Transfer(
