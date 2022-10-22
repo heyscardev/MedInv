@@ -3,6 +3,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useTheme } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -21,7 +22,7 @@ export default ({ auth, can }) => {
     const [openSideBar, setOpenSideBar] = React.useState(false);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const { permissions: p } = auth;
-
+const {palette} = useTheme();
     const pages = [
         ["Inicio", route().t.url, <Home />],
         ["Dashboard", route("dashboard"), <Dashboard />],
@@ -103,8 +104,8 @@ export default ({ auth, can }) => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="fixed" sx={{ backgroundColor: "primary.dark" }}>
-                <Toolbar variant="regular">
+            <AppBar position="fixed" sx={{ background: palette.secondaryGradient.main, backgroundColor:"transparent" }}>
+                <Toolbar variant="dense" >
                     <IconButton
                         size="large"
                         edge="start"
@@ -140,7 +141,7 @@ export default ({ auth, can }) => {
                     <Box sx={{ display: { xs: "none", md: "flex" } }}>
                         <IconButton
                             size="large"
-                            aria-label="show 17 new notifications"
+                            aria-label="show 17 new notifications"npm
                             color="inherit"
                         >
                             <Badge badgeContent={17} color="error">
@@ -183,7 +184,7 @@ export default ({ auth, can }) => {
                 open={openSideBar}
                 onClose={toggleSideBar}
             />
-            
+
       <Toolbar />
         </Box>
     );

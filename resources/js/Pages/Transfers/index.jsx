@@ -57,7 +57,7 @@ export default (props) => {
           { accessorKey: 'id', header: 'id' ,id:"id" },
 
           {
-            
+
             //columnDefType: 'display',
             header: 'actions',
             size: 80,

@@ -2,15 +2,19 @@ import SkewOrnament from "@/Components/Ornaments/SkewOrnament";
 import { createTheme } from "@mui/material/styles";
 
 const MedinvTheme = createTheme({
+
   palette: {
     primary: {
-      dark:"#036C93",
+      dark: "#036C93",
       main: "#18a1d4",
       light: "#c7ebf6",
     },
     secondary: {
       main: "#eaeaea",
       dark: "#808080",
+    },
+    secondaryGradient: {
+      main:"linear-gradient(to left, #1488cc, #036C93 40%)",
     },
     error: {
       main: "#ff5f76",
@@ -35,25 +39,29 @@ const MedinvTheme = createTheme({
       light: "rgba(24,161,212,.57)",
     },
   },
-  components: {
-    MuiSpeedDial:{
-      defaultProps:{
-        sx:{ position: "absolute", bottom: 16, right: 16 }
+  typography: {
+    // In Chinese and Japanese the characters are usually larger,
+    // so a smaller fontsize may be appropriate.
+    fontSize: 10,
+  },
 
-      }
+  components: {
+    MuiSpeedDial: {
+      defaultProps: {
+        sx: { position: "absolute", bottom: 16, right: 16 },
+      },
     },
     MuiSpeedDialAction: {
       defaultProps: {
-        sx:{
-          color:"primary.main",
-          ":hover":{
-            backgroundColor:"primary.dark",
-            color:"#fff"
-          }
-        }
+        sx: {
+          color: "primary.main",
+          ":hover": {
+            backgroundColor: "primary.dark",
+            color: "#fff",
+          },
+        },
       },
     },
   },
-
 });
 export default MedinvTheme;
