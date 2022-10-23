@@ -16,7 +16,6 @@ class BuyMedicamentObserver
     public function created(BuyMedicament $buyMedicament)
     {
         $buyMedicament->buy->module->addMedicament($buyMedicament->medicament->id, $buyMedicament->quantity);
-        logger($buyMedicament->medicament->module);
     }
 
     /**
@@ -27,7 +26,8 @@ class BuyMedicamentObserver
      */
     public function updated(BuyMedicament $buyMedicament)
     {
-        //
+        $quantity = $buyMedicament->getAttribute('quantity') - $buyMedicament->getOriginal('quantity') ;
+        $buyMedicament->buy->module->addMedicament($buyMedicament->medicament->id, $quantity);
     }
 
     /**
@@ -36,30 +36,10 @@ class BuyMedicamentObserver
      * @param  \App\Models\BuyMedicament  $buyMedicament
      * @return void
      */
-    public function deleted(BuyMedicament $buyMedicament)
+    public function deleting(BuyMedicament $buyMedicament)
     {
-        //
+        $medTra = BuyMedicament::where('medicament_id', $buyMedicament->medicament_id)->where('buy_id', $buyMedicament->buy_id)->first();
+       return $buyMedicament->buy->module->removeMedicament($buyMedicament->medicament->id, $medTra->quantity);
     }
 
-    /**
-     * Handle the BuyMedicament "restored" event.
-     *
-     * @param  \App\Models\BuyMedicament  $buyMedicament
-     * @return void
-     */
-    public function restored(BuyMedicament $buyMedicament)
-    {
-        //
-    }
-
-    /**
-     * Handle the BuyMedicament "force deleted" event.
-     *
-     * @param  \App\Models\BuyMedicament  $buyMedicament
-     * @return void
-     */
-    public function forceDeleted(BuyMedicament $buyMedicament)
-    {
-        //
-    }
 }

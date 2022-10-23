@@ -14,11 +14,11 @@ class MedicamentTransferObserver
      */
     public function created(MedicamentTransfer $medicamentTransfer)
     {
-        $moduleSend =$medicamentTransfer->transfer->moduleSend;
-        $moduleReceive =$medicamentTransfer->transfer->moduleReceive;
+        $moduleSend = $medicamentTransfer->transfer->moduleSend;
+        $moduleReceive = $medicamentTransfer->transfer->moduleReceive;
         $medicament = $medicamentTransfer->medicament;
-        $moduleSend->removeMedicament($medicament->id,$medicamentTransfer->quantity);
-        $moduleReceive->addMedicament($medicament->id,$medicamentTransfer->quantity);
+        $moduleSend->removeMedicament($medicament->id, $medicamentTransfer->quantity);
+        $moduleReceive->addMedicament($medicament->id, $medicamentTransfer->quantity);
     }
 
     /**
@@ -29,7 +29,13 @@ class MedicamentTransferObserver
      */
     public function updated(MedicamentTransfer $medicamentTransfer)
     {
-        //
+        if ($medicamentTransfer->isDirty('quantity')) {
+            $quantity = $medicamentTransfer->getOriginal('quantity') - $medicamentTransfer->getAttribute('quantity');
+            $moduleSend = $medicamentTransfer->transfer->moduleSend;
+            $moduleReceive = $medicamentTransfer->transfer->moduleReceive;
+            $moduleSend->addMedicament($medicamentTransfer->medicament_id, $quantity);
+            $moduleReceive->removeMedicament($medicamentTransfer->medicament_id, $quantity);
+        }
     }
 
     /**
@@ -38,30 +44,14 @@ class MedicamentTransferObserver
      * @param  \App\Models\MedicamentTransfer  $medicamentTransfer
      * @return void
      */
-    public function deleted(MedicamentTransfer $medicamentTransfer)
+    public function deleting(MedicamentTransfer $medicamentTransfer)
     {
-        //
-    }
 
-    /**
-     * Handle the MedicamentTransfer "restored" event.
-     *
-     * @param  \App\Models\MedicamentTransfer  $medicamentTransfer
-     * @return void
-     */
-    public function restored(MedicamentTransfer $medicamentTransfer)
-    {
-        //
-    }
-
-    /**
-     * Handle the MedicamentTransfer "force deleted" event.
-     *
-     * @param  \App\Models\MedicamentTransfer  $medicamentTransfer
-     * @return void
-     */
-    public function forceDeleted(MedicamentTransfer $medicamentTransfer)
-    {
-        //
+        $medTra = MedicamentTransfer::where('medicament_id', $medicamentTransfer->medicament_id)->where('transfer_id', $medicamentTransfer->transfer_id)->first();
+        $moduleSend = $medicamentTransfer->transfer->moduleSend;
+        $moduleReceive = $medicamentTransfer->transfer->moduleReceive;
+        $medicament = $medicamentTransfer->medicament;
+        $moduleSend->addMedicament($medicament->id, $medTra->quantity);
+        $moduleReceive->removeMedicament($medicament->id, $medTra->quantity);
     }
 }

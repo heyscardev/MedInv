@@ -13,6 +13,7 @@ class Module extends Model
         'name',
         'user_id'
     ];
+    protected $appends = ['total_medicaments'];
 
     public function medicaments()
     {
@@ -35,11 +36,15 @@ class Module extends Model
     {
         return $this->hasMany(Transfer::class, 'module_receive_id');
     }
+    public function getTotalMedicamentsAttribute()
+    {
+        return $this->medicaments->sum('pivot.quantity_exist');
+    }
     public function transferSends()
     {
         return $this->hasMany(Transfer::class, 'module_send_id');
     }
-    public function transfersAll()
+    public function transfers()
     {
         return $this->hasMany(Transfer::class, 'module_receive_id')->orWhere('module_send_id', '=', $this->id);
     }
@@ -59,9 +64,8 @@ class Module extends Model
             ->where('medicament_id', $medicamentId)->first();
 
         if (!isset($oldMedicament))
-            return $this->medicaments()->attach($medicamentId, ['quantity_exist' => 0]);
-        if ($oldMedicament->pivot->quantity_exist >= $decrement)
+            return $this->medicaments()->attach($medicamentId, ['quantity_exist' => $decrement * -1]);
+
             return $oldMedicament->pivot->decrement('quantity_exist', $decrement);
-        else $oldMedicament->pivot->quantity_exist;
     }
 }

@@ -21,4 +21,5 @@ class RecipeController extends Controller
         $items = Recipe::get();
         return Inertia::render('Recipes/index', ['data' => $items]);
     }
+
 }

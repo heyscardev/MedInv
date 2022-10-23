@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         ]);
  */
         Module::factory(20)->create();
-        Transfer::factory(2000)->hasAttached(
+        Transfer::factory(200)->hasAttached(
             Medicament::orderByRaw("RAND()")->limit(rand(1, 20))->get(),
             ['quantity' => 10]
         )->create();
