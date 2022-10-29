@@ -50,10 +50,10 @@ class Medicament extends Model
     {
         return $this->belongsToMany(Module::class)->withPivot('quantity_exist')->withTimestamps()->wherePivot('quantity_exist', '>', 0);
     }
-    public function recipes()
+/*     public function recipes()
     {
-        return $this->belongsToMany(Recipe::class)->withPivot('prescribed_amount', 'quantity_deliver', 'price', 'description');
-    }
+        return $this->belongsToMany(Recipe::class)->withPivot('prescribed_amount', 'quantity', 'price', 'description')->using(MedicamentRecipe::class);
+    } */
 
     public function buys()
     {

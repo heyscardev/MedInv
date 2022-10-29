@@ -46,7 +46,7 @@ class Module extends Model
     }
     public function transfers()
     {
-        return $this->hasMany(Transfer::class, 'module_receive_id')->orWhere('module_send_id', '=', $this->id);
+        return dd($this->hasMany(Transfer::class, 'module_receive_id')->orWhere('module_send_id', '=', $this->id));
     }
     public function addMedicament($medicamentId, $increment = 0)
     {

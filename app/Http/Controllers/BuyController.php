@@ -7,10 +7,7 @@ use App\Models\Buy;
 use App\Models\Medicament;
 use App\Models\Module;
 use App\Models\Unit;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class BuyController extends Controller
@@ -32,9 +29,9 @@ class BuyController extends Controller
             'filter.module'=>'numeric|min:1',
             'filter.unit'=>'numeric|min:1'
         ]);
-        $data = auth()->user()->buys;
+        $data = Buy::where('user_id',auth()->user()->id)->paginate(10);
         return inertia('Buys/index.employee',['data'=>$data]);
-        
+
         if(isset($valid['filters'])){
 
         };

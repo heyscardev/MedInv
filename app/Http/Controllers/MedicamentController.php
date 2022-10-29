@@ -22,19 +22,19 @@ class MedicamentController extends Controller
 
     public function index(MedicamentRequest $request)
     {
-         $paginate = max(min($request->get('page_size'), 100), 10);
-        $search = $request->get('search',"");
+         $paginate = 10; /* max(min($request->get('page_size',), 100), 10); */
+      /*   $search = $request->get('search',""); */
         $orderBy = $request->get('orderBy', [['id' => "updated_at", 'desc' => false]]);
         $filters = $request->get('filters', []);
 
         //start building of query
-        $query = Medicament::with('unit:id,name')
-        ->where('id', 'LIKE', "{$search}%")
+        $query = Medicament::with('unit:id,name');
+      /*   ->where('id', 'LIKE', "{$search}%")
         ->orWhere('name', 'LIKE', "{$search}%")
         ->orWhere('code', 'LIKE', "{$search}%")
         ->orWhere('price_sale', 'LIKE', "{$search}%")
         ->orWhere('name', 'LIKE', "{$search}%");
-
+ */
         //fliters iteration
         array_map(function ($filter) use ($query) {
             $id = $filter['id'];

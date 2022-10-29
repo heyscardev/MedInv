@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('recipe_id');
             $table->unsignedBigInteger('medicament_id');
             $table->integer('prescribed_amount');
-            $table->integer('quantity_deliver');
+            $table->integer('quantity');
             $table->decimal('price',11,2);
             $table->string('description',250)->nullable();
             $table->timestamps();
