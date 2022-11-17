@@ -14,7 +14,6 @@ class ModuleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('can:module.admin.index')->only(['indexAdmin']);
         $this->middleware('can:module.index')->only(['index']);
         $this->middleware('can:module.store')->only(['store']);
         $this->middleware('can:module.show')->only(['show']);
@@ -29,14 +28,10 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        $items = auth()->user()->modules;
+        $items = ( auth()->user()->hasRole('administrador') )
+                    ? Module::get()
+                    : auth()->user()->modules;
         return Inertia::render('Modules/index.employee', ['data' => $items]);
-    }
-
-    public function indexAdmin()
-    {
-        $items = Module::get();
-        return Inertia::render('Modules/index', ['data' => $items]);
     }
 
      /**
