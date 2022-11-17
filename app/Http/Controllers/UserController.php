@@ -24,12 +24,23 @@ class UserController extends Controller
         $this->middleware('can:user.update')->only(['update']);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $users = User::orderBy('created_at','asc')->skip(0)->take(500)->get();
         return Inertia::render('Users/index', ['data' => $users]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $yesterday = date('Y-m-d', strtotime('1 days'));
@@ -51,11 +62,13 @@ class UserController extends Controller
 
     }
 
-    public function show($id)
-    {
-    
-    }
-
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $yesterday = date('Y-m-d', strtotime('1 days'));
@@ -81,6 +94,7 @@ class UserController extends Controller
         }
         return $user->save() ? back() : back(500)->withErrors('save', 'error al guardar');
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -95,8 +109,8 @@ class UserController extends Controller
             return back()->withErrors(['noDelete' => 'Este Usuario No existe']);
         } else if ($user->hasRole('administrador')) return back()->withErrors(['noDelete' => 'no puede eliminar un administrador']);
 
-
         $user->delete();
         return back();
     }
+
 }

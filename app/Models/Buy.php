@@ -13,6 +13,19 @@ class Buy extends Model
     protected $appends = ['total_quantity','total_medicaments','total_price'];
 
 
+    /**
+     * This are the relations
+     */
+    public function module(){
+        return $this->belongsTo(Module::class);
+    }
+    public function medicaments(){
+        return $this->belongsToMany(Medicament::class)->withPivot('price','quantity')->withTimestamps()->using(BuyMedicament::class);
+    }
+
+    /**
+     * This are the Attribute
+     */
     protected function totalQuantity():Attribute{
         return new Attribute(get:fn()=>$this->medicaments->sum('pivot.quantity'));
     }
@@ -21,12 +34,6 @@ class Buy extends Model
     }
     protected function totalPrice():Attribute{
         return new Attribute(get:fn()=>$this->medicaments->sum('pivot.price'));
-    }
-    public function module(){
-        return $this->belongsTo(Module::class);
-    }
-    public function medicaments(){
-        return $this->belongsToMany(Medicament::class)->withPivot('price','quantity')->withTimestamps()->using(BuyMedicament::class);
     }
 
 }

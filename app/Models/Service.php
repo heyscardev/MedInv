@@ -11,7 +11,11 @@ class Service extends Model
     use HasFactory;
     protected $fillable = ['name'];
 
+    /**
+     * This are the relations
+     */
     public function doctors(){
         return $this->hasMany(Doctor::class);
     }
+
 }

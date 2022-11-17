@@ -11,10 +11,14 @@ class MedicamentTransfer extends Pivot
     protected $table = "medicament_transfer";
     protected $fillable = ['medicament_id', 'transfer_id','quantity'];
 
+    /**
+     * This are the relations
+     */
     public function medicament(){
         return $this->belongsTo(Medicament::class);
     }
     public function transfer(){
         return $this->belongsTo(Transfer::class);
     }
+
 }

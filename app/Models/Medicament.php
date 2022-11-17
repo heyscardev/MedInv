@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 class Medicament extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'code',
         'name',
@@ -17,31 +18,13 @@ class Medicament extends Model
         'quantity_exist',
         'unit_id'
     ];
-    protected $appends = ['quantity_global'];
-    //accessors y mutators
 
-    public function setCodeAttribute($value)
-    {
-        $this->attributes['code'] = strtoupper($value);
-    }
-    public function getCodeAttribute($value)
-    {
-        return strtoupper($value);
-    }
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = strtoupper($value);
-    }
-    public function getNameAttribute($value)
-    {
-        return strtoupper($value);
-    }
-    //calculated accessors y mutators
-    public function getQuantityGlobalAttribute()
-    {
-        return $this->modules->sum('pivot.quantity_exist');
-    }
-    //relations ships
+    protected $appends = ['quantity_global'];
+
+
+    /**
+     * This are the relations
+     */
     public function unit()
     {
         return $this->belongsTo(Unit::class);
@@ -64,9 +47,33 @@ class Medicament extends Model
         return $this->belongsToMany(Transfer::class)->withPivot('quantity')->using(MedicamentTransfer::class);
     }
 
-    //query scopes
+    /**
+     * This are the Attribute
+     */
+    public function setCodeAttribute($value)
+    {
+        $this->attributes['code'] = strtoupper($value);
+    }
+    public function getCodeAttribute($value)
+    {
+        return strtoupper($value);
+    }
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtoupper($value);
+    }
+    public function getNameAttribute($value)
+    {
+        return strtoupper($value);
+    }
+    public function getQuantityGlobalAttribute()
+    {
+        return $this->modules->sum('pivot.quantity_exist');
+    }
 
-
+    /**
+     * This are the Scope
+     */
     public function scopeUnit($query, $column, $value)
     {
         if (is_array($value)) return $query->whereRelation('unit', $column, ">=",   $value[0])->whereRelation('unit', $column, "<=",   $value[1]);
@@ -86,4 +93,5 @@ class Medicament extends Model
     {
         $query->withSum('modules',"medicament_module.quantity_exist")->orderBy('modules_sum_medicament_modulequantity_exist',$sorting);
     }
+
 }

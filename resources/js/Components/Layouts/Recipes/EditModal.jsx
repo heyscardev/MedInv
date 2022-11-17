@@ -33,7 +33,7 @@ export default ({ user, open, onClose }) => {
           dataToSend[key] = key === "birth_date" ? formatStringDateToDatabase(data[key]) : data[key];
       }
     }
-    put(route("user.update", dataToSend.id), dataToSend, {
+    put(route("recipe.update", dataToSend.id), dataToSend, {
       onSuccess: (e) => {
         onClose(null);
       },
@@ -45,7 +45,7 @@ export default ({ user, open, onClose }) => {
       birth_date : formatStringDateToDatabase(data.birth_date)
     };
 
-    post(route("user.store"), dataToSend, {
+    post(route("recipe.store"), dataToSend, {
       onSuccess: (e) => {
         onClose(null);
       },

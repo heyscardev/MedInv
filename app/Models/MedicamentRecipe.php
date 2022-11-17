@@ -11,6 +11,9 @@ class MedicamentRecipe extends Pivot
     protected $table = "medicament_recipe";
     protected $fillable = ['medicament_id','recipe_id', 'recipe_type','prescribed_amount','quantity','price','description'];
 
+    /**
+     * This are the relations
+     */
     public function medicament()
     {
         return $this->belongsTo(Medicament::class);
@@ -19,4 +22,5 @@ class MedicamentRecipe extends Pivot
     {
         return $this->belongsTo(Recipe::class);
     }
+
 }

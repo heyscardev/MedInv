@@ -10,7 +10,11 @@ class Pathology extends Model
     use HasFactory;
     protected $fillable = ['code','name'];
 
+    /**
+     * This are the relations
+     */
     public function recipes(){
         return $this->hasMany(Recipe::class);
     }
+
 }

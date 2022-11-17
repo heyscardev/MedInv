@@ -13,8 +13,11 @@ class Module extends Model
         'name',
         'user_id'
     ];
-    protected $appends = ['total_medicaments'];
+    // protected $appends = ['total_medicaments'];
 
+    /**
+     * This are the relations
+     */
     public function medicaments()
     {
         return $this->belongsToMany(Medicament::class)->with(['unit:id,name'])->withPivot('quantity_exist')->withTimestamps();
@@ -36,10 +39,6 @@ class Module extends Model
     {
         return $this->hasMany(Transfer::class, 'module_receive_id');
     }
-    public function getTotalMedicamentsAttribute()
-    {
-        return $this->medicaments->sum('pivot.quantity_exist');
-    }
     public function transferSends()
     {
         return $this->hasMany(Transfer::class, 'module_send_id');
@@ -48,6 +47,18 @@ class Module extends Model
     {
         return dd($this->hasMany(Transfer::class, 'module_receive_id')->orWhere('module_send_id', '=', $this->id));
     }
+
+     /**
+     * This are the Attribute
+     */
+    public function getTotalMedicamentsAttribute()
+    {
+        return $this->medicaments->sum('pivot.quantity_exist');
+    }
+
+
+    //////////////////
+
     public function addMedicament($medicamentId, $increment = 0)
     {
         $oldMedicament = $this->medicaments()
@@ -68,4 +79,5 @@ class Module extends Model
 
             return $oldMedicament->pivot->decrement('quantity_exist', $decrement);
     }
+
 }

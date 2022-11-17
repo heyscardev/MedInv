@@ -20,6 +20,11 @@ class MedicamentController extends Controller
         $this->middleware('can:medicament.update')->only(['update']);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(MedicamentRequest $request)
     {
          $paginate = 10; /* max(min($request->get('page_size',), 100), 10); */
@@ -63,6 +68,27 @@ class MedicamentController extends Controller
         return Inertia::render('Medicaments/index.employee', ['data' => $query->paginate($paginate)]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(MedicamentRequest $request)
+    {
+        $validData = $request->validated();
+        $item = new Medicament($validData);
+        $item->save();
+        return $item->save() ? Redirect::back() : back(500)->withErrors('save', 'error al guardar');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {/*
         $valido = $request->validate([
@@ -75,14 +101,12 @@ class MedicamentController extends Controller
         return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar'); */
     }
 
-    public function store(MedicamentRequest $request)
-    {
-        $validData = $request->validated();
-        $item = new Medicament($validData);
-        $item->save();
-        return $item->save() ? Redirect::back() : back(500)->withErrors('save', 'error al guardar');
-    }
-
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         $item = Medicament::find($id);

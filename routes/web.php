@@ -6,6 +6,8 @@ use App\Http\Controllers\MedicamentController;
 use App\Http\Controllers\ModuleBuyController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -36,17 +38,21 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('users', UserController::class)->only(['index', 'destroy', 'update', 'store'])->names('user');
-    Route::resource('medicaments', MedicamentController::class)->only(['index', 'destroy', 'update', 'store'])->names('medicament');
-    Route::resource('units', UnitController::class)->only(['index', 'destroy', 'update', 'store'])->names('unit');
+
     Route::resource('doctors', DoctorController::class)->only(['index', 'destroy', 'update', 'store'])->names('doctor');
-    Route::resource('patitents', PatientController::class)->only(['index', 'destroy', 'update', 'store'])->names('patient');
-    Route::resource('modules', ModuleController::class)->only(['index', 'show'])->names('module');
+    Route::resource('medicaments', MedicamentController::class)->only(['index', 'destroy', 'update', 'store'])->names('medicament');
+    Route::resource('modules', ModuleController::class)->only(['index', 'destroy', 'update', 'store', 'show'])->names('module');
+    Route::resource('patients', PatientController::class)->only(['index', 'destroy', 'update', 'store'])->names('patient');
+    Route::resource('recipes', RecipeController::class)->only(['index', 'destroy', 'update', 'store'])->names('recipe');
+    Route::resource('services', ServiceController::class)->only(['index', 'destroy', 'update', 'store'])->names('service');
+    Route::resource('units', UnitController::class)->only(['index', 'destroy', 'update', 'store'])->names('unit');
+    Route::resource('users', UserController::class)->only(['index', 'destroy', 'update', 'store'])->names('user');
 
     Route::get('modules/{module}/buy/create', [ModuleBuyController::class, 'create'])->name('module.buy.create');
     Route::post('modules/{module}/buy', [ModuleBuyController::class, 'store'])->name('module.buy.store');
     Route::get('modules/{module}/buy', [ModuleBuyController::class, 'index'])->name('module.buy.index');
-   Route::get('buys',[BuyController::class,'index'])->name('buy.index');
+    Route::get('buys',[BuyController::class,'index'])->name('buy.index');
 });
+
 require __DIR__.'/medinv/TransfersRoute.php';
 require __DIR__ . '/auth.php';

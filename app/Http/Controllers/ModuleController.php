@@ -22,6 +22,11 @@ class ModuleController extends Controller
         $this->middleware('can:module.update')->only(['update']);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $items = auth()->user()->modules;
@@ -34,11 +39,23 @@ class ModuleController extends Controller
         return Inertia::render('Modules/index', ['data' => $items]);
     }
 
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         //
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show(ModuleRequest $request, Module $module)
     {
         $search = $request->get('search');
@@ -75,11 +92,24 @@ class ModuleController extends Controller
         return Inertia::render('Modules/show.employee', ['module' => $module, 'data' => $query->paginate($paginate)]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         //
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         //

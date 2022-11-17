@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Redirect;
 
 class TransferController extends Controller
 {
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(TransferRequest $request)
     {
         $orderBy = $request->get('orderBy', [['id' => "created_at", 'desc' => true]]);
@@ -44,6 +50,12 @@ class TransferController extends Controller
 
         return inertia('Transfers/index', compact('data'));
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create(TransferRequest $request, Module $module)
     {
         $moduleSelected = null;
@@ -60,6 +72,12 @@ class TransferController extends Controller
         return inertia('Transfers/Create', compact('moduleToTransfers', 'moduleFromTransfers', 'moduleSelected', 'selectedMedicaments', 'medicaments'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(TransferRequest $request)
     {
         $transfer = new Transfer(

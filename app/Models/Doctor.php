@@ -22,6 +22,9 @@ class Doctor extends Model
         'service_id'
     ];
 
+    /**
+     * This are the relations
+     */
     public function recipes()
     {
         return $this->hasMany(Recipe::class);
@@ -30,4 +33,5 @@ class Doctor extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
 }

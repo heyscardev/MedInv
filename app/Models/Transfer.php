@@ -10,6 +10,10 @@ class Transfer extends Model
     use HasFactory;
     protected $fillable = ['user_id', 'module_receive_id', 'module_send_id', 'description'];
     protected $appends = ['total_quantity_medicaments','quantity_medicaments'];
+
+    /**
+     * This are the relations
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -27,6 +31,9 @@ class Transfer extends Model
         return $this->belongsToMany(Medicament::class)->withPivot('quantity')->using(MedicamentTransfer::class);
     }
 
+    /**
+     * This are the Attribute
+     */
     public function getTotalQuantityMedicamentsAttribute()
     {
         return $this->medicaments->sum('pivot.quantity');
@@ -35,6 +42,10 @@ class Transfer extends Model
     {
         return $this->medicaments->count();
     }
+
+    /**
+     * This are the Scope
+     */
     public function scopeWhereModuleReceive($query, $column, $value)
     {
         if (is_array($value)) return $query->whereRelation('moduleReceive', $column, ">=",   $value[0])->whereRelation('moduleReceive', $column, "<=",   $value[1]);
@@ -76,4 +87,5 @@ class Transfer extends Model
         return $query->join('modules as moduleSend', 'module_send_id', '=', 'moduleSend.id')
             ->orderBy("moduleSend." . $column, $sorting)->select('transfers.*');
     }
+
 }

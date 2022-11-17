@@ -12,16 +12,11 @@ use Inertia\Inertia;
 
 class BuyController extends Controller
 {
-    public function create($id)
-    {
-        $item = Module::find($id);
-        $medmodule = $item->medicaments()->where('medicament_id',4)->first();
-        if (!isset($item)) return abort('404');
-        if ($item->user->id !== auth()->user()->id) return abort('403');
-        $Medicaments = Medicament::get(['id', 'code', 'name']);
-        $units = Unit::orderBy('name')->get();
-        return Inertia::render('Modules/buy.employee', ['module' => $item, 'medicaments' => $Medicaments,'units'=>$units]);
-    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request){
         $valid = $request->validate([
             'filters'=>'array|min:1',
@@ -35,8 +30,30 @@ class BuyController extends Controller
         if(isset($valid['filters'])){
 
         };
-
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create($id)
+    {
+        $item = Module::find($id);
+        $medmodule = $item->medicaments()->where('medicament_id',4)->first();
+        if (!isset($item)) return abort('404');
+        if ($item->user->id !== auth()->user()->id) return abort('403');
+        $Medicaments = Medicament::get(['id', 'code', 'name']);
+        $units = Unit::orderBy('name')->get();
+        return Inertia::render('Modules/buy.employee', ['module' => $item, 'medicaments' => $Medicaments,'units'=>$units]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(CreateBuyRequest $request, $id)
     {
         $data = $request->validated();
@@ -49,4 +66,5 @@ class BuyController extends Controller
         }, $data['medicaments']);
        return redirect(route('module.show',$id));
     }
+
 }

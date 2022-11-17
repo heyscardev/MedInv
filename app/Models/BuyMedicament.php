@@ -10,6 +10,9 @@ class BuyMedicament extends Pivot
     protected $table = "buy_medicament";
     protected $fillable = ['quantity','price'];
 
+    /**
+     * This are the relations
+     */
     public function medicament(){
         return $this->belongsTo(Medicament::class);
     }

@@ -20,6 +20,9 @@ class Recipe extends Model
         'user_id',
     ];
 
+    /**
+     * This are the relations
+     */
     public function patient()
     {
         return $this->belongsTo(Patient::class);
@@ -43,4 +46,5 @@ class Recipe extends Model
     public function medicaments(){
         return $this->belongsToMany(Medicament::class)->withPivot('prescribed_amount','quantity','price','description')->using(MedicamentRecipe::class);
     }
+
 }

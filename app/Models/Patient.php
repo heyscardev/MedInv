@@ -22,8 +22,12 @@ class Patient extends Model
         'direction'
     ];
 
+    /**
+     * This are the relations
+     */
     public function recipes()
     {
         return $this->hasMany(Recipe::class);
     }
+
 }

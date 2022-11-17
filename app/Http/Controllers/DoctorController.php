@@ -17,6 +17,11 @@ class DoctorController extends Controller
         $this->middleware('can:doctor.update')->only(['update']);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $data = Doctor::orderBy('created_at','asc')->skip(0)->take(500)->get();
@@ -49,17 +54,6 @@ class DoctorController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-    
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -83,9 +77,10 @@ class DoctorController extends Controller
         ]);
         $item = Doctor::find($request->id);
         $item->update($valido);
-       
+
         return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
     }
+
     /**
      * Remove the specified resource from storage.
      *

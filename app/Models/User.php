@@ -48,7 +48,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    //this are the relations
+
+    /**
+     * This are the relations
+     */
     public function Transfers()
     {
         return $this->hasMany(Transfer::class);
