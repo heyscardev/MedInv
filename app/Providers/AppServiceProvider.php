@@ -7,10 +7,11 @@ use App\Models\BuyMedicament;
 use App\Models\MedicamentTransfer;
 use App\Models\Transfer;
 use App\Observers\BuyMedicamentObserver;
+use App\Observers\BuyObserver;
 use App\Observers\MedicamentTransferObserver;
 use App\Observers\TransferObserver;
 use Illuminate\Support\ServiceProvider;
-use Mockery\Generator\Method;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
         BuyMedicament::observe(BuyMedicamentObserver::class);
         MedicamentTransfer::observe(MedicamentTransferObserver::class);
         Transfer::observe(TransferObserver::class);
-        Buy::observe(Buy::class);
+        Buy::observe(BuyObserver::class);
 
     }
 }
