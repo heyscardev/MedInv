@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Field } from "react-final-form";
 import { FormControl, OutlinedInput, IconButton, InputAdornment, FormHelperText, InputLabel } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import IntlMessage from "../IntlMessage";
 
 const onChangeDesicion = (e, inputOnchange, externalOnChange, meta, maxLength, onlyNumbers) => {
   let pass = true;
@@ -41,7 +42,7 @@ const PasswordField = ({
       {({ input, meta }) => (
         <div style={{margin}}>
         <FormControl  fullWidth={fullWidth}>
-        <InputLabel error={meta.error && meta.submitFailed ? true : false} htmlFor="outlined-adornment-password">{label}</InputLabel>
+        <InputLabel error={meta.error && meta.submitFailed ? true : false} htmlFor="outlined-adornment-password"><IntlMessage id={label} /></InputLabel>
           <OutlinedInput
             {...input}
             inputProps={{spellCheck,autoComplete, maxLength,...inputProps,  }}
@@ -65,7 +66,7 @@ const PasswordField = ({
               </InputAdornment>
             }
           />
-          {meta.submitFailed && meta.error && <FormHelperText error>{meta.error}</FormHelperText>}
+          {meta.submitFailed && meta.error && <FormHelperText error>{meta.error?<IntlMessage id="fieldError.weakPassword" />:meta.error }</FormHelperText>}
         </FormControl>
         </div>
       )}

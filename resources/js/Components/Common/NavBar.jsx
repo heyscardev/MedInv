@@ -141,7 +141,7 @@ const {palette} = useTheme();
                     <Box sx={{ display: { xs: "none", md: "flex" } }}>
                         <IconButton
                             size="large"
-                            aria-label="show 17 new notifications"npm
+                            aria-label="show 17 new notifications"
                             color="inherit"
                         >
                             <Badge badgeContent={17} color="error">

@@ -77,7 +77,7 @@ export default function Register() {
 
             <Input
               name="email"
-              label="Correo"
+              label="email"
               autoComplete="nope"
               spellCheck={false}
               validate={composeValidators(required, email)}

@@ -16,5 +16,5 @@ return [
     'failed' => 'Las Credenciales no coinciden o no existen en nuestra base de datos',
     'password' => 'La contraseña proporcionada es incorrecta.',
     'throttle' => 'Demasiados intentos de inicio de sesión. Vuelva a intentarlo en :seconds segundos.',
-
+    'suspended'=>'Usuario suspendido comuniquese con el administrador'
 ];

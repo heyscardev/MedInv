@@ -95,7 +95,7 @@ export default ({ user, open, onClose }) => {
               <Grid item xs={12} lg={8}>
                 <InputText
                   name="email"
-                  label="Correo"
+                  label="email"
                   autoComplete="nope"
                   spellCheck={false}
                   validate={composeValidators(required, email)}

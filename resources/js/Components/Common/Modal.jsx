@@ -10,11 +10,12 @@ export default ({
   maxWidth = "sm",
   children,
   headerMedinv = false,
-  subtitle ="empty"
+  subtitle ="empty",
+  ...props
 }) => {
   const { primary } = useTheme().palette;
   return (
-    <Dialog open={open} onClose={onClose} fullWidth={fullWidth} maxWidth={maxWidth}>
+    <Dialog  open={open}  onClose={onClose} fullWidth={fullWidth} maxWidth={maxWidth} {...props}>
       {headerMedinv && (
         <DialogTitle>
           <div style={{ textAlign: "center" }}>

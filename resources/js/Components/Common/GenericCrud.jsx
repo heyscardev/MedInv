@@ -8,7 +8,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import Table from "./Table";
 
-export default ({ columns, EditModal, routeName, data, columnVisibility = {}, multiButtonActions, deleteKeyMessage }) => {
+export default ({ columns, EditModal,actions=["create","update","delete"], routeName, data, columnVisibility = {}, multiButtonActions, deleteKeyMessage }) => {
   const { formatMessage } = useIntl();
   const [idToDelete, setIdToDelete] = useState(null);
   const toggleConfirmDelete = (id) => {
@@ -22,6 +22,7 @@ export default ({ columns, EditModal, routeName, data, columnVisibility = {}, mu
   return (
     <Fragment>
       <Table
+      actions={actions}
         initialState={{ columnVisibility }}
         onDelete={(id) => toggleConfirmDelete(id)}
         onEdit={(id) => toggleEdit(id)}

@@ -59,11 +59,11 @@ export default ({ item, open, onClose }) => {
   };
 
   return (
-    <Modal {...{ open, onClose }}>
+    <Modal {...{ open }}>
       <div style={{ textAlign: "center" }}>
         <LogoTypography />
         <Typography variant="h5" color="secondary.dark">
-          {!item ? "Registrar Usuario" : "Acualizar Usuario"}
+          {item &&  item.id ?  "Acualizar Usuario":"Registrar Usuario" }
         </Typography>
       </div>
       <Form
@@ -75,7 +75,7 @@ export default ({ item, open, onClose }) => {
               <Grid item xs={12} lg={6}>
                 <InputText
                   name="first_name"
-                  label="Nombre"
+                  label="first_name"
                   autoComplete="nope"
                   validate={composeValidators(required, alpha)}
                   maxLength={80}
@@ -85,7 +85,7 @@ export default ({ item, open, onClose }) => {
               <Grid item xs={12} lg={6}>
                 <InputText
                   name="last_name"
-                  label="Apellido"
+                  label="last_name"
                   autoComplete="nope"
                   validate={composeValidators(required, alpha)}
                   maxLength={80}
@@ -95,7 +95,7 @@ export default ({ item, open, onClose }) => {
               <Grid item xs={12} lg={8}>
                 <InputText
                   name="email"
-                  label="Correo"
+                  label="email"
                   autoComplete="nope"
                   spellCheck={false}
                   validate={composeValidators(required, email)}
@@ -106,7 +106,7 @@ export default ({ item, open, onClose }) => {
               <Grid item xs={12} lg={4}>
                 <InputText
                   name="c_i"
-                  label="cedula"
+                  label="c_i"
                   autoComplete="nope"
                   validate={composeValidators(required)}
                   onlyNumbers
@@ -117,7 +117,7 @@ export default ({ item, open, onClose }) => {
               <Grid item xs={12} lg={6}>
                 <PasswordField
                   name="password"
-                  label="Contraseña"
+                  label="password"
                   autoComplete="new-password"
                   spellCheck={false}
                   validate={composeValidators(passwordWeakValidation)}
@@ -127,7 +127,7 @@ export default ({ item, open, onClose }) => {
               <Grid item xs={12} lg={6}>
                 <PasswordField
                   name="password_confirmation"
-                  label="Confirmar Contraseña"
+                  label="password_confirmation"
                   autoComplete="new-password"
                   spellCheck={false}
                   validate={composeValidators(passwordWeakValidation, passwordEqual("password"))}
@@ -137,7 +137,7 @@ export default ({ item, open, onClose }) => {
               <Grid item xs={12} lg={6}>
                 <DatePicker
                   name="birth_date"
-                  label="fecha de nacimiento"
+                  label="birth_date"
                   maxDate={Date.now()}
                   minDate={addYears(Date.now(), -150)}
                   validate={composeValidators(
@@ -150,8 +150,8 @@ export default ({ item, open, onClose }) => {
                 />
               </Grid>
               <Grid item xs={12} lg={6} display="flex" justifyContent="center" alignItems="center">
-                <CheckBox type="radio" name="gender" label="Hombre" value="Male" />
-                <CheckBox type="radio" name="gender" label="Mujer" value="Female" />
+                <CheckBox type="radio" name="gender" label="male" value="Male" />
+                <CheckBox type="radio" name="gender" label="female" value="Female" />
               </Grid>
             </Grid>
           </form>

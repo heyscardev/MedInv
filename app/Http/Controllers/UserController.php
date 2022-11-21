@@ -31,7 +31,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('created_at','asc')->skip(0)->take(500)->get();
+        $users = User::orderBy('created_at','asc')->with('roles')->get();
         return Inertia::render('Users/index', ['data' => $users]);
     }
 
@@ -54,6 +54,7 @@ class UserController extends Controller
             'email' => ['required',  'email', 'max:255', 'unique:users'],
             'phone' => ['nullable', 'max:25'],
             'direction' => ['nullable', 'max:250'],
+            'state' => ['nullable', 'boolean'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()]
         ]);
         $user = new User($validate);
@@ -83,6 +84,7 @@ class UserController extends Controller
             'email' => ['email', 'max:255', Rule::unique('users')->ignore($request->id),],
             'phone' => ['nullable', 'max:25'],
             'direction' => ['nullable', 'max:250'],
+            'state' => ['nullable', 'boolean'],
             'password' => ['confirmed', 'min:8', Rules\Password::defaults()]
         ]);
         $user = User::find($request->id);

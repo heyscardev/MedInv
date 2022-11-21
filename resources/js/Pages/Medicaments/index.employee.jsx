@@ -1,5 +1,4 @@
 import AsyncTable from "@/Components/Common/AsyncTable";
-import Breadcrums from "@/Components/Common/Breadcrums";
 import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
 import IntlFormatNumber from "@/Components/Custom/IntlFormatNumber";
 import { Box } from "@mui/material";
@@ -8,14 +7,6 @@ import { Fragment } from "react";
 export default (props) => {
   return (
     <Fragment>
-       <Breadcrums
-        links={[
-          { name: "dashboard", route: "dashboard" },
-          { name: "medicaments", route: "medicament.index" },
-
-        ]}
-      />
-
       <AsyncTable
         routeName="medicament.index"
         routeParams={{ }}

@@ -39,7 +39,7 @@ const FormSigin = () => (
   <Form onSubmit={onSubmit}>
     {({ handleSubmit }) => (
       <form onSubmit={handleSubmit}>
-        <InputText name="email" label="Correo" fullWidth validate={composeValidators(required, email)} />
+        <InputText name="email" label="email" fullWidth validate={composeValidators(required, email)} />
 
         <PasswordField name="password" label="contraseña" fullWidth validate={composeValidators(required)} />
 

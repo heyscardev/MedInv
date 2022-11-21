@@ -1,9 +1,10 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 import { TextField, FormControl } from '@mui/material'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
-import { es } from 'date-fns/locale'
+import IntlMessage from '../IntlMessage'
+
 
 export default ({
   name,
@@ -25,10 +26,10 @@ export default ({
     <Field name={name} validate={validate}>
       {({ input, meta }) => (
         <FormControl sx={{ margin: 2, ...props }}>
-          <LocalizationProvider adapterLocale={es} dateAdapter={AdapterDateFns}>
+          
             <DesktopDatePicker
               {...input}
-              label={label}
+              label={<IntlMessage id={label} />}
               inputFormat={inputFormat ? inputFormat : 'dd/MM/yyyy'}
               onChange={
                 !onchange
@@ -51,13 +52,12 @@ export default ({
                 />
               )}
             />
-          </LocalizationProvider>
         </FormControl>
       )}
     </Field>
   ) : (
     <FormControl sx={props}>
-      <LocalizationProvider adapterLocale={es} dateAdapter={AdapterDateFns}>
+     
         <DesktopDatePicker
           name={name}
           label={label}
@@ -79,7 +79,6 @@ export default ({
             />
           )}
         />
-      </LocalizationProvider>
     </FormControl>
   )
 }

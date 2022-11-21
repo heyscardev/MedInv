@@ -50,7 +50,7 @@ export default (props) => {
           },
           {
             accessorKey: "email",
-            header: "Correo",
+            header: "email",
           },
           {
             accessorKey: "c_i",

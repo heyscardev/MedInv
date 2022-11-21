@@ -1,6 +1,7 @@
 import { FormControl, FormControlLabel, Checkbox, FormHelperText } from "@mui/material";
 import React from "react";
 import { Field } from "react-final-form";
+import IntlMessage from "../IntlMessage";
 
 /* export default (name, validate, label, value, check, checkBoxProps) => (
   <Field name={name} validate={validate}>
@@ -26,7 +27,7 @@ export default ({
     {({ meta, input }) => (
       <FormControl error={meta.submitFailed && !!meta.error} fullWidth={fullWidth} >
         <FormControlLabel
-          label={label}
+          label={<IntlMessage id={label} />}
           control={
             <Checkbox
               {...input}
