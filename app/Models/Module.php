@@ -10,14 +10,15 @@ class Module extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+
 
     protected $fillable = [
         'code',
         'name',
         'user_id'
     ];
-    // protected $appends = ['total_medicaments'];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * This are the relations

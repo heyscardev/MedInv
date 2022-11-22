@@ -28,7 +28,9 @@ class ModuleRequest extends FormRequest
     {
         if ($this->routeIs('module.show')) return $this->showRules();
         return [
-            //
+            'code'=>'required|unique:modules|max:25',
+            'name'=>'required|max:100',
+            'user_id'=>'required|integer|exists:users,id'
         ];
     }
     protected function showRules()
@@ -43,5 +45,13 @@ class ModuleRequest extends FormRequest
             'page_size'=>['integer','in:10,20,50,100']
         ];
     }
+
+    // public function messages()
+    // {
+    //     return [
+    //         'name.required' => 'Name is Must',
+    //         'name.min' => 'Name Must be 5 Chr.',
+    //     ];
+    // }
 
 }

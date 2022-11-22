@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ModuleRequest;
-use App\Models\Medicament;
 use App\Models\Module;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class ModuleController extends Controller
@@ -40,9 +37,13 @@ class ModuleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ModuleRequest $request)
     {
-        //
+        dd('store');
+        $validated = $request->validated();
+        $item = new Module($validated);
+        $item->save();
+        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
     }
 
     /**
@@ -105,8 +106,17 @@ class ModuleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Module $module)
     {
-        //
+        // $item = Module::find($id);
+        // if (!$item) {
+        //     return back()->withErrors(['noDelete' => 'Esta Modulo No existe']);
+        // }
+        // return $item->delete() ? back() : back(500)->withErrors('save', 'error al eliminar');
+
+        dd('destroy');
+        return $module->delete()
+                ? back()
+                : back(500)->withErrors('save', 'error al eliminar');
     }
 }
