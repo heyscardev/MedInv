@@ -25,13 +25,14 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        $items = ( auth()->user()->hasRole('administrador') )
-                    ? Module::get()
-                    : auth()->user()->modules;
-        return Inertia::render('Modules/index.employee', ['data' => $items]);
+        if (auth()->user()->hasRole('administrador')) {
+            return  Inertia::render('Modules/index.admin', ['data' => Module::with('user')->get()]);
+        }
+
+        return Inertia::render('Modules/index.employee', ['data' => auth()->user()->modules]);
     }
 
-     /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -39,7 +40,7 @@ class ModuleController extends Controller
      */
     public function store(ModuleRequest $request)
     {
-        dd('store');
+        
         $validated = $request->validated();
         $item = new Module($validated);
         $item->save();
@@ -82,7 +83,7 @@ class ModuleController extends Controller
             if (str_contains($id, "pivot.")) return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
 
             if (str_contains($id, "unit.")) return $query->orderByUnit(str_replace('unit.', '', $id), $sorting);
-            if($id === 'quantity_global')return $query->orderByGlobalInventory($sorting);
+            if ($id === 'quantity_global') return $query->orderByGlobalInventory($sorting);
             return $query->orderBy('medicaments.' . $id, $sorting);
         }, $orderBy);
         return Inertia::render('Modules/show.employee', ['module' => $module, 'data' => $query->paginate($paginate)]);
@@ -114,7 +115,7 @@ class ModuleController extends Controller
         // }
         // return $item->delete() ? back() : back(500)->withErrors('save', 'error al eliminar');
 
-        dd('destroy');
+        
         return $module->delete()
                 ? back()
                 : back(500)->withErrors('save', 'error al eliminar');

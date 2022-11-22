@@ -139,6 +139,9 @@
     "moduleSend":"Modulo Envia",
     "quantityMedicaments": "Cantidad de Medicamentos",
     "totalQuantityMedicaments": "Cantidad Total de Medicamentos",
-    "show":"Mostrar"
+    "show":"Mostrar",
+    "noAsigned":"No asignado",
+    "delete":"Eliminar",
+    "enter":"Entrar"
     
 }

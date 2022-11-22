@@ -98,7 +98,7 @@ export default ({ sx = { margin: 2 }, elevation = 2, actions, ...props }) => {
         initialState={{
           density: 'compact',
           expanded: false, //expand all groups by default
-          pagination: { pageIndex: 0, pageSize: 20 },
+          pagination: { pageIndex: 0, pageSize: 10 },
           ...props.initialState,
           // sorting: [{ id: 'state', desc: false }], //sort by state by default
         }}

@@ -6,6 +6,7 @@ import { useState } from "react";
 import SingInModal from "../../Auth/SingInModal";
 import { showLoader } from "@/Config/Loader";
 import BtnUserSession from "@/Components/Auth/BtnUserSession";
+import { visit } from "@/HTTPProvider";
 
 export default ({ styleContainer,auth }) => {
   const { palette } = useTheme();
@@ -91,7 +92,7 @@ export default ({ styleContainer,auth }) => {
         <Grid>
           <IconButton
             onClick={() => {
-              showLoader();
+              visit(route('dashboard'))
             }}
             size="large"
             sx={{ border: `3px solid`, borderColor: "primary.light" }}
