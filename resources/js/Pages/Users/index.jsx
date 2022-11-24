@@ -5,18 +5,26 @@ import {
   formatDateFromDataBase,
   formatGenderFromDataBase,
 } from '@/Utils/format'
-import { Delete, Edit, PersonAdd } from '@mui/icons-material'
+import {
+  Delete,
+  Edit,
+  People,
+  PersonAdd,
+  Restore,
+  RestoreFromTrash,
+} from '@mui/icons-material'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import ConfirmModal from '@/Components/Common/ConfirmModal'
 import MultiButton from '@/Components/Common/MultiButton'
-import { destroy, put } from '@/HTTPProvider'
+import { destroy, get, put, visit } from '@/HTTPProvider'
 import _ from 'lodash'
 import Tooltip from '@/Components/Custom/Tooltip'
 import IconButton from '@/Components/Custom/IconButton'
 import { Switch } from '@mui/material'
+import { Head, usePage } from '@inertiajs/inertia-react'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)
@@ -31,11 +39,18 @@ const columnVisibility = {
   last_name: false,
   phone: false,
   direction: false,
+  deleted_at:false
 }
 const routeName = 'user'
 
-export default (props) => {
+export default ({ ...props }) => {
+  console.log(usePage())
+  const urlParams = new URLSearchParams(window.location.search)
+  const restoreMode = urlParams.has('deleted')
+  //Accedemos a los valores
+
   const [dataTable, setDataTable] = useState([])
+
   useEffect(() => {
     setDataTable(props.data.map(formatDataUser))
   }, [props.data])
@@ -52,6 +67,7 @@ export default (props) => {
   }
   return (
     <Fragment>
+      <Head title={formatMessage({ id: 'users' })} />
       <Table
         initialState={{ columnVisibility }}
         data={dataTable}
@@ -63,26 +79,39 @@ export default (props) => {
             header: 'actions',
             size: 80,
 
-            Cell: ({ cell }) => (
-              <Fragment>
-                <Tooltip arrow placement="right" title="Eliminar">
-                  <IconButton
-                    color="error"
-                    onClick={(e) => setIdToDelete(cell.getValue())}
-                  >
-                    <Delete />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip arrow placement="right" title="Editar">
+            Cell: ({ cell }) => {
+              return cell.row.original.deleted_at ? (
+                <Tooltip arrow placement="right" title="delete">
                   <IconButton
                     color="primary"
-                    onClick={(e) => setIdToEdit(cell.getValue())}
+                    onClick={(e) => {
+                      get(route(`${routeName}.restore`, cell.row.original.id))
+                    }}
                   >
-                    <Edit />
+                    <Restore />
                   </IconButton>
                 </Tooltip>
-              </Fragment>
-            ),
+              ) : (
+                <Fragment>
+                  <Tooltip arrow placement="right" title="delete">
+                    <IconButton
+                      color="error"
+                      onClick={(e) => setIdToDelete(cell.getValue())}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip arrow placement="right" title="edit">
+                    <IconButton
+                      color="primary"
+                      onClick={(e) => setIdToEdit(cell.getValue())}
+                    >
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                </Fragment>
+              )
+            },
           },
           {
             accessorKey: 'id',
@@ -134,11 +163,12 @@ export default (props) => {
               return (
                 <div>
                   <Switch
-                    checked={cell.getValue()}
-                   // disabled={cell.row.getValue('roles') && _.find(cell.row.getValue('roles'),{name:"administrador"})}
+                    checked={!!cell.getValue()}
+                    disabled={cell.row.original.deleted_at}
+                    // disabled={cell.row.getValue('roles') && _.find(cell.row.getValue('roles'),{name:"administrador"})}
                     onChange={(e, newValue) => {
                       put(route('user.update', cell.row.getValue('id')), {
-                        id:cell.row.getValue('id'),
+                        id: cell.row.getValue('id'),
                         state: newValue,
                       })
                     }}
@@ -161,7 +191,18 @@ export default (props) => {
             accessorKey: 'updated_at',
             header: 'updated_at',
             accessorFn: ({ updated_at }) =>
-              !updated_at ? '00/00/0000 00:00:00' : updated_at,
+              !updated_at ? '00/00/0000 00:00:00' : format(new Date(updated_at), 'hh:mm dd MMMM yyyy', {
+                locale: es,
+              }),
+          },
+          {
+            accessorKey: 'deleted_at',
+            header: 'deleted_at',
+            
+            accessorFn: ({ deleted_at }) =>
+              !deleted_at ? formatMessage({ id: 'active' }) : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy', {
+                locale: es,
+              }),
           },
         ]}
       />
@@ -169,9 +210,20 @@ export default (props) => {
         actions={[
           {
             icon: <PersonAdd />,
-            name: 'crear',
+            name: 'user',
             onClick: (e) => {
               toggleEdit(-1)
+            },
+          },
+          {
+            icon: <RestoreFromTrash  />,
+            name: restoreMode?'exitRestoreMode':'usersRestore',
+            ...restoreMode?{sx:{backgroundColor:"primary.dark",color:"#fff"}}:{},
+            onClick: (e) => {
+              if (restoreMode) {
+                return visit(route(`${routeName}.index`))
+              }
+              return visit(route(`${routeName}.index`, { deleted: true }))
             },
           },
         ]}

@@ -7,6 +7,7 @@
     "quantity_exist": "Cantidad Existente",
     "created_at": "Fecha de Creacion",
     "updated_at": "Ultima Actualizacion",
+    "deleted_at": "Fecha de Eliminacion",
     "description": "Descripcion",
     "phone": "Telefono",
     "direction": "Direccion",
@@ -142,6 +143,11 @@
     "show":"Mostrar",
     "noAsigned":"No asignado",
     "delete":"Eliminar",
-    "enter":"Entrar"
+    "enter":"Entrar",
+    "usersRestore":"Restaurar Usuarios",
+    "state":"Estado",
+    "active":"Activo",
+    "users":"Usuarios",
+    "exitRestoreMode":"salir del modo de recuperación"
     
 }

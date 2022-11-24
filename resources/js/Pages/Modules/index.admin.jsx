@@ -19,7 +19,7 @@ import IconButton from '@/Components/Custom/IconButton'
 import { Switch } from '@mui/material'
 import AsyncTable from '@/Components/Common/AsyncTable'
 import EditModuleModal from '@/Components/Layouts/Modules/EditModuleModal'
-import { Link } from '@inertiajs/inertia-react'
+import { Head, Link } from '@inertiajs/inertia-react'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)
@@ -37,7 +37,7 @@ const columnVisibility = {
 const routeName = 'module'
 
 export default ({data=[],...props}) => {
- 
+ console.log(props)
 
   const { formatMessage } = useIntl()
   const [idToDelete, setIdToDelete] = useState(null)
@@ -51,6 +51,7 @@ export default ({data=[],...props}) => {
   }
   return (
     <Fragment>
+      <Head title='Modulos' />
       <Table
         initialState={{ columnVisibility }}
         data={data}

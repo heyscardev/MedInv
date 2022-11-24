@@ -17,6 +17,7 @@ class UserController extends Controller
         $this->middleware('can:user.store')->only(['store']);
         $this->middleware('can:user.destroy')->only(['destroy']);
         $this->middleware('can:user.update')->only(['update']);
+        $this->middleware('can:user.restore')->only(['restore']);
     }
 
     /**
@@ -26,9 +27,13 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // $users = User::with('roles')->onlyTrashed()->orderBy('created_at','asc')->get();
-        $users = User::with('roles')->orderBy('created_at','asc')->get();
+        $withTrash = $request->get('deleted');
+        if ($withTrash) {
+            $users = User::with('roles')->onlyTrashed()->orderBy('created_at', 'asc')->get();
+            return Inertia::render('Users/index', ['data' => $users]);
+        }
 
+        $users = User::with('roles')->orderBy('created_at', 'asc')->get();
         return Inertia::render('Users/index', ['data' => $users]);
     }
 
@@ -44,7 +49,6 @@ class UserController extends Controller
         $user = new User($validated);
         $user->password = Hash::make($request->password);
         return $user->save() ? back() : back(500)->withErrors('save', 'error al guardar');
-
     }
 
     /**
@@ -56,10 +60,10 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        if($user->id == Auth::id())
-            return back()->withErrors(['noCurrentUser'=>'el usuario actual solo se puede modificar desde preferencias']);
-        else if($user->hasRole('administrador'))
-            return back()->withErrors(['noAdmin'=>'no se puede modificar un administrador']);
+        if ($user->id == Auth::id())
+            return back()->withErrors(['noCurrentUser' => 'el usuario actual solo se puede modificar desde preferencias']);
+        else if ($user->hasRole('administrador'))
+            return back()->withErrors(['noAdmin' => 'no se puede modificar un administrador']);
 
         $validated = $request->validated();
         $user->update($validated);
@@ -77,9 +81,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->hasRole('administrador')){
+        $error = false;
+        if ($user->hasRole('administrador')) {
             $error = 'no puede eliminar un administrador';
-        }else{
+        } else {
             // with soft deletes
             $user->delete();
             $user->state = false;
@@ -99,10 +104,11 @@ class UserController extends Controller
     //     $fund->forceDelete();
     //     return redirect()->route('model.index')->with('success', __('The model was destroyed'));
     // }
-    // public function restore(Model $model)
-    // {
-    //     $fund->restore();
-    //     return redirect()->route('model.index')->with('success', __('The model was restored'));
-    // }
-
+    public function restore($id)
+    {
+        User::withTrashed()->find($id)->restore();
+  
+        
+         return redirect()->route('user.index')->with('success', __('The model was destroyed'));
+    }
 }

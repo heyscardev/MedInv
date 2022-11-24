@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('services', ServiceController::class)->only(['index', 'destroy', 'update', 'store'])->names('service');
     Route::resource('units', UnitController::class)->only(['index', 'destroy', 'update', 'store'])->names('unit');
     Route::resource('users', UserController::class)->only(['index', 'destroy', 'update', 'store'])->names('user');
+    Route::get('users/restore/{id}',[UserController::class,"restore"])->name('user.restore');
 
     Route::get('modules/{module}/buy/create', [ModuleBuyController::class, 'create'])->name('module.buy.create');
     Route::post('modules/{module}/buy', [ModuleBuyController::class, 'store'])->name('module.buy.store');
