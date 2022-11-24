@@ -26,7 +26,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // $users = User::with('roles')->withTrashed()->orderBy('created_at','asc')->get();
+        // $users = User::with('roles')->onlyTrashed()->orderBy('created_at','asc')->get();
         $users = User::with('roles')->orderBy('created_at','asc')->get();
 
         return Inertia::render('Users/index', ['data' => $users]);

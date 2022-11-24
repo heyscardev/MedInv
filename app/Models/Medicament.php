@@ -76,12 +76,12 @@ class Medicament extends Model
      */
     public function scopeUnit($query, $column, $value)
     {
-        if (is_array($value)) return $query->whereRelation('unit', $column, ">=",   $value[0])->whereRelation('unit', $column, "<=",   $value[1]);
         return $query->whereRelation('unit', $column, "LIKE", "%" . strtoupper($value) . "%");
     }
     public function scopeLikeOrBeetween($query, $column, $value)
     {
-        if (is_array($value)) return $query->where($column, ">=",$value[0] ? $value[0] : 0)->where($column, "<=", $value[1] ? $value[1] : 999999999.99);
+        if (is_array($value))
+            return $query->where($column, ">=",$value[0] ? $value[0] : 0)->where($column, "<=", $value[1] ? $value[1] : 999999999.99);
         return $query->where($column, "LIKE", "%" . strtoupper($value) . "%");
     }
     public function scopeOrderByUnit($query, $column, $sorting)

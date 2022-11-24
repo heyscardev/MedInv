@@ -40,7 +40,7 @@ class ModuleController extends Controller
      */
     public function store(ModuleRequest $request)
     {
-        
+
         $validated = $request->validated();
         $item = new Module($validated);
         $item->save();
@@ -55,10 +55,12 @@ class ModuleController extends Controller
      */
     public function show(ModuleRequest $request, Module $module)
     {
-        $search = $request->get('search');
-        $paginate = max(min($request->get('page_size'), 100), 10);
+        // $search = $request->get('search');
+        $paginate = max( min( $request->get('page_size'), 100), 10);
+
         $orderBy = $request->get('orderBy', [['id' => "pivot.updated_at", 'desc' => true]]);
         $filters = $request->get('filters', []);
+
 
         //start building of query
         $query = $module->medicaments();
@@ -66,26 +68,40 @@ class ModuleController extends Controller
         //fliters iteration
         array_map(function ($filter) use ($query) {
             $id = $filter['id'];
-            $value = $filter['value'];
+            $value = $filter['value'];  // [10,100] or  [10,null] or [null,10]
+
 
             if (str_contains($id, "pivot.")) {
-                if (is_array($value)) return $query->wherePivot(str_replace("pivot.", "", $id), ">=",   $value[0] ? $value[0] : 0)->wherePivot(str_replace("pivot.", "", $id), "<=",   $value[1] ? $value[1] : 9999999999.2);
-                return $query->wherePivot(str_replace("pivot.", "", $id), "LIKE", "%" . $value . "%");
+                $column = str_replace("pivot.", "", $id);
+                if (is_array($value))
+                    return $query->wherePivot( $column, ">=",   $value[0] ? $value[0] : 0)
+                                 ->wherePivot( $column, "<=",   $value[1] ? $value[1] : 9999999999.2);
+
+                return $query->wherePivot( $column, "LIKE", "%" . $value . "%");
             }
-            if (str_contains($id, "unit.")) return $query->unit(str_replace('unit.', '', $id), $value);
+            if (str_contains($id, "unit.")){
+                $column = str_replace('unit.', '', $id);
+                return $query->whereRelation('unit', $column, "LIKE", "%" . strtoupper($value) . "%");
+            }
+
             return $query->LikeOrBeetween('medicaments.' . $id, $value);
         }, $filters);
+
         //fliters orders
         array_map(function ($by) use ($query) {
             $id = $by['id'];
             $sorting = $by['desc'] == true ? "DESC" : 'ASC';
 
-            if (str_contains($id, "pivot.")) return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
+            if (str_contains($id, "pivot."))
+                return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
+            if (str_contains($id, "unit."))
+                return $query->orderByUnit(str_replace('unit.', '', $id), $sorting);
+            if ($id === 'quantity_global')
+                return $query->orderByGlobalInventory($sorting);
 
-            if (str_contains($id, "unit.")) return $query->orderByUnit(str_replace('unit.', '', $id), $sorting);
-            if ($id === 'quantity_global') return $query->orderByGlobalInventory($sorting);
             return $query->orderBy('medicaments.' . $id, $sorting);
         }, $orderBy);
+
         return Inertia::render('Modules/show.employee', ['module' => $module, 'data' => $query->paginate($paginate)]);
     }
 
@@ -115,7 +131,7 @@ class ModuleController extends Controller
         // }
         // return $item->delete() ? back() : back(500)->withErrors('save', 'error al eliminar');
 
-        
+
         return $module->delete()
                 ? back()
                 : back(500)->withErrors('save', 'error al eliminar');

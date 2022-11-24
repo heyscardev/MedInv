@@ -5,20 +5,22 @@ namespace App\Models;
 use Hamcrest\Description;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Recipe extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'recipe_type',
-        'state',
         'patient_id',
         'doctor_id',
         'pathology_id',
         'module_id',
         'user_id',
     ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * This are the relations

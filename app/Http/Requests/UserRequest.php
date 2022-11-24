@@ -25,6 +25,7 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+
         $yesterday = date('Y-m-d', strtotime('1 days'));
         $nowMinus150years = date('Y-m-d', strtotime('-150 years'));
         return [

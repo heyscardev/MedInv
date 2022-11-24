@@ -46,12 +46,4 @@ class ModuleRequest extends FormRequest
         ];
     }
 
-    // public function messages()
-    // {
-    //     return [
-    //         'name.required' => 'Name is Must',
-    //         'name.min' => 'Name Must be 5 Chr.',
-    //     ];
-    // }
-
 }
