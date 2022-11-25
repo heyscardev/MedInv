@@ -43,7 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('medicaments', MedicamentController::class)->only(['index', 'destroy', 'update', 'store'])->names('medicament');
     Route::resource('modules', ModuleController::class)->only(['index', 'destroy', 'update', 'store', 'show'])->names('module');
     Route::resource('patients', PatientController::class)->only(['index', 'destroy', 'update', 'store'])->names('patient');
-    Route::resource('recipes', RecipeController::class)->only(['index', 'destroy', 'update', 'store'])->names('recipe');
+    Route::resource('recipes', RecipeController::class)->only(['index', 'destroy', 'update', 'store','create'])->names('recipe');
+    
     Route::resource('services', ServiceController::class)->only(['index', 'destroy', 'update', 'store'])->names('service');
     Route::resource('units', UnitController::class)->only(['index', 'destroy', 'update', 'store'])->names('unit');
     Route::resource('users', UserController::class)->only(['index', 'destroy', 'update', 'store'])->names('user');

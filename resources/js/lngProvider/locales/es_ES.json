@@ -148,6 +148,7 @@
     "state":"Estado",
     "active":"Activo",
     "users":"Usuarios",
-    "exitRestoreMode":"salir del modo de recuperación"
+    "exitRestoreMode":"salir del modo de recuperación",
+    "createRecipe":"Crear Recipe"
     
 }

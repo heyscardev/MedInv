@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RecipeRequest;
+use App\Models\Doctor;
+use App\Models\Module;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -24,10 +26,31 @@ class RecipeController extends Controller
      */
     public function index(Request $request)
     {
-        $paginate = max( min( $request->get('page_size'), 100), 10);
-        ////////////////////////7 FALTA
+        $paginate = max(min($request->get('page_size'), 100), 10);
         $items = Recipe::paginate($paginate);
         return Inertia::render('Recipes/index', ['data' => $items]);
+    }
+    public function create(Request $request)
+    {
+        $doctorFind = $request->get('doctors', "");
+        $doctors = Doctor::where('first_name', "%" . $doctorFind . "%")
+            ->orWhere('c_i', "LIKE", "%" . $doctorFind . "%")
+            ->orWhere('last_name', "LIKE", "%" . $doctorFind . "%")
+            ->orWhere('email', "LIKE", "%" . $doctorFind . "%")
+            ->orWhere('id', $doctorFind)
+            ->get();
+
+        $moduleFind = $request->get('module', "");
+        $modules =  Module::with('user')
+            ->when(!auth()->user()->hasRole('administrador'), function ($q) {
+                return $q->where('user_id', auth()->user()->id);
+            })
+            ->where('name', 'LIKE', "%" . $moduleFind . "%")
+            ->orWhere('id', $moduleFind)
+            ->get();
+
+
+        return Inertia::render('Recipes/create', compact("doctors", "modules"));
     }
 
     /**
@@ -84,6 +107,4 @@ class RecipeController extends Controller
         Recipe::withTrashed()->find($id)->restore();
         return back();
     }
-
-
 }

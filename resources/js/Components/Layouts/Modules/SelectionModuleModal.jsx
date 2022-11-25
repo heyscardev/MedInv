@@ -18,7 +18,7 @@ export default ({
             <ModuleButton
               module={module}
               disabled={(moduleSelected && moduleSelected.id === module.id) || !!_.find(moduleDisableds, { id: module.id })}
-              withUser={true}
+              withUser={!!module.user}
               onClick={(e) => {
                 onClose();
                 onSelect(module);

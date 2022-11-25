@@ -1,4 +1,4 @@
-import { Dashboard, Home, Masks, Medication, People, Scale, Sick, Store } from "@mui/icons-material";
+import { Dashboard, Home, Masks, Medication, People, Receipt, Scale, Sick, Store } from "@mui/icons-material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -31,6 +31,7 @@ const {palette} = useTheme();
     can('unit.index') ? ["Unidades", route("unit.index"), <Scale />] : null,
     can('doctor.index') ? ["Doctores", route("doctor.index"), <Masks />] : null,
     can('patient.index') ? ["Pacientes", route("patient.index"), <Sick />] : null,
+    can('recipe.index') ? ["Recipes", route("recipe.index"), <Receipt />] : null,
         can("module.index")
             ? ["Modulos", route("module.index"), <Store />]
             : null,

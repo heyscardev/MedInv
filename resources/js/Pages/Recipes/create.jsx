@@ -15,7 +15,7 @@ import {
   required,
 } from '@/Config/InputErrors'
 import { post, visit } from '@/HTTPProvider'
-import { Add, Clear, MoveDown } from '@mui/icons-material'
+import { Add, Article, Clear, MoveDown } from '@mui/icons-material'
 import {
   Autocomplete,
   Button,
@@ -59,9 +59,11 @@ export default ({
   moduleFromTransfers,
   moduleSelected,
   selectedMedicaments,
+  modules,
   can,
   ...props
 }) => {
+  console.log(modules)
   const { formatMessage } = useIntl()
   const [propsSelectedModuleTo, setPropsSelectedModuleTo] = useState({
     open: false,
@@ -129,8 +131,8 @@ export default ({
                       alignItems="center"
                       alignSelf="center"
                     >
-                      <MoveDown sx={{ fontSize: 'inherit' }} />
-                      <IntlMessage id="transfer" />
+                      <Article sx={{ fontSize: 'inherit' }} />
+                      <IntlMessage id="Recipe" />
                     </Typography>
                     <Divider />
                     <Grid
@@ -140,66 +142,16 @@ export default ({
                       rowGap={2}
                       columnSpacing={2}
                     >
-                      <Grid item xs={12} sm={10} md={5}>
-                        <FormControl fullWidth>
-                          <ModuleButton
-                            module={values.moduleSend}
-                            onClick={(e) => {
-                              setPropsSelectedModuleFrom({
-                                open: true,
-                                moduleSelected: values.moduleSend,
-                                moduleDisableds: [],
-                              })
-                            }}
-                          />
-                          {meta.submitFailed && meta.errors.moduleSend && (
-                            <FormHelperText error>
-                              <IntlMessage id={meta.errors.moduleSend} />
-                            </FormHelperText>
-                          )}
-                        </FormControl>
-                      </Grid>
-
-                      <Grid item xs={12} sm={10} md={2}>
-                        <Stack alignItems="center">
-                          <Hidden mdDown>
-                            <Stack direction="row">
-                              <KeyboardDoubleArrowRightIcon
-                                color="primary"
-                                sx={{ fontSize: '50px' }}
-                              />
-                              <KeyboardDoubleArrowRightIcon
-                                color="primary"
-                                sx={{ fontSize: '50px' }}
-                              />
-                              <KeyboardDoubleArrowRightIcon
-                                color="primary"
-                                sx={{ fontSize: '50px' }}
-                              />
-                            </Stack>
-                          </Hidden>
-                          <Hidden mdUp>
-                            <Stack marginLeft={5}>
-                              <KeyboardDoubleArrowDownIcon
-                                color="primary"
-                                sx={{ fontSize: '50px' }}
-                              />
-                              <KeyboardDoubleArrowDownIcon
-                                color="primary"
-                                sx={{ fontSize: '50px' }}
-                              />
-                            </Stack>
-                          </Hidden>
-                        </Stack>
-                      </Grid>
-                      <Grid item xs={12} sm={10} md={5}>
+                
+                    
+                      <Grid item xs={12}  sm={6}>
                         <FormControl fullWidth>
                           <ModuleButton
                             module={values.moduleReceive}
                             onClick={(e) => {
                               setPropsSelectedModuleTo({
                                 open: true,
-                                moduleSelected: values.moduleReceive,
+                                moduleSelected: values.moduleDeliver,
                                 moduleDisableds: [values.moduleSend],
                               })
                             }}
@@ -335,27 +287,15 @@ export default ({
                   >
                     <IntlMessage id="endBuy" />
                   </Button>
-                  <SelectionModuleModal
-                    {...propsSelectedModuleFrom}
-                    modules={moduleFromTransfers}
-                    onClose={() => {
-                      setPropsSelectedModuleFrom({ open: false })
-                    }}
-                    onSelect={(value) => {
-                      if (moduleSelected && moduleSelected.id === value.id)
-                        return null
-                      visit(route('transfer.create', value.id))
-                    }}
-                    label="selectModuleFromTransfer"
-                  />
+                
                   <SelectionModuleModal
                     {...propsSelectedModuleTo}
-                    modules={moduleToTransfers}
+                    modules={modules}
                     onClose={() => {
                       setPropsSelectedModuleTo({ open: false })
                     }}
                     onSelect={(value) => {
-                      form.change('moduleReceive', value)
+                      form.change('moduleDeliver', value)
                     }}
                     label="selectModuleToTransfer"
                   />
