@@ -14,8 +14,8 @@ class ModuleRequest extends FormRequest
      */
     public function authorize()
     {
-        $module = $this->route('module');
-        if ($module->user->id !== auth()->user()->id) return abort(403);
+        // $module = $this->route('module');
+        // if ($module->user->id !== auth()->user()->id) return abort(403);
         return true;
     }
 
@@ -42,9 +42,9 @@ class ModuleRequest extends FormRequest
     public function store()
     {
         return [
-            'code'=>'required|max:25|unique:modules',
-            'name'=>'required|max:100',
-            'user_id'=>'required|integer|exists:users,id'
+            'code'    =>'required|max:25|unique:modules',
+            'name'    =>'required|max:100',
+            'user_id' =>'required|integer|exists:users,id'
         ];
     }
 
@@ -56,8 +56,8 @@ class ModuleRequest extends FormRequest
     public function update()
     {
         return [
-            'code'=>'sometimes|required|max:25|' . Rule::unique('modules')->ignore($this->id),
-            'name'=>'sometimes|required|max:100',
+            'code'  =>'sometimes|required|max:25|' . Rule::unique('modules')->ignore($this->id),
+            'name'  =>'sometimes|required|max:100',
         ];
     }
 

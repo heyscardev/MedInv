@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ModuleRequest;
 use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ModuleController extends Controller
@@ -112,6 +113,7 @@ class ModuleController extends Controller
     {
         $validated = $request->validated();
         $module->update($validated);
+
         return back();
     }
 
@@ -137,7 +139,9 @@ class ModuleController extends Controller
     public function restore($id)
     {
         // Restore soft deletes
-        Module::withTrashed()->find($id)->restore();
-        return back();
+        $restore = Module::withTrashed()->find($id)->restore();
+        return $restore
+                ? back()
+                : back(500)->withErrors('save', 'error al recuperar');
     }
 }
