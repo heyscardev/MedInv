@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DoctorRequest;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -34,23 +35,13 @@ class DoctorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DoctorRequest $request)
     {
-        $yesterday = date('Y-m-d', strtotime('1 days'));
-        $nowMinus150years = date('Y-m-d', strtotime('-150 years'));
-        $validate = $request->validate([
-            'c_i' => ['required', 'numeric', 'digits_between:0,8', 'unique:doctors'],
-            'first_name' => ['required', 'alpha', 'max:80'],
-            'last_name' => ['required', 'alpha', 'max:80'],
-            'birth_date' => ['required', 'date_format:Y-m-d', 'after:' . $nowMinus150years, 'before:' . $yesterday],
-            'gender' => ['required', 'in:Male,Female'],
-            'email' => ['required',  'email', 'max:255', 'unique:doctors'],
-            'phone' => ['nullable', 'max:25'],
-            'direction' => ['nullable', 'max:250']
-        ]);
-        $item = new Doctor($validate);
-        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
+        $validated = $request->validated();
+        $doctor = new Doctor($validated);
+        $doctor->save();
 
+        return back();
     }
 
     /**
@@ -60,25 +51,12 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DoctorRequest $request, Doctor $doctor)
     {
-        $yesterday = date('Y-m-d', strtotime('1 days'));
-        $nowMinus150years = date('Y-m-d', strtotime('-150 years'));
-        $valido = $request->validate([
-            'id' => ['required', 'integer', 'exists:doctors'],
-            'c_i' => ['numeric', 'digits_between:0,8', Rule::unique('doctors')->ignore($request->id)],
-            'first_name' => ['alpha', 'max:80'],
-            'last_name' => ['alpha', 'max:80'],
-            'birth_date' => ['date_format:Y-m-d', 'after:' . $nowMinus150years, 'before:' . $yesterday],
-            'gender' => ['in:Male,Female'],
-            'email' => ['email', 'max:255', Rule::unique('doctors')->ignore($request->id),],
-            'phone' => ['nullable', 'max:25'],
-            'direction' => ['nullable', 'max:250']
-        ]);
-        $item = Doctor::find($request->id);
-        $item->update($valido);
+        $validated = $request->validated();
+        $doctor->update($validated);
 
-        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
+        return back();
     }
 
     /**
@@ -87,14 +65,16 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Doctor $doctor)
     {
-        $item = Doctor::find($id);
-
-        if (!$item) {
-            return back()->withErrors(['noDelete' => 'Este Recurso No existe']);
-        }
-        $item->delete();
+        // with soft deletes ??????????????
+        $doctor->delete();
         return back();
     }
+
+    // public function restore($id)
+    // {
+    //     Doctor::withTrashed()->find($id)->restore();
+    //     return back()->with('success', 'El doctor fue restaurado');
+    // }
 }

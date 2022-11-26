@@ -89,16 +89,12 @@ class MedicamentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {/*
-        $valido = $request->validate([
-            'id' => ['required', 'integer', 'exists:medicaments'],
-            'name' => ['alpha', 'max:80', Rule::unique('medicaments')->ignore($request->name)],
-            'description' => ['max:250']
-        ]);
-        $item = Medicament::find($request->id);
-        $item->update($valido);
-        return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar'); */
+    public function update(MedicamentRequest $request, Medicament $medicament)
+    {
+        $validated = $request->validated();
+        $medicament->update($validated);
+
+        return back();
     }
 
     /**
@@ -107,13 +103,11 @@ class MedicamentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Medicament $medicament)
     {
-        $item = Medicament::find($id);
+        // with soft deletes
+        $medicament->delete();
 
-        if (!$item) {
-            return back()->withErrors(['noDelete' => 'Esta Unidad No existe']);
-        }
-        return $item->delete() ? back() : back(500)->withErrors('save', 'error al eliminar');
+        return back();
     }
 }

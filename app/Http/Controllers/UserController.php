@@ -93,22 +93,17 @@ class UserController extends Controller
         return !$error ? back() : back()->withErrors(['noDelete' => $error]);
     }
 
+    public function restore($id)
+    {
+        User::withTrashed()->find($id)->restore();
+        return back()->with('success', 'El usuario fue restaurado');
+    }
 
-    // public function destroy(Model $model)
-    // {
-    //     $fund->delete();
-    //     return redirect()->route('model.index')->with('success', __('The model was removed'));
-    // }
+
     // public function forceDelete(Model $model)
     // {
     //     $fund->forceDelete();
     //     return redirect()->route('model.index')->with('success', __('The model was destroyed'));
     // }
-    public function restore($id)
-    {
-        User::withTrashed()->find($id)->restore();
-  
-        
-         return redirect()->route('user.index')->with('success', __('The model was destroyed'));
-    }
+
 }
