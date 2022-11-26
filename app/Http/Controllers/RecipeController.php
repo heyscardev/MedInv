@@ -30,6 +30,7 @@ class RecipeController extends Controller
         $items = Recipe::paginate($paginate);
         return Inertia::render('Recipes/index', ['data' => $items]);
     }
+
     public function create(Request $request)
     {
         $doctorFind = $request->get('doctors', "");

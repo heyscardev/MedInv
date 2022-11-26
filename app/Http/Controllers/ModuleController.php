@@ -28,7 +28,6 @@ class ModuleController extends Controller
         if (auth()->user()->hasRole('administrador')) {
             return  Inertia::render('Modules/index.admin', ['data' => Module::with('user')->get()]);
         }
-
         return Inertia::render('Modules/index.employee', ['data' => auth()->user()->modules]);
     }
 
@@ -40,7 +39,6 @@ class ModuleController extends Controller
      */
     public function store(ModuleRequest $request)
     {
-
         $validated = $request->validated();
         $item = new Module($validated);
         $item->save();
@@ -61,7 +59,6 @@ class ModuleController extends Controller
         $orderBy = $request->get('orderBy', [['id' => "pivot.updated_at", 'desc' => true]]);
         $filters = $request->get('filters', []);
 
-
         //start building of query
         $query = $module->medicaments();
 
@@ -69,7 +66,6 @@ class ModuleController extends Controller
         array_map(function ($filter) use ($query) {
             $id = $filter['id'];
             $value = $filter['value'];  // [10,100] or  [10,null] or [null,10]
-
 
             if (str_contains($id, "pivot.")) {
                 $column = str_replace("pivot.", "", $id);
@@ -112,9 +108,11 @@ class ModuleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ModuleRequest $request, Module $module)
     {
-        //
+        $validated = $request->validated();
+        $module->update($validated);
+        return back();
     }
 
     /**
@@ -125,15 +123,21 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module)
     {
-        // $item = Module::find($id);
-        // if (!$item) {
-        //     return back()->withErrors(['noDelete' => 'Esta Modulo No existe']);
-        // }
-        // return $item->delete() ? back() : back(500)->withErrors('save', 'error al eliminar');
-
-
         return $module->delete()
                 ? back()
                 : back(500)->withErrors('save', 'error al eliminar');
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        // Restore soft deletes
+        Module::withTrashed()->find($id)->restore();
+        return back();
     }
 }
