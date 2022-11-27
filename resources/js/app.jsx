@@ -17,6 +17,7 @@ import NavBar from './Components/Common/NavBar'
 import { IntlProvider } from 'react-intl'
 import appLocale from '@/lngProvider'
 import { LocalizationProvider } from '@mui/x-date-pickers'
+import { setDefaultOptions } from 'date-fns'
 
 const appName =
   window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
@@ -42,7 +43,7 @@ createInertiaApp({
     ),
   setup({ el, App, props }) {
     removeLoader()
-
+setDefaultOptions({locale:es})
     return render(
       <ThemeProvider theme={theme}>
         <IntlProvider locale="es" messages={appLocale.es}>

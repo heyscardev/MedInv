@@ -10,6 +10,7 @@ export default ({
       {`${option.code} (${option.name}) ${option.unit.name}`}
     </Box>
   ),
+  ...rest
 }) => {
   return (
     <Autocomplete
@@ -19,6 +20,7 @@ export default ({
       renderOption={renderOption}
       onChange={onChange}
       onInputChange={onInputChange}
+      {...rest}
     />
   );
 };

@@ -13,7 +13,7 @@ import { FormattedDate } from "react-intl";
 export default ({ data, module, ...props }) => {
     return (
         <Fragment>
-            <Breadcrums
+      {/*       <Breadcrums
                 links={[
                     { name: "dashboard", route: "dashboard" },
                     { name: "modules", route: "module.index" },
@@ -30,7 +30,7 @@ export default ({ data, module, ...props }) => {
                         noTranslate:true
                     },
                 ]}
-            />
+            /> */}
 
             <Table
                 data={data}

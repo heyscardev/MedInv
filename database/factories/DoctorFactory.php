@@ -26,7 +26,7 @@ class DoctorFactory extends Factory
             'gender' => fake()->randomElement(['Female','Male']),
             'email' => fake()->safeEmail(),
             'phone'=> fake()->phoneNumber(),
-            'direction'=> fake()->randomElement([fake()->address(),null]),
+            
             'service_id'=>Service::create([
                 'name'=>fake()->text(40)
             ])

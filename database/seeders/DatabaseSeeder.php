@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Buy;
+use App\Models\Doctor;
 use App\Models\Medicament;
 use App\Models\Module;
+use App\Models\Patient;
 use App\Models\Transfer;
 use App\Models\User;
 use Database\Factories\ModuleFactory;
@@ -35,10 +37,12 @@ class DatabaseSeeder extends Seeder
             $user->assignRole('empleado');
         })->create();
         \App\Models\Doctor::factory(200)->create();
-        \App\Models\Patient::factory(200)->create([
+        
+ */
+        Doctor::factory(200)->create();
+        Patient::factory(200)->create([
             'gender' => 'MALE'
         ]);
- */
         Module::factory(20)->create();
         Transfer::factory(200)->hasAttached(
             Medicament::orderByRaw("RAND()")->limit(rand(1, 20))->get(),
