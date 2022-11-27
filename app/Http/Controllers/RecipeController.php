@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RecipeRequest;
 use App\Models\Doctor;
+use App\Models\Medicament;
 use App\Models\Module;
+use App\Models\Patient;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,28 +35,45 @@ class RecipeController extends Controller
 
         return Inertia::render('Recipes/index', ['data' => $query->paginate($paginate) ]);
     }
-
-    public function create(Request $request)
+    public function create(Request $request, Module $module)
     {
-        $doctorFind = $request->get('doctors', "");
-        $doctors = Doctor::where('first_name', "%" . $doctorFind . "%")
-            ->orWhere('c_i', "LIKE", "%" . $doctorFind . "%")
-            ->orWhere('last_name', "LIKE", "%" . $doctorFind . "%")
-            ->orWhere('email', "LIKE", "%" . $doctorFind . "%")
-            ->orWhere('id', $doctorFind)
-            ->get();
 
-        $moduleFind = $request->get('module', "");
+        $medicaments = [];
+        $patients = [];
+        $patientFind = $request->get('patients', null);
+        $doctorsFind = $request->get('doctors', null);
+        $doctors=[];
+        $onlyChilds = $request->get('onlyChilds', null);
+        if ($patientFind !== null) {
+            $patients = Patient::where('c_i', "LIKE","%".$patientFind."%")
+                ->orWhere('first_name', "LIKE","%".$patientFind."%")
+                ->orWhere('last_name', "LIKE","%".$patientFind."%")
+                ->orWhere('n_history', "LIKE","%".$patientFind."%")
+                ->when($onlyChilds === true, function ($q) {
+                    return $q->where('child', true);
+                })->get();
+        }
+        if ($module->exists) {
+            if (!auth()->user()->hasRole('administrador') && ($module->user_id != auth()->user()->id)) return abort(403);
+            $medicaments = $module->medicaments()->with('unit')->get();
+        }
+        if ($doctorsFind !== null) {
+            $doctors = Doctor::where('c_i', "LIKE","%".$doctorsFind."%")
+                ->orWhere('first_name', "LIKE","%".$doctorsFind."%")
+                ->orWhere('last_name', "LIKE","%".$doctorsFind."%")
+                ->orWhere('code', "LIKE","%".$doctorsFind."%")
+               ->get();
+        }
+        $moduleDeliver = $module->exists ? $module : null;
+       
         $modules =  Module::with('user')
             ->when(!auth()->user()->hasRole('administrador'), function ($q) {
                 return $q->where('user_id', auth()->user()->id);
             })
-            ->where('name', 'LIKE', "%" . $moduleFind . "%")
-            ->orWhere('id', $moduleFind)
             ->get();
 
 
-        return Inertia::render('Recipes/create', compact("doctors", "modules"));
+        return Inertia::render('Recipes/create', compact("doctors", "modules", "medicaments", "moduleDeliver", "patients"));
     }
 
     /**
