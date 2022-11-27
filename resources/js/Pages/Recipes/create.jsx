@@ -1,4 +1,3 @@
-
 import InputText from '@/Components/Common/Inputs/InputText'
 import IntlMessage from '@/Components/Common/IntlMessage'
 import IconButton from '@/Components/Custom/IconButton'
@@ -10,6 +9,7 @@ import {
   greaterOrEqualThan,
   greaterOrEqualThanValue,
   greaterOrEqualValue,
+  lessOrEqualThan,
   lessOrEqualThanValue,
   required,
 } from '@/Config/InputErrors'
@@ -38,20 +38,18 @@ import { Fragment, useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { useIntl } from 'react-intl'
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 import SelectionModuleModal from '@/Components/Layouts/Modules/SelectionModuleModal'
 import CellNumberBox from '@/Components/Common/CellNumberBox'
 import { format } from 'date-fns'
 import Autocomplete from '@/Components/Common/Inputs/Autocomplete'
 import Select from '@/Components/Common/Inputs/Select'
 
-
 export default ({
   medicaments,
   moduleSelected,
   selectedMedicaments,
   modules,
+  pathologies = [],
   doctors = [],
   patients = [],
   moduleDeliver,
@@ -61,11 +59,11 @@ export default ({
   const { formatMessage } = useIntl()
   const [hour, setHour] = useState(new Date())
   //update relog
-  const submit = ({description,...values}) => {
+  const submit = ({ description, ...values }) => {
     const dataToSend = {
       doctor_id: values.doctor.id,
       recipe_type: values.recipe_type,
-     module_id: moduleDeliver.id,
+      module_id: moduleDeliver.id,
       patient_id: values.patient.id,
       description,
       medicaments: values.medicaments.map(
@@ -76,8 +74,11 @@ export default ({
         }),
       ),
     }
-  
-     post(route('recipe.store'), dataToSend)
+    if (values.recipe_type === 'HIGH COST') {
+      dataToSend.pathology_id = values.pathology.id
+    }
+
+    post(route('recipe.store'), dataToSend)
   }
   useEffect(() => {
     const interval = setInterval(() => {
@@ -104,10 +105,19 @@ export default ({
         }}
         validate={(values) => {
           const error = {}
-             if (!values.moduleDeliver) error.moduleDeliver = 'fieldError.required'
+          if (!values.moduleDeliver) error.moduleDeliver = 'fieldError.required'
+          if (!values.medicaments || values.medicaments.length <= 0)
+            error.medicamentsArray = 'fielderror.medicamentGreatherThanOne'
+          else if (
+            values.recipe_type === 'DAILY' &&
+            values.medicaments.length > 1
+          )
+            error.medicamentsArray = 'fielderror.medicamentlessOrThanOne'
+          if (values.recipe_type === 'HIGH COST' && !values.pathology)
+            error.pathology = 'fieldError.required'
           return error
         }}
-        render={({ handleSubmit, values, form, ...meta }) => (
+        render={({ handleSubmit, values, form, errors, ...meta }) => (
           <form onSubmit={handleSubmit}>
             <FieldArray name="medicaments">
               {({ fields }) => (
@@ -150,9 +160,9 @@ export default ({
                               })
                             }}
                           />
-                          {meta.submitFailed && meta.errors.moduleDeliver && (
+                          {meta.submitFailed && errors.moduleDeliver && (
                             <FormHelperText error>
-                              <IntlMessage id={meta.errors.moduleDeliver} />
+                              <IntlMessage id={errors.moduleDeliver} />
                             </FormHelperText>
                           )}
                         </FormControl>
@@ -179,8 +189,8 @@ export default ({
                                 value: 'MASSIVE',
                               },
                               {
-                                label: 'HIGHT COST',
-                                value: 'HIGHT COST',
+                                label: 'HIGH COST',
+                                value: 'HIGH COST',
                               },
                             ]}
                             label="recipeType"
@@ -468,11 +478,6 @@ export default ({
 
                       <AutocompleteMedicaments
                         medicaments={medicaments}
-                        validate={() => {
-                          if (!medicaments || medicaments.length <= 0)
-                            return 'fielderror.medicamentGreatherThanOne'
-                          return null
-                        }}
                         renderOption={(props, option) => (
                           <Box {...props} key={option.id} component="li">
                             {`${option.code} (${option.name}) ${option.unit.name}`}
@@ -501,6 +506,26 @@ export default ({
                         fullWidth
                         margin={0}
                       />
+                      {values.recipe_type === 'HIGH COST' && (
+                        <Autocomplete
+                          label="pathology"
+                          fullWidth
+                          name="pathology"
+                          margin="10px 0"
+                          options={pathologies}
+                          getOptionLabel={(option) =>
+                            `Codigo: ${option.code} Nombre: ${option.name} `
+                          }
+                          renderOption={(props, option) => (
+                            <Box {...props} key={option.id}>
+                              <Typography variant="body1" color="primary">
+                                {option.code}
+                              </Typography>
+                              {` -> ${option.name} `}
+                            </Box>
+                          )}
+                        />
+                      )}
                     </Stack>
                   )}
                   <Table sx={{ backgroundColor: 'white.main' }}>
@@ -555,11 +580,8 @@ export default ({
                                   lessOrEqualThanValue(
                                     itemMed.pivot.quantity_exist,
                                   ),
-                                  lessOrEqualThanValue(
-                                    _.get(
-                                      values,
-                                      `${fieldName}.prescribed_amount`,
-                                    ),
+                                  lessOrEqualThan(
+                                    `${fieldName}.prescribed_amount`,
                                   ),
                                   greaterOrEqualThanValue(1),
                                 )}
@@ -569,23 +591,11 @@ export default ({
                                 errorValues={{
                                   greaterOrEqualThanValue2: 1,
                                   lessOrEqualThanValue2:
-                                    Number(
-                                      _.get(
-                                        values,
-                                        `${fieldName}.quantity_deliver`,
-                                      ),
-                                    ) >
-                                    Number(
-                                      _.get(
-                                        values,
-                                        `${fieldName}.prescribed_amount`,
-                                      ),
-                                    )
-                                      ? _.get(
-                                          values,
-                                          `${fieldName}.prescribed_amount`,
-                                        )
-                                      : itemMed.pivot.quantity_exist,
+                                    itemMed.pivot.quantity_exist,
+                                  lessOrEqualThan: _.get(
+                                    values,
+                                    `${fieldName}.prescribed_amount`,
+                                  ),
                                 }}
                                 onlyNumbers
                               />
@@ -649,8 +659,18 @@ export default ({
                       })}
                     </TableBody>
                   </Table>
-                  <Button variant="contained" color="primary" type="submit">
-                    <IntlMessage id="endBuy" />
+                  {meta.submitFailed && errors && errors.medicamentsArray && (
+                    <FormHelperText error>
+                      <IntlMessage id={errors.medicamentsArray} />
+                    </FormHelperText>
+                  )}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ color: '#fff' }}
+                    type="submit"
+                  >
+                    <IntlMessage id="endRecipe" />
                   </Button>
 
                   <SelectionModuleModal

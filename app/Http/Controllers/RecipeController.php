@@ -6,6 +6,7 @@ use App\Http\Requests\RecipeRequest;
 use App\Models\Doctor;
 use App\Models\Medicament;
 use App\Models\Module;
+use App\Models\Pathology;
 use App\Models\Patient;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
@@ -39,19 +40,24 @@ class RecipeController extends Controller
     {
 
         $medicaments = [];
+
         $patients = [];
         $patientFind = $request->get('patients', null);
+
         $doctorsFind = $request->get('doctors', null);
         $doctors=[];
-        $onlyChilds = $request->get('onlyChilds', null);
+$pathologies = Pathology::get();
+      //  $onlyChilds = $request->get('onlyChilds', null);
+        
         if ($patientFind !== null) {
             $patients = Patient::where('c_i', "LIKE","%".$patientFind."%")
                 ->orWhere('first_name', "LIKE","%".$patientFind."%")
                 ->orWhere('last_name', "LIKE","%".$patientFind."%")
                 ->orWhere('n_history', "LIKE","%".$patientFind."%")
-                ->when($onlyChilds === true, function ($q) {
+               /*  ->when($onlyChilds === true, function ($q) {
                     return $q->where('child', true);
-                })->get();
+                }) */
+                ->get();
         }
         if ($module->exists) {
             if (!auth()->user()->hasRole('administrador') && ($module->user_id != auth()->user()->id)) return abort(403);
@@ -73,7 +79,7 @@ class RecipeController extends Controller
             ->get();
 
 
-        return Inertia::render('Recipes/create', compact("doctors", "modules", "medicaments", "moduleDeliver", "patients"));
+        return Inertia::render('Recipes/create', compact("pathologies","doctors", "modules", "medicaments", "moduleDeliver", "patients"));
     }
 
     /**

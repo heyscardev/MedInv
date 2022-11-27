@@ -51,7 +51,7 @@ const passwordEqual = (fieldToValue) => (fieldFromValue, values) =>
 const alpha = (value) => (value && value.match(/^[A-Z]+$/i) ? null : "campo solo letras.");
 //it is not  verify
 const greaterThan = (fieldToValue) => (fieldFromValue, values) =>
-  !_.get(values, fieldToValue) || !fieldFromValue || Number(fieldFromValue) > _.get(values, fieldToValue)
+  !_.get(values, fieldToValue) || !fieldFromValue || Number(fieldFromValue) > Number(_.get(values, fieldToValue))
     ? null
     : "fieldError.greaterThan";
 const greaterOrEqualThan = (fieldToValue) => (fieldFromValue, values) =>
@@ -60,7 +60,7 @@ const greaterOrEqualThan = (fieldToValue) => (fieldFromValue, values) =>
     : "fieldError.greaterOrEqualThan";
 
 const lessOrEqualThan = (fieldToValue) => (fieldFromValue, values) =>
-  !_.get(values, fieldToValue) || !fieldFromValue || fieldFromValue <= _.get(values, fieldToValue)
+  !_.get(values, fieldToValue) || !fieldFromValue || Number(fieldFromValue) <= Number(_.get(values, fieldToValue))
     ? null
     : "fieldError.lessOrEqualThan";
 const greaterThanZeroDependency = (dependency) => (valueField, values) =>

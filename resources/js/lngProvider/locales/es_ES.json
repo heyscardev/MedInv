@@ -36,6 +36,7 @@
     "quantity": "Cantidad",
     "sendMedicaments": "Enviar Medicamentos",
     "endBuy": "Finalizar Compra",
+    "endRecipe": "Finalizar Recipe",
     "totalPrice": "Precio Total",
     "moneySimbol": "$",
     "formatCurrency": "BSD",
@@ -64,6 +65,7 @@
     "fieldError.betweenValue": "El campo solo debe tener valores entre {valueMin} y {valueMax}",
     "fieldError.unique":"Este campo debe ser unico y el valor actual ya se encuentra en uso.",
     "fielderror.medicamentGreatherThanOne":"Debe seleccionar por lo menos un medicamento",
+    "fielderror.medicamentlessOrThanOne":"Los recipes de tipo (DIARIO) solo pueden contener un solo tipo de medicamento",
     "buyMedicaments": "Comprar Medicamentos",
     "priceSale":"Precio de Venta",
     "registerUser":"Registrar Usuario",
@@ -153,7 +155,7 @@
     "createRecipe":"Crear Recipe",
     "recipeType":"Tipo de Recipe",
     "Recipe":"Recipe",
-    "HIGHT COST":"ALTO COSTO",
+    "HIGH COST":"ALTO COSTO",
     "DAILY":"DIARIO",
     "MASSIVE":"MASIVO",
     "patient":"Paciente",
@@ -165,6 +167,7 @@
     "prescribed_amount":"Cantidad preescrita",
     "quantity_deliver":"Cantidad Entregada",
     "doctor":"Doctor",
-    "doctorInformation":"Información del Doctor"
+    "doctorInformation":"Información del Doctor",
+    "pathology":"Patología"
     
 }
