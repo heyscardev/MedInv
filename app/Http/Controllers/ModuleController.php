@@ -54,51 +54,11 @@ class ModuleController extends Controller
      */
     public function show(ModuleRequest $request, Module $module)
     {
-        // $search = $request->get('search');
-        $paginate = max( min( $request->get('page_size'), 100), 10);
-
-        $orderBy = $request->get('orderBy', [['id' => "pivot.updated_at", 'desc' => true]]);
-        $filters = $request->get('filters', []);
-
         //start building of query
         $query = $module->medicaments();
+        $query = $this->applyFilters($query, $request);
 
-        //fliters iteration
-        array_map(function ($filter) use ($query) {
-            $id = $filter['id'];
-            $value = $filter['value'];  // [10,100] or  [10,null] or [null,10]
-
-            if (str_contains($id, "pivot.")) {
-                $column = str_replace("pivot.", "", $id);
-                if (is_array($value))
-                    return $query->wherePivot( $column, ">=",   $value[0] ? $value[0] : 0)
-                                 ->wherePivot( $column, "<=",   $value[1] ? $value[1] : 9999999999.2);
-
-                return $query->wherePivot( $column, "LIKE", "%" . $value . "%");
-            }
-            if (str_contains($id, "unit.")){
-                $column = str_replace('unit.', '', $id);
-                return $query->whereRelation('unit', $column, "LIKE", "%" . strtoupper($value) . "%");
-            }
-
-            return $query->LikeOrBeetween('medicaments.' . $id, $value);
-        }, $filters);
-
-        //fliters orders
-        array_map(function ($by) use ($query) {
-            $id = $by['id'];
-            $sorting = $by['desc'] == true ? "DESC" : 'ASC';
-
-            if (str_contains($id, "pivot."))
-                return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
-            if (str_contains($id, "unit."))
-                return $query->orderByUnit(str_replace('unit.', '', $id), $sorting);
-            if ($id === 'quantity_global')
-                return $query->orderByGlobalInventory($sorting);
-
-            return $query->orderBy('medicaments.' . $id, $sorting);
-        }, $orderBy);
-
+        $paginate = max( min( $request->get('page_size'), 100), 10);
         return Inertia::render('Modules/show.employee', ['module' => $module, 'data' => $query->paginate($paginate)]);
     }
 
@@ -113,7 +73,6 @@ class ModuleController extends Controller
     {
         $validated = $request->validated();
         $module->update($validated);
-
         return back();
     }
 
@@ -144,4 +103,55 @@ class ModuleController extends Controller
                 ? back()
                 : back(500)->withErrors('save', 'error al recuperar');
     }
+
+
+    /**
+     * Apply filters and order list
+     **/
+    private function applyFilters($query, $request)
+    {
+        $orderBy = $request->get('orderBy', [['id' => "pivot.updated_at", 'desc' => true]]);
+        $filters = $request->get('filters', []);
+
+        //fliters iteration
+            array_map(function ($filter) use ($query) {
+                $id = $filter['id'];
+                $value = $filter['value'];  // [10,100] or  [10,null] or [null,10]
+
+                if (str_contains($id, "pivot.")) {
+                    $column = str_replace("pivot.", "", $id);
+                    if (is_array($value))
+                        return $query->wherePivot( $column, ">=",   $value[0] ? $value[0] : 0)
+                                        ->wherePivot( $column, "<=",   $value[1] ? $value[1] : 9999999999.2);
+
+                    return $query->wherePivot( $column, "LIKE", "%" . $value . "%");
+                }
+                if (str_contains($id, "unit.")){
+                    $column = str_replace('unit.', '', $id);
+                    return $query->whereRelation('unit', $column, "LIKE", "%" . strtoupper($value) . "%");
+                }
+
+                return $query->LikeOrBeetween('medicaments.' . $id, $value);
+            }, $filters);
+
+        //fliters orders
+            array_map(function ($by) use ($query) {
+                $id = $by['id'];
+                $sorting = $by['desc'] ? "DESC" : 'ASC';
+
+                if (str_contains($id, "pivot."))
+                    return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
+                if (str_contains($id, "unit."))
+                    return $query->orderByUnit(str_replace('unit.', '', $id), $sorting);
+                if ($id === 'quantity_global')
+                    return $query->orderByGlobalInventory($sorting);
+
+                return $query->orderBy('medicaments.' . $id, $sorting);
+            }, $orderBy);
+
+        return $query;
+    }
+    /**
+     * end function apply filters and order list
+     **/
 }

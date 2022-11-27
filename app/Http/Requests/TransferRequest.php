@@ -44,9 +44,9 @@ class TransferRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->routeIs('transfer.index')) return $this->indexRules();
         if ($this->routeIs('transfer.create')) return $this->createRules();
         if ($this->routeIs('transfer.store')) return $this->storeRules();
-        if ($this->routeIs('transfer.index')) return $this->indexRules();
         return [
             //
         ];
@@ -56,22 +56,22 @@ class TransferRequest extends FormRequest
     {
         $validColumns = ['id','user.first_name', 'module_send.name', 'module_receive.name','created_at'];
         return [
-            'module' => ['numeric', 'exists:modules,id'],
-            'page_size'=>['integer','in:10,20,50,100'],
-            'orderBy' => ['array'],
-            'orderBy.*.id' => ['required',Rule::in($validColumns)],
+            'module'         => ['numeric', 'exists:modules,id'],
+            'page_size'      => ['integer','in:10,20,50,100'],
+            'orderBy'        => ['array'],
+            'orderBy.*.id'   => ['required',Rule::in($validColumns)],
             'orderBy.*.desc' => ['required','boolean'],
-            'filters'=>['array'],
-            'filters.*.id'=>['required',Rule::in($validColumns)],
-            'filters.*.value'=>['required','nullable'],
+            'filters'        => ['array'],
+            'filters.*.id'   => ['required',Rule::in($validColumns)],
+            'filters.*.value'=> ['required','nullable'],
         ];
     }
     private function createRules()
     {
         return [
             //'searchMedicaments' => ['string', 'nullable'],
-            'selected_medicaments' => ['array'],
-            'selected_medicaments.*' => ['required', 'distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
+            'selected_medicaments'      => ['array'],
+            'selected_medicaments.*'    => ['required', 'distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
                 return $query->where('module_id', $this->route("module")->id);
             })]
         ];
@@ -79,11 +79,11 @@ class TransferRequest extends FormRequest
     private function storeRules()
     {
         return [
-            'module_send_id' => ['required', 'exists:modules,id',],
-            'module_receive_id' => ['required', 'exists:modules,id', "different:module_send_id"],
-            'description' => ['string', 'nullable', 'max:250'],
-            'medicaments' => ['required', 'array', 'min:1'],
-            'medicaments.*.id' => ['required', 'distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
+            'module_send_id'        => ['required', 'exists:modules,id',],
+            'module_receive_id'     => ['required', 'exists:modules,id', "different:module_send_id"],
+            'description'           => ['string', 'nullable', 'max:250'],
+            'medicaments'           => ['required', 'array', 'min:1'],
+            'medicaments.*.id'      => ['required', 'distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
                 return $query->where('module_id', $this->post("module_send_id"));
             })],
             'medicaments.*.quantity' => ['required', 'integer', "min:1", function ($attribute, $value, $fail) {

@@ -67,4 +67,17 @@ class BuyController extends Controller
        return redirect(route('module.show',$id));
     }
 
+
+    /////////////////////////////////////////
+    /**
+     * Apply filters and order list
+     **/
+    private function applyFilters($query, $request)
+    {
+        //
+    }
+    /**
+     * end function apply filters and order list
+     **/
+
 }

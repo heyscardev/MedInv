@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RecipeRequest extends FormRequest
 {
@@ -23,10 +24,29 @@ class RecipeRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->routeIs('recipe.store')) return $this->store();
-        if ($this->routeIs('recipe.update')) return $this->update();
+        if ($this->routeIs('recipe.index')) return $this->indexRules();
+        if ($this->routeIs('recipe.store')) return $this->storeRules();
+        if ($this->routeIs('recipe.update')) return $this->updateRules();
 
         return [];
+    }
+
+    /**
+     * Get the validation rules that apply to the get request.
+     *
+     * @return array
+     */
+    protected function indexRules()
+    {
+        return [
+            'orderBy'           => ['array'],
+            'orderBy.*.id'      => ['required',Rule::in(['id','code', 'name', 'price_sale', 'unit.name','pivot.quantity_exist', 'pivot.created_at', 'pivot.updated_at','quantity_global'])],
+            'orderBy.*.desc'    => ['required','boolean'],
+            'filters'           => ['array'],
+            'filters.*.id'      => ['required',Rule::in(['id','code', 'name', 'price_sale', 'unit.name','pivot.quantity_exist', 'pivot.created_at', 'pivot.updated_at'])],
+            'filters.*.value'   => ['required','nullable'],
+            'page_size'         => ['integer','in:10,20,50,100']
+        ];
     }
 
     /**
@@ -34,7 +54,7 @@ class RecipeRequest extends FormRequest
      *
      * @return array
      */
-    public function store()
+    public function storeRules()
     {
         return [
             'recipe_type'   => ['required', 'in:DAILY,MASSIVE,HIGH COST'],
@@ -51,7 +71,7 @@ class RecipeRequest extends FormRequest
      *
      * @return array
      */
-    public function update()
+    public function updateRules()
     {
         return [
             'recipe_type'   => ['sometimes','required', 'in:DAILY,MASSIVE,HIGH COST'],
@@ -61,5 +81,8 @@ class RecipeRequest extends FormRequest
             'module_id'     => ['sometimes','required', 'numeric', 'exists:modules,id'],
             'user_id'       => ['sometimes','required', 'numeric', 'exists:users,id'],
         ];
+
+
+        //Patalogia solo es requerida solo cuando el type es: HIGH COST
     }
 }

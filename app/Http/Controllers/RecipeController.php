@@ -27,8 +27,11 @@ class RecipeController extends Controller
     public function index(Request $request)
     {
         $paginate = max(min($request->get('page_size'), 100), 10);
-        $items = Recipe::paginate($paginate);
-        return Inertia::render('Recipes/index', ['data' => $items]);
+
+        $query = Recipe::with(['patient','doctor','pathology','module','user']);
+        $query = $this->applyFilters($query,$request);
+
+        return Inertia::render('Recipes/index', ['data' => $query->paginate($paginate) ]);
     }
 
     public function create(Request $request)
@@ -107,5 +110,53 @@ class RecipeController extends Controller
         // Restore soft deletes
         Recipe::withTrashed()->find($id)->restore();
         return back();
+    }
+
+    /////////////////////////////////////////
+    /**
+     * Apply filters and order list
+     **/
+    private function applyFilters($query, $request)
+    {
+        $orderBy = $request->get('orderBy', [['id' => "updated_at", 'desc' => true]]);
+        $filters = $request->get('filters', []);
+
+        //fliters iteration
+            array_map(function ($filter) use ($query) {
+                $id = $filter['id'];
+                $value = $filter['value'];
+
+                // if (str_contains($id, "pivot.")) {
+                //     $column = str_replace("pivot.", "", $id);
+                //     if (is_array($value))
+                //         return $query->wherePivot( $column, ">=",   $value[0] ? $value[0] : 0)
+                //                         ->wherePivot( $column, "<=",   $value[1] ? $value[1] : 9999999999.2);
+
+                //     return $query->wherePivot( $column, "LIKE", "%" . $value . "%");
+                // }
+                // if (str_contains($id, "doctor.")){
+                //     $column = str_replace('doctor.', '', $id);
+                //     return $query->whereRelation('doctor', $column, "LIKE", "%" . strtoupper($value) . "%");
+                // }
+
+                return $query->LikeOrBeetween('recipes.' . $id, $value);
+            }, $filters);
+
+        //fliters orders
+            array_map(function ($by) use ($query) {
+                $id = $by['id'];
+                $sorting = $by['desc'] ? "DESC" : 'ASC';
+
+                // if (str_contains($id, "pivot."))
+                //     return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
+                // if (str_contains($id, "doctor."))
+                //     return $query->orderByDoctor(str_replace('doctor.', '', $id), $sorting);
+                // if ($id === 'patient')
+                //     return $query->orderByPatient($sorting);
+
+                return $query->orderBy('recipes.' . $id, $sorting);
+            }, $orderBy);
+
+        return $query;
     }
 }
