@@ -22,6 +22,7 @@ class TransferRequest extends FormRequest
         if ($module && $module->user_id !== auth()->user()->id) return false;
         if ($this->routeIs('transfer.store')) return $this->storeAuthorize();
         if ($this->routeIs('transfer.index')) return $this->indexAuthorize();
+        if ($this->routeIs('module.transfer.index')) return $this->indexAuthorize();
         return true;
     }
     private function storeAuthorize()

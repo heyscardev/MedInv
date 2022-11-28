@@ -2,6 +2,7 @@ import CheckBox from "@/Components/Common/Inputs/CheckBox";
 import DatePicker from "@/Components/Common/Inputs/DatePicker";
 import InputText from "@/Components/Common/Inputs/InputText";
 import PasswordField from "@/Components/Common/Inputs/PasswordField";
+import PhoneInput from "@/Components/Common/Inputs/PhoneInput";
 import Modal from "@/Components/Common/Modal";
 import LogoTypography from "@/Components/LogoTypography";
 import {
@@ -20,9 +21,10 @@ import { formatStringDateToDatabase } from "@/Utils/format";
 import { Cancel, Save } from "@mui/icons-material";
 import { Button, DialogActions, Grid, Typography } from "@mui/material";
 import { addYears } from "date-fns";
+import { matchIsValidTel } from "mui-tel-input";
 import { Form } from "react-final-form";
-
-export default ({ user, open, onClose }) => {
+const routeName = "doctor";
+export default ({ item, open, onClose }) => {
   const update = (data, form) => {
     const dataToSend = {
       id: data.id,
@@ -33,7 +35,7 @@ export default ({ user, open, onClose }) => {
           dataToSend[key] = key === "birth_date" ? formatStringDateToDatabase(data[key]) : data[key];
       }
     }
-    put(route("doctor.update", dataToSend.id), dataToSend, {
+    put(route(`${routeName}.update`, dataToSend.id), dataToSend, {
       onSuccess: (e) => {
         onClose(null);
       },
@@ -45,7 +47,7 @@ export default ({ user, open, onClose }) => {
       birth_date : formatStringDateToDatabase(data.birth_date)
     };
 
-    post(route("doctor.store"), dataToSend, {
+    post(route(`${routeName}.store`), dataToSend, {
       onSuccess: (e) => {
         onClose(null);
       },
@@ -59,23 +61,23 @@ export default ({ user, open, onClose }) => {
   };
 
   return (
-    <Modal {...{ open, onClose }}>
+    <Modal {...{ open }}>
       <div style={{ textAlign: "center" }}>
         <LogoTypography />
         <Typography variant="h5" color="secondary.dark">
-          {!user ? "Registrar Usuario" : "Acualizar Usuario"}
+          {item &&  item.id ?  "Acualizar Doctor":"Registrar Doctor" }
         </Typography>
       </div>
       <Form
-        initialValues={{ ...user }}
+        initialValues={{ ...item }}
         onSubmit={submit}
-        render={({ handleSubmit, form }) => (
+        render={({ handleSubmit, form,values }) => (
           <form onSubmit={handleSubmit} id="userForm" autoComplete="off">
             <Grid container>
               <Grid item xs={12} lg={6}>
                 <InputText
                   name="first_name"
-                  label="Nombre"
+                  label="first_name"
                   autoComplete="nope"
                   validate={composeValidators(required, alpha)}
                   maxLength={80}
@@ -85,7 +87,7 @@ export default ({ user, open, onClose }) => {
               <Grid item xs={12} lg={6}>
                 <InputText
                   name="last_name"
-                  label="Apellido"
+                  label="last_name"
                   autoComplete="nope"
                   validate={composeValidators(required, alpha)}
                   maxLength={80}
@@ -106,7 +108,7 @@ export default ({ user, open, onClose }) => {
               <Grid item xs={12} lg={4}>
                 <InputText
                   name="c_i"
-                  label="cedula"
+                  label="c_i"
                   autoComplete="nope"
                   validate={composeValidators(required)}
                   onlyNumbers
@@ -115,29 +117,33 @@ export default ({ user, open, onClose }) => {
                 />
               </Grid>
               <Grid item xs={12} lg={6}>
-                <PasswordField
-                  name="password"
-                  label="Contraseña"
-                  autoComplete="new-password"
-                  spellCheck={false}
-                  validate={composeValidators(passwordWeakValidation)}
+                <InputText
+                  name="code"
+                  label="code"
+                  autoComplete="nope"
+                  validate={composeValidators(required)}
+                  maxLength={8}
                   fullWidth
                 />
               </Grid>
+             { console.log(values)}
               <Grid item xs={12} lg={6}>
-                <PasswordField
-                  name="password_confirmation"
-                  label="Confirmar Contraseña"
-                  autoComplete="new-password"
-                  spellCheck={false}
-                  validate={composeValidators(passwordWeakValidation, passwordEqual("password"))}
+                <PhoneInput
+                  name="phone"
+                  label="phone"
+                  autoComplete="nope"
+                  validate={composeValidators(required,(val)=>{
+                    if(!matchIsValidTel(val))return "fielderror.numberPhoneInvalid"
+                    return null;
+                  } )}
+              
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} lg={6}>
                 <DatePicker
                   name="birth_date"
-                  label="fecha de nacimiento"
+                  label="birth_date"
                   maxDate={Date.now()}
                   minDate={addYears(Date.now(), -150)}
                   validate={composeValidators(
@@ -150,8 +156,8 @@ export default ({ user, open, onClose }) => {
                 />
               </Grid>
               <Grid item xs={12} lg={6} display="flex" justifyContent="center" alignItems="center">
-                <CheckBox type="radio" name="gender" label="Hombre" value="Male" />
-                <CheckBox type="radio" name="gender" label="Mujer" value="Female" />
+                <CheckBox type="radio" name="gender" label="male" value="Male" />
+                <CheckBox type="radio" name="gender" label="female" value="Female" />
               </Grid>
             </Grid>
           </form>

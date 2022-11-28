@@ -1,6 +1,7 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
 import Breadcrums from '@/Components/Common/Breadcrums'
 import CellNumberBox from '@/Components/Common/CellNumberBox'
+import MultiButton from '@/Components/Common/MultiButton'
 import Table from '@/Components/Common/Table'
 import IconButton from '@/Components/Custom/IconButton'
 import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
@@ -46,18 +47,17 @@ export default (props) => {
       <LogoTypography subtitle="transfers" padding={20} />
 
       <AsyncTable
-        routeName="transfer.index"
+        routeName={route().current()}
         enableRowSelection={false}
-        //  routeParams={{ module: props.module.id }}
+        routeParams={{ module: props.module ? props.module.id : null }}
         // renderTopToolbarCustomActions={ActionsTableShow(props.module)}
         // onAsync={tableUpdate}
         data={props.data}
         initialState={{ columnVisibility: { id: false } }}
         columns={[
-          { accessorKey: 'id', header: 'id' ,id:"id" },
+          { accessorKey: 'id', header: 'id', id: 'id' },
 
           {
-
             //columnDefType: 'display',
             header: 'actions',
             size: 80,
@@ -66,7 +66,7 @@ export default (props) => {
 
             Cell: ({ cell }) => (
               <>
-              {console.log(cell)}
+                {console.log(cell)}
                 <IconButton placement="right" color="primary" title="show">
                   <iconsMaterial.Visibility />
                 </IconButton>
@@ -95,6 +95,21 @@ export default (props) => {
             accessorKey: 'created_at',
             header: 'created_at',
             typeColumn: 'date',
+          },
+        ]}
+      />
+        <MultiButton
+        actions={[
+          {
+            icon: <iconsMaterial.MoveDown />,
+            name: 'newTransfer',
+            onClick: (e) => {
+              visit(
+                route(`transfer.create`, {
+                  id: props.module ? props.module.id : null,
+                }),
+              )
+            },
           },
         ]}
       />

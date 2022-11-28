@@ -4,6 +4,7 @@ import { TextField, FormControl } from '@mui/material'
 
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import IntlMessage from '../IntlMessage'
+import { formatMessage } from '@formatjs/intl'
 
 
 export default ({
@@ -48,7 +49,7 @@ export default ({
                     placeholder: placeholder || params.inputProps.placeholder,
                   }}
                   error={meta.error && meta.submitFailed ? true : false}
-                  helperText={meta.error && meta.submitFailed ? meta.error : ''}
+                  helperText={meta.error && meta.submitFailed ? <IntlMessage id={meta.error} />: ''}
                 />
               )}
             />

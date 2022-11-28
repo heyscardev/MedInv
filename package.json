@@ -32,6 +32,7 @@
         "final-form-arrays": "^3.0.2",
         "material-react-table": "^0.36.0",
         "moment": "^2.29.4",
+        "mui-tel-input": "^2.1.0",
         "react": "^17.0.2",
         "react-final-form": "^6.5.9",
         "react-final-form-arrays": "^3.1.3",

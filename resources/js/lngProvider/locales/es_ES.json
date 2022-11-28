@@ -75,6 +75,7 @@
     "newUnit":"Nueva Unidad",
     "buys":"Compras",
     "modules":"Modulos",
+    "module":"Módulo",
     "transfers":"Transferencias",
     "reports":"Reportes",
     "medicaments":"Medicamentos",
@@ -168,6 +169,10 @@
     "quantity_deliver":"Cantidad Entregada",
     "doctor":"Doctor",
     "doctorInformation":"Información del Doctor",
-    "pathology":"Patología"
+    "pathology":"Patología",
+    "fielderror.numberPhoneInvalid":"Numero de teléfono Invalido",
+    "addDoctor":"Agregar Doctor",
+    "newBuy":"Nueva Compra",
+    "newTransfer":"Nueva Transferencia"
     
 }

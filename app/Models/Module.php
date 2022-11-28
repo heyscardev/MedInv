@@ -48,7 +48,7 @@ class Module extends Model
     }
     public function transfers()
     {
-        return dd($this->hasMany(Transfer::class, 'module_receive_id')->orWhere('module_send_id', '=', $this->id));
+        return $this->hasMany(Transfer::class, 'module_receive_id')->orWhere('module_send_id', '=', $this->id);
     }
 
      /**

@@ -1,6 +1,7 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
 import MultiButton from '@/Components/Common/MultiButton'
 import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
+import { visit } from '@/HTTPProvider'
 import { formatMessage } from '@formatjs/intl'
 import { PostAdd } from '@mui/icons-material'
 import { format } from 'date-fns'
@@ -10,19 +11,20 @@ const columnVisibility = {
   user: false,
   updated_at: false,
 }
-export default (props) => {
+export default ({ module, ...props }) => {
   const [idToEdit, setIdToEdit] = useState(null)
   const toggleEdit = (id) => {
     setIdToEdit(id ? id : null)
   }
   return (
     <Fragment>
+      {console.log(route())}
       {props.data.data && (
         <AsyncTable
-        enableRowSelection={false}
+          enableRowSelection={false}
           initialState={{ columnVisibility }}
-          routeName="recipe.index"
-          routeParams={{}}
+          routeName={route().current()}
+          routeParams={{ module: module ? module.id : null }}
           // onAsync={tableUpdate}
           data={props.data}
           columns={[
@@ -38,14 +40,14 @@ export default (props) => {
               accessorKey: 'module',
               header: 'module',
               accessorFn: ({ module: { name } }) => {
-                return `${name}`;
+                return `${name}`
               },
             },
             {
               accessorKey: 'doctor',
               header: 'doctor',
               accessorFn: ({ doctor: { first_name, last_name } }) => {
-                return `${first_name} ${last_name}`
+                return first_name ? `${first_name} ${last_name}` : 'hola'
               },
             },
             {
@@ -90,7 +92,11 @@ export default (props) => {
             icon: <PostAdd />,
             name: 'createRecipe',
             onClick: (e) => {
-              toggleEdit(-1)
+              visit(
+                route(`recipe.create`, {
+                  id: module ? module.id : null,
+                }),
+              )
             },
           },
         ]}

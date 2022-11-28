@@ -45,6 +45,7 @@ class DoctorRequest extends FormRequest
             'code'          => ['required', 'max:30','unique:doctors'],
             'nationality'   => ['required', 'in:V,E'],
             'c_i'           => ['required', 'numeric', 'digits_between:0,8', 'unique:doctors'],
+            'code'           => ['required', 'max:30', 'unique:doctors'],
             'first_name'    => ['required', 'alpha', 'max:80'],
             'last_name'     => ['required', 'alpha', 'max:80'],
             'birth_date'    => ['required', 'date_format:Y-m-d', 'after:' . $this->nowMinus150years, 'before:' . $this->yesterday],

@@ -8,6 +8,7 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -53,6 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::get('modules/{module}/buy/create', [ModuleBuyController::class, 'create'])->name('module.buy.create');
     Route::post('modules/{module}/buy', [ModuleBuyController::class, 'store'])->name('module.buy.store');
     Route::get('modules/{module}/buy', [ModuleBuyController::class, 'index'])->name('module.buy.index');
+    Route::get('modules/{module}/recipes', [RecipeController::class, 'index'])->name('module.recipe.index');
+    Route::get('modules/{module}/transfers', [TransferController::class, 'index'])->name('module.transfer.index');
     Route::get('buys',[BuyController::class,'index'])->name('buy.index');
 });
 

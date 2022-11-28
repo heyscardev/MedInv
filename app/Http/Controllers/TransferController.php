@@ -12,20 +12,36 @@ use Illuminate\Support\Facades\Redirect;
 class TransferController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('can:transfer.index')->only(['index']);
+        $this->middleware('can:transfer.store')->only(['store']);
+        $this->middleware('can:transfer.destroy')->only(['destroy']);
+        $this->middleware('can:transfer.update')->only(['update']);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TransferRequest $request)
+    public function index(TransferRequest $request,Module $module)
     {
+      
         $paginate = max(min($request->get('page_size'), 100), 10);
-
-        $query  = Transfer::with('moduleSend', 'moduleReceive', 'user')->where('transfers.user_id',auth()->user()->id);
+      
+        $paginate = max(min($request->get('page_size'), 100), 10);
+        if ($module->exists) {
+            $query = $module->transfers()->with('moduleSend', 'moduleReceive', 'user');
+            
+        } else {
+            $query  = Transfer::with('moduleSend', 'moduleReceive', 'user')->where('transfers.user_id',auth()->user()->id);
+            $module = null;
+        }
+       
         $query  = $this->applyFilters($query, $request);
         $data   = $query->paginate($paginate);
 
-        return inertia('Transfers/index', compact('data'));
+        return inertia('Transfers/index', compact('data','module'));
     }
 
     /**

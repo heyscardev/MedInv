@@ -25,6 +25,7 @@ class RecipeRequest extends FormRequest
     public function rules()
     {
         if ($this->routeIs('recipe.index')) return $this->indexRules();
+        if ($this->routeIs('module.recipe.index')) return $this->indexRules();
         if ($this->routeIs('recipe.store')) return $this->storeRules();
         if ($this->routeIs('recipe.update')) return $this->updateRules();
 

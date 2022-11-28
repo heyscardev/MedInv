@@ -27,14 +27,19 @@ class RecipeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Module $module)
     {
+        $moduleDeliver = null;
         $paginate = max(min($request->get('page_size'), 100), 10);
+        if ($module->exists) {
+            $query = $module->recipes()->with(['patient', 'doctor', 'pathology', 'module', 'user']);
+            $moduleDeliver = $module;
+        } else {
+            $query = Recipe::with(['patient', 'doctor', 'pathology', 'module', 'user']);
+        }
+        $query = $this->applyFilters($query, $request);
 
-        $query = Recipe::with(['patient','doctor','pathology','module','user']);
-        $query = $this->applyFilters($query,$request);
-
-        return Inertia::render('Recipes/index', ['data' => $query->paginate($paginate) ]);
+        return Inertia::render('Recipes/index', ['data' => $query->paginate($paginate), "module" => $moduleDeliver]);
     }
     public function create(Request $request, Module $module)
     {
@@ -45,16 +50,16 @@ class RecipeController extends Controller
         $patientFind = $request->get('patients', null);
 
         $doctorsFind = $request->get('doctors', null);
-        $doctors=[];
-$pathologies = Pathology::get();
-      //  $onlyChilds = $request->get('onlyChilds', null);
-        
+        $doctors = [];
+        $pathologies = Pathology::get();
+        //  $onlyChilds = $request->get('onlyChilds', null);
+
         if ($patientFind !== null) {
-            $patients = Patient::where('c_i', "LIKE","%".$patientFind."%")
-                ->orWhere('first_name', "LIKE","%".$patientFind."%")
-                ->orWhere('last_name', "LIKE","%".$patientFind."%")
-                ->orWhere('n_history', "LIKE","%".$patientFind."%")
-               /*  ->when($onlyChilds === true, function ($q) {
+            $patients = Patient::where('c_i', "LIKE", "%" . $patientFind . "%")
+                ->orWhere('first_name', "LIKE", "%" . $patientFind . "%")
+                ->orWhere('last_name', "LIKE", "%" . $patientFind . "%")
+                ->orWhere('n_history', "LIKE", "%" . $patientFind . "%")
+                /*  ->when($onlyChilds === true, function ($q) {
                     return $q->where('child', true);
                 }) */
                 ->get();
@@ -64,14 +69,14 @@ $pathologies = Pathology::get();
             $medicaments = $module->medicaments()->with('unit')->get();
         }
         if ($doctorsFind !== null) {
-            $doctors = Doctor::where('c_i', "LIKE","%".$doctorsFind."%")
-                ->orWhere('first_name', "LIKE","%".$doctorsFind."%")
-                ->orWhere('last_name', "LIKE","%".$doctorsFind."%")
-                ->orWhere('code', "LIKE","%".$doctorsFind."%")
-               ->get();
+            $doctors = Doctor::where('c_i', "LIKE", "%" . $doctorsFind . "%")
+                ->orWhere('first_name', "LIKE", "%" . $doctorsFind . "%")
+                ->orWhere('last_name', "LIKE", "%" . $doctorsFind . "%")
+                ->orWhere('code', "LIKE", "%" . $doctorsFind . "%")
+                ->get();
         }
         $moduleDeliver = $module->exists ? $module : null;
-       
+
         $modules =  Module::with('user')
             ->when(!auth()->user()->hasRole('administrador'), function ($q) {
                 return $q->where('user_id', auth()->user()->id);
@@ -79,7 +84,7 @@ $pathologies = Pathology::get();
             ->get();
 
 
-        return Inertia::render('Recipes/create', compact("pathologies","doctors", "modules", "medicaments", "moduleDeliver", "patients"));
+        return Inertia::render('Recipes/create', compact("pathologies", "doctors", "modules", "medicaments", "moduleDeliver", "patients"));
     }
 
     /**
@@ -147,40 +152,40 @@ $pathologies = Pathology::get();
         $filters = $request->get('filters', []);
 
         //fliters iteration
-            array_map(function ($filter) use ($query) {
-                $id = $filter['id'];
-                $value = $filter['value'];
+        array_map(function ($filter) use ($query) {
+            $id = $filter['id'];
+            $value = $filter['value'];
 
-                // if (str_contains($id, "pivot.")) {
-                //     $column = str_replace("pivot.", "", $id);
-                //     if (is_array($value))
-                //         return $query->wherePivot( $column, ">=",   $value[0] ? $value[0] : 0)
-                //                         ->wherePivot( $column, "<=",   $value[1] ? $value[1] : 9999999999.2);
+            // if (str_contains($id, "pivot.")) {
+            //     $column = str_replace("pivot.", "", $id);
+            //     if (is_array($value))
+            //         return $query->wherePivot( $column, ">=",   $value[0] ? $value[0] : 0)
+            //                         ->wherePivot( $column, "<=",   $value[1] ? $value[1] : 9999999999.2);
 
-                //     return $query->wherePivot( $column, "LIKE", "%" . $value . "%");
-                // }
-                // if (str_contains($id, "doctor.")){
-                //     $column = str_replace('doctor.', '', $id);
-                //     return $query->whereRelation('doctor', $column, "LIKE", "%" . strtoupper($value) . "%");
-                // }
+            //     return $query->wherePivot( $column, "LIKE", "%" . $value . "%");
+            // }
+            // if (str_contains($id, "doctor.")){
+            //     $column = str_replace('doctor.', '', $id);
+            //     return $query->whereRelation('doctor', $column, "LIKE", "%" . strtoupper($value) . "%");
+            // }
 
-                return $query->LikeOrBeetween('recipes.' . $id, $value);
-            }, $filters);
+            return $query->LikeOrBeetween('recipes.' . $id, $value);
+        }, $filters);
 
         //fliters orders
-            array_map(function ($by) use ($query) {
-                $id = $by['id'];
-                $sorting = $by['desc'] ? "DESC" : 'ASC';
+        array_map(function ($by) use ($query) {
+            $id = $by['id'];
+            $sorting = $by['desc'] ? "DESC" : 'ASC';
 
-                // if (str_contains($id, "pivot."))
-                //     return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
-                // if (str_contains($id, "doctor."))
-                //     return $query->orderByDoctor(str_replace('doctor.', '', $id), $sorting);
-                // if ($id === 'patient')
-                //     return $query->orderByPatient($sorting);
+            // if (str_contains($id, "pivot."))
+            //     return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
+            // if (str_contains($id, "doctor."))
+            //     return $query->orderByDoctor(str_replace('doctor.', '', $id), $sorting);
+            // if ($id === 'patient')
+            //     return $query->orderByPatient($sorting);
 
-                return $query->orderBy('recipes.' . $id, $sorting);
-            }, $orderBy);
+            return $query->orderBy('recipes.' . $id, $sorting);
+        }, $orderBy);
 
         return $query;
     }

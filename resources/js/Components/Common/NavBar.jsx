@@ -28,7 +28,7 @@ const {palette} = useTheme();
         ["Dashboard", route("dashboard"), <Dashboard />],
            can('user.index') ? ["Usuarios", route("user.index"), <People />] : null,
     can('medicament.index') ? ["Medicamentos", route("medicament.index"), <Medication />] : null,
-    can('unit.index') ? ["Unidades", route("unit.index"), <Scale />] : null,
+   /*  can('unit.index') ? ["Unidades", route("unit.index"), <Scale />] : null, */
     can('doctor.index') ? ["Doctores", route("doctor.index"), <Masks />] : null,
     can('patient.index') ? ["Pacientes", route("patient.index"), <Sick />] : null,
     can('recipe.index') ? ["Recipes", route("recipe.index"), <Receipt />] : null,
@@ -66,7 +66,7 @@ const {palette} = useTheme();
             onClose={handleMobileMenuClose}
         >
             <MenuItem>
-                <IconButton
+       {/*          <IconButton
                     size="large"
                     aria-label="show 17 new notifications"
                     color="inherit"
@@ -74,7 +74,7 @@ const {palette} = useTheme();
                     <Badge badgeContent={17} color="error">
                         <NotificationsIcon color="info" />
                     </Badge>
-                </IconButton>
+                </IconButton> */}
                 <p>Notificaciones</p>
             </MenuItem>
             <BtnUserSession
@@ -140,7 +140,7 @@ const {palette} = useTheme();
                     </Box>
 
                     <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                        <IconButton
+                   {/*      <IconButton
                             size="large"
                             aria-label="show 17 new notifications"
                             color="inherit"
@@ -148,7 +148,7 @@ const {palette} = useTheme();
                             <Badge badgeContent={17} color="error">
                                 <NotificationsIcon color="info" />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                         <BtnUserSession
                             auth={auth}
                             BtnOpenMenu={({ onclickMenu }) => (
