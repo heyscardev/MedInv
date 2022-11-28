@@ -66,14 +66,14 @@ class PatientController extends Controller
      */
     public function destroy(Patient $patient)
     {
-        // with soft deletes ??????????????
+        // with soft deletes
         $patient->delete();
         return back();
     }
 
-    // public function restore($id)
-    // {
-    //     Doctor::withTrashed()->find($id)->restore();
-    //     return back()->with('success', 'El doctor fue restaurado');
-    // }
+    public function restore($id)
+    {
+        Patient::withTrashed()->find($id)->restore();
+        return back()->with('success', 'El paciente fue restaurado');
+    }
 }
