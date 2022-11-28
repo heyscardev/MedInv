@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Patient extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'n_history',
@@ -22,6 +23,8 @@ class Patient extends Model
         'phone',
         'direction'
     ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * This are the relations

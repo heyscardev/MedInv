@@ -18,6 +18,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            'nationality' => fake()->randomElement(['V','E']),
             'c_i' => strval(fake()->unique()->randomNumber(8, true)),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),

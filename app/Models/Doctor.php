@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Doctor extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'code',
@@ -22,6 +23,8 @@ class Doctor extends Model
         'direction',
         'service_id'
     ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * This are the relations

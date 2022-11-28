@@ -19,6 +19,7 @@ class DoctorFactory extends Factory
     {
         return [
             'code' => strval(fake()->unique()->randomNumber(8, false)),
+            'nationality' => fake()->randomElement(['V','E']),
             'c_i' => strval(fake()->unique()->randomNumber(8, true)),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -26,7 +27,7 @@ class DoctorFactory extends Factory
             'gender' => fake()->randomElement(['Female','Male']),
             'email' => fake()->safeEmail(),
             'phone'=> fake()->phoneNumber(),
-            
+
             'service_id'=>Service::create([
                 'name'=>fake()->text(40)
             ])

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
             $table->string('code',30)->unique();
+            $table->enum('nationality',["V","E"]);
             $table->string('c_i',10)->unique();
             $table->string('first_name',80);
             $table->string('last_name',80);
@@ -25,6 +26,8 @@ return new class extends Migration
             $table->string('phone',20);
             $table->unsignedBigInteger('service_id');
             $table->timestamps();
+            $table->softDeletes();
+
             $table->foreign('service_id')->references('id')->on('services');
         });
     }

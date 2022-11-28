@@ -16,13 +16,14 @@ return new class extends Migration
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
             $table->enum('recipe_type',['DAILY','MASSIVE','HIGH COST']);
-            $table->enum('state',['DELIVER','PENDING','CANCELLED']);
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('pathology_id')->nullable();
             $table->unsignedBigInteger('module_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('description', 250)->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('patient_id')->references('id')->on('patients');
             $table->foreign('doctor_id')->references('id')->on('doctors');

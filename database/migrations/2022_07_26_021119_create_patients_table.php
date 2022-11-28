@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->string('n_history',30)->unique();
+            $table->enum('nationality',["V","E"]);
             $table->string('c_i',10)->unique();
             $table->string('first_name',80);
             $table->string('last_name',80);
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('phone',20);
             $table->string('direction',250)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

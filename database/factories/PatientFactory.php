@@ -18,6 +18,7 @@ class PatientFactory extends Factory
     {
         return [
             'n_history' => strval(fake()->unique()->randomNumber(8, false)),
+            'nationality' => fake()->randomElement(['V','E']),
             'c_i' => strval(fake()->unique()->randomNumber(8, true)),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
