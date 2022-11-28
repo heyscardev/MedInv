@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class DoctorRequest extends FormRequest
+class PatientRequest extends FormRequest
 {
     protected $yesterday, $nowMinus150years;
 
@@ -32,8 +32,8 @@ class DoctorRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->routeIs('doctor.store')) return $this->store();
-        if ($this->routeIs('doctor.update')) return $this->update();
+        if ($this->routeIs('patient.store')) return $this->store();
+        if ($this->routeIs('patient.update')) return $this->update();
         return [
             //
         ];
@@ -48,6 +48,7 @@ class DoctorRequest extends FormRequest
             'last_name'     => ['required', 'alpha', 'max:80'],
             'birth_date'    => ['required', 'date_format:Y-m-d', 'after:' . $this->nowMinus150years, 'before:' . $this->yesterday],
             'gender'        => ['required', 'in:Male,Female'],
+            'child'         => ['required'],
             'email'         => ['required', 'email', 'max:255', 'unique:doctors'],
             'phone'         => ['nullable', 'max:25'],
             'direction'     => ['nullable', 'max:250'],
@@ -64,6 +65,7 @@ class DoctorRequest extends FormRequest
             'last_name'     => ['sometimes','alpha', 'max:80'],
             'birth_date'    => ['sometimes','date_format:Y-m-d', 'after:' . $this->nowMinus150years, 'before:' . $this->yesterday],
             'gender'        => ['sometimes','in:Male,Female'],
+            'child'         => ['sometimes','required'],
             'email'         => ['sometimes','email', 'max:255', Rule::unique('doctors')->ignore($this->id)],
             'phone'         => ['sometimes','nullable', 'max:25'],
             'direction'     => ['sometimes','nullable', 'max:250'],

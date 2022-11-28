@@ -53,6 +53,7 @@ class UserRequest extends FormRequest
     public function store()
     {
         return [
+            'nationality'   => ['required', 'in:V,E'],
             'c_i'           => ['required', 'numeric', 'digits_between:0,8', Rule::unique('users')->ignore($this->id) ],
             'first_name'    => ['required', 'alpha', 'max:80'],
             'last_name'     => ['required', 'alpha', 'max:80'],
@@ -75,6 +76,7 @@ class UserRequest extends FormRequest
     {
         return [
             'id'            => ['required', 'integer', 'exists:users'],
+            'nationality'   => ['sometimes','required', 'in:V,E'],
             'c_i'           => ['sometimes','required', 'numeric', 'digits_between:0,8', Rule::unique('users')->ignore($this->id) ],
             'first_name'    => ['sometimes','required', 'alpha', 'max:80'],
             'last_name'     => ['sometimes','required', 'alpha', 'max:80'],

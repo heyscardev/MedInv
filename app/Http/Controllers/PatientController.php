@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatientRequest;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,7 +22,7 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $items = Patient::get();
         return Inertia::render('Patients/index', ['data' => $items]);
@@ -33,9 +34,13 @@ class PatientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PatientRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $patient = new Patient($validated);
+        $patient->save();
+
+        return back();
     }
 
     /**
@@ -45,9 +50,12 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PatientRequest $request, Patient $patient)
     {
-        //
+        $validated = $request->validated();
+        $patient->update($validated);
+
+        return back();
     }
 
     /**
@@ -56,8 +64,16 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Patient $patient)
     {
-        //
+        // with soft deletes ??????????????
+        $patient->delete();
+        return back();
     }
+
+    // public function restore($id)
+    // {
+    //     Doctor::withTrashed()->find($id)->restore();
+    //     return back()->with('success', 'El doctor fue restaurado');
+    // }
 }
