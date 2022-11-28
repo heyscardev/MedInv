@@ -1,12 +1,15 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
 import MultiButton from '@/Components/Common/MultiButton'
-import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
-import IntlFormatNumber from '@/Components/Custom/IntlFormatNumber'
 import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
-import { MoveUp, PostAdd } from '@mui/icons-material'
-import { Box } from '@mui/material'
+import { formatMessage } from '@formatjs/intl'
+import { PostAdd } from '@mui/icons-material'
+import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
 
+const columnVisibility = {
+  user: false,
+  updated_at: false,
+}
 export default (props) => {
   const [idToEdit, setIdToEdit] = useState(null)
   const toggleEdit = (id) => {
@@ -16,11 +19,69 @@ export default (props) => {
     <Fragment>
       {props.data.data && (
         <AsyncTable
+        enableRowSelection={false}
+          initialState={{ columnVisibility }}
           routeName="recipe.index"
           routeParams={{}}
           // onAsync={tableUpdate}
           data={props.data}
-          columns={[{ accessorKey: 'id', header: 'id' }]}
+          columns={[
+            { accessorKey: 'id', header: 'id' },
+            {
+              accessorKey: 'user',
+              header: 'user',
+              accessorFn: ({ user: { first_name, last_name } }) => {
+                return `${first_name} ${last_name}`
+              },
+            },
+            {
+              accessorKey: 'module',
+              header: 'module',
+              accessorFn: ({ module: { name } }) => {
+                return `${name}`;
+              },
+            },
+            {
+              accessorKey: 'doctor',
+              header: 'doctor',
+              accessorFn: ({ doctor: { first_name, last_name } }) => {
+                return `${first_name} ${last_name}`
+              },
+            },
+            {
+              accessorKey: 'patient',
+              header: 'patient',
+              accessorFn: ({ patient: { first_name, last_name } }) => {
+                return `${first_name} ${last_name}`
+              },
+            },
+
+            {
+              typeColumn: 'date',
+              accessorKey: 'created_at',
+              header: 'date',
+              accessorFn: ({ created_at }) =>
+                !created_at
+                  ? '00/00/0000 00:00:00'
+                  : format(new Date(created_at), 'hh:mm dd MMMM yyyy'),
+            },
+            {
+              typeColumn: 'date',
+              accessorKey: 'updated_at',
+              header: 'updated_at',
+              accessorFn: ({ updated_at }) =>
+                !updated_at
+                  ? '00/00/0000 00:00:00'
+                  : format(new Date(updated_at), 'hh:mm dd MMMM yyyy'),
+            },
+            /*     {
+              accessorKey: 'deleted_at',
+              header: 'deleted_at',
+              
+              accessorFn: ({ deleted_at }) =>
+                !deleted_at ? formatMessage({ id: 'active' }) : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy'),
+            }, */
+          ]}
         />
       )}
       <MultiButton

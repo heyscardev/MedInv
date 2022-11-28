@@ -15,6 +15,7 @@ class Recipe extends Model
         'recipe_type',
         'patient_id',
         'doctor_id',
+        'description',
         'pathology_id',
         'module_id',
         'user_id',

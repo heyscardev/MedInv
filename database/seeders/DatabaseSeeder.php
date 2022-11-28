@@ -8,6 +8,7 @@ use App\Models\Medicament;
 use App\Models\Module;
 use App\Models\Pathology;
 use App\Models\Patient;
+use App\Models\Recipe;
 use App\Models\Transfer;
 use App\Models\User;
 use Database\Factories\ModuleFactory;
@@ -57,6 +58,16 @@ class DatabaseSeeder extends Seeder
                 return [
                     'price' => rand(0, 999999),
                     'quantity' => rand(0, 10)
+                ];
+            },
+        )->create();
+        Recipe::factory(200)->hasAttached(
+            Medicament::orderByRaw('RAND()')->limit(rand(1, 12))->get(),
+            function () {
+                return [
+                    'quantity' => rand(0, 20),
+                    'prescribed_amount' => rand(0, 20),
+                    
                 ];
             },
         )->create();

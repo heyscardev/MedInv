@@ -402,6 +402,7 @@ const AsyncTable = ({
           density: 'compact',
           showColumnFilters: true,
           columnVisibility: { id: false },
+          ...initialState
         }}
         enableGlobalFilter={false}
         manualFiltering
