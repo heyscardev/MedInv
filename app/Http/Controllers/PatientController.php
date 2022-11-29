@@ -24,7 +24,8 @@ class PatientController extends Controller
      */
     public function index(Request $request)
     {
-        $items = Patient::get();
+        $paginate = max(min($request->get('page_size'), 100), 10);
+        $items = Patient::paginate($paginate);
         return Inertia::render('Patients/index', ['data' => $items]);
     }
 

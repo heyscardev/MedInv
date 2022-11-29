@@ -1,92 +1,159 @@
-import { format } from "date-fns";
-import { useState, Fragment, useEffect } from "react";
-import _ from "lodash";
-import { PersonAdd } from "@mui/icons-material";
-import EditModal from "@/Components/Layouts/Users/EditModal";
-import { formatCiFromDataBase, formatDateFromDataBase, formatGenderFromDataBase } from "@/Utils/format";
-import { es } from "date-fns/locale";
-import GenericCrud from "@/Components/Common/GenericCrud";
-const formatDataUser = (user) => {
-  const birth_date = formatDateFromDataBase(user.birth_date);
-  return {
-    ...user,
-    birth_date,
-  };
-};
-export default (props) => {
-  const [dataTable, setDataTable] = useState([]);
-  useEffect(() => {
-    setDataTable(props.data.map(formatDataUser));
-  }, [props.data]);
+import AsyncTable from '@/Components/Common/AsyncTable'
+import Select from '@/Components/Common/Inputs/Select'
+import IntlMessage from '@/Components/Common/IntlMessage'
+import MultiButton from '@/Components/Common/MultiButton'
+import SectionTitle from '@/Components/Common/SectionTitle'
+import EditPatientModal from '@/Components/Layouts/Patients/EditPatientModal'
+import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
+import { visit } from '@/HTTPProvider'
+import { ChildCare, HighlightOff, PersonAdd, PostAdd } from '@mui/icons-material'
+import { IconButton, Stack } from '@mui/material'
+import { format } from 'date-fns'
+import { Fragment, useState } from 'react'
+import { useIntl } from 'react-intl'
 
+const columnVisibility = {
+ id:false,
+ deleted_at:false,
+ created_at:false,
+ updated_at:false,
+ direction:false,
+ phone:false,
+ email:false
+
+}
+export default ({ module, ...props }) => {
+  const {formatMessage}= useIntl();
+  const [idToEdit, setIdToEdit] = useState(null)
+  const toggleEdit = (id) => {
+    setIdToEdit(id ? id : null)
+  }
   return (
     <Fragment>
-      <GenericCrud
-        data={dataTable}
-        columnVisibility={{ id: false, last_name: false, phone: false, direction: false }}
-        routeName="patient"
-        EditModal={EditModal}
-        multiButtonActions={[
+      <SectionTitle title="patients" />
+      {props.data.data && (
+        <AsyncTable
+          enableRowSelection={false}
+          initialState={{ columnVisibility }}
+          routeName={route().current()}
+          /* routeParams={{ module: module ? module.id : null }} */
+          // onAsync={tableUpdate}
+          data={props.data}
+          columns={[
+            { accessorKey: 'id', header: 'id' },
+            {
+              accessorKey: 'c_i',
+              header: 'c_i',
+              accessorFn: ({ nationality, c_i }) => `${nationality}- ${c_i}`,
+            },
+            { accessorKey: 'n_history', header: 'n_history' },
+            { accessorKey: 'first_name', header: 'first_name' },
+            { accessorKey: 'last_name', header: 'last_name' },
+            {
+              accessorKey: 'child',
+              header: 'isChild',
+              accessorFn: ({ child }) =>
+                child ? (
+                  <ChildCare sx={{marginLeft:1}} color="success" />
+                ) : (
+                  <HighlightOff sx={{marginLeft:1}}  color="error" />
+                ),
+              size: 30,
+              muiTableHeadCellProps: {
+                align: 'left',
+              },
+              muiTableBodyCellProps: {
+                align: 'left',
+              },
+              enableClickToCopy:false,
+              Filter: ({ column }) => {
+                const filterValue = column.getFilterValue() || []
+                return (
+                  <IconButton
+                    color={column.getFilterValue()?"success":"secondary"}
+                    onClick={()=>{
+                      if(column.getFilterValue()) return column.setFilterValue(false);
+                      column.setFilterValue(true);
+                    }}
+                  >
+                    <ChildCare />
+                  </IconButton>
+                )
+              },
+            },
+            { accessorKey: 'email', header: 'email' },
+            { accessorKey: 'direction', header: 'direction' },
+            {
+              accessorKey: 'gender',
+              header: 'gender',
+              accessorFn: ({ gender }) => <IntlMessage id={gender || ''} />,
+              Filter: ({ column }) => {
+                const filterValue = column.getFilterValue() || []
+                return (
+                  <Select
+                    value={column.getFilterValue() || ''}
+                    variant="standard"
+                    fullWidth
+                    options={[
+                      {
+                        label: 'Male',
+                        value: 'Male',
+                      },
+                      {
+                        label: 'Female',
+                        value: 'Female',
+                      },
+                    ]}
+                    onChange={(e) => column.setFilterValue(e.target.value)}
+                  />
+                )
+              },
+            },
+
+            {
+              typeColumn: 'created_at',
+              accessorKey: 'created_at',
+              header: 'date',
+              accessorFn: ({ created_at }) =>
+                !created_at
+                  ? '00/00/0000 00:00:00'
+                  : format(new Date(created_at), 'hh:mm dd MMMM yyyy'),
+            },
+            {
+              typeColumn: 'date',
+              accessorKey: 'updated_at',
+              header: 'updated_at',
+              accessorFn: ({ updated_at }) =>
+                !updated_at
+                  ? '00/00/0000 00:00:00'
+                  : format(new Date(updated_at), 'hh:mm dd MMMM yyyy'),
+            },
+                {
+              accessorKey: 'deleted_at',
+              header: 'deleted_at',
+              
+              accessorFn: ({ deleted_at }) =>
+                !deleted_at ? formatMessage({ id: 'active' }) : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy'),
+            },
+          ]}
+        />
+      )}
+      <MultiButton
+        actions={[
           {
             icon: <PersonAdd />,
-            name: "crear",
-          },
-        ]}
-        columns={[
-          {
-            accessorKey: "id",
-            header: "ID",
-            enableColumnOrdering: false,
-            enableEditing: false,
-            size: 80,
-          },
-          {
-            accessorKey: "first_name",
-            header: "Nombre",
-          },
-          {
-            accessorKey: "last_name",
-            header: "Apellido",
-          },
-          {
-            accessorKey: "email",
-            header: "email",
-          },
-          {
-            accessorKey: "c_i",
-            header: "Cedula",
-            accessorFn: ({ c_i }) => formatCiFromDataBase(c_i),
-          },
-          {
-            accessorKey: "birth_date",
-            header: "Fecha de Nacimiento",
-            accessorFn: ({ birth_date }) => format(new Date(birth_date), "dd 	MMMM yyyy", { locale: es }),
-          },
-          {
-            accessorKey: "gender",
-            header: "Sexo",
-            accessorFn: ({ gender }) => formatGenderFromDataBase(gender),
-          },
-          {
-            accessorKey: "phone",
-            header: "Telefono",
-          },
-          {
-            accessorKey: "direction",
-            header: "Direccion",
-          },
-          {
-            accessorKey: "created_at",
-            header: "Fecha de Creacion",
-            accessorFn: ({ created_at }) => (!created_at ? "00/00/0000 00:00:00" : created_at),
-          },
-          {
-            accessorKey: "updated_at",
-            header: "Fecha de Ultima Modificacion",
-            accessorFn: ({ updated_at }) => (!updated_at ? "00/00/0000 00:00:00" : updated_at),
+            name: 'createPatient',
+            onClick: (e) => {
+             toggleEdit(-1)
+            },
           },
         ]}
       />
+      <EditPatientModal
+        open={idToEdit ? true : false}
+        onClose={() => toggleEdit(null)}
+        item={{ ..._.find(props.data.data, { id: idToEdit }) }}
+      />
     </Fragment>
-  );
-};
+  )
+}

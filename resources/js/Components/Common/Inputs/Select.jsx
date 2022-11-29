@@ -1,5 +1,5 @@
 import {
-  FormControl,  
+  FormControl,
   FormHelperText,
   InputLabel,
   MenuItem,
@@ -25,48 +25,75 @@ export default ({
   value,
   fullWidth = false,
   label,
+  margin,
   noTranslateOptions,
   onChange,
   options = [],
   validate,
   type,
-}) => (
-  <Field name={name} type={type} value={value} validate={validate}>
-    {({ meta, input }) => (
-      <FormControl
-        error={meta.submitFailed && !!meta.error}
-        fullWidth={fullWidth}
-      >
-        <InputLabel>
-          <IntlMessage id={label} />
-        </InputLabel>
-        <Select
-          label={<IntlMessage id={label} />}
-          {...input}
-          color="primary"
-          onChange={
-            !onChange
-              ? input.onChange
-              : (e) => onChange(e, input.onChange, meta)
-          }
+  ...rest
+}) =>
+  name ? (
+    <Field name={name} type={type} value={value} validate={validate}>
+      {({ meta, input }) => (
+        <FormControl
+          error={meta.submitFailed && !!meta.error}
+          fullWidth={fullWidth}
+          sx={{margin}}
         >
-          {options.map((option) => {
-            return (
-              <MenuItem key={option.value}  value={option.value}>
-                {noTranslateOptions || option.noTranslate ? (
-                  option.label
-                ) : (
-                  <IntlMessage id={option.label} />
-                )}
-              </MenuItem>
-            )
-          })}
-        </Select>
+          <InputLabel>{label && <IntlMessage id={label} />}</InputLabel>
+          <Select
+            label={label && <IntlMessage id={label} />}
+            {...input}
+            color="primary"
+            onChange={
+              !onChange
+                ? input.onChange
+                : (e) => onChange(e, input.onChange, meta)
+            }
+            {...rest}
+          >
+            {options.map((option) => {
+              return (
+                <MenuItem key={option.value} value={option.value}>
+                  {noTranslateOptions || option.noTranslate ? (
+                    option.label
+                  ) : (
+                    <IntlMessage id={option.label} />
+                  )}
+                </MenuItem>
+              )
+            })}
+          </Select>
 
-        {meta.submitFailed && meta.error && (
-          <FormHelperText><IntlMessage id={meta.error} /></FormHelperText>
-        )}
-      </FormControl>
-    )}
-  </Field>
-)
+          {meta.submitFailed && meta.error && (
+            <FormHelperText>
+              <IntlMessage id={meta.error} />
+            </FormHelperText>
+          )}
+        </FormControl>
+      )}
+    </Field>
+  ) : (
+    <FormControl fullWidth={fullWidth}>
+      {label &&<InputLabel><IntlMessage id={label} /></InputLabel>}
+      <Select
+        label={label && <IntlMessage id={label} />}
+        {...rest}
+        onChange={onChange}
+        color="primary"
+      >
+        {options.map((option) => {
+          return (
+            <MenuItem key={option.value} value={option.value}>
+              {noTranslateOptions || option.noTranslate ? (
+                option.label
+              ) : (
+                <IntlMessage id={option.label} />
+              )}
+            </MenuItem>
+          )
+        })}
+      </Select>
+    </FormControl>
+  )

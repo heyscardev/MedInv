@@ -173,6 +173,13 @@
     "fielderror.numberPhoneInvalid":"Numero de teléfono Invalido",
     "addDoctor":"Agregar Doctor",
     "newBuy":"Nueva Compra",
-    "newTransfer":"Nueva Transferencia"
-    
+    "newTransfer":"Nueva Transferencia",
+    "fielderror.invalid_c_i":"error cedula inavalida formatos validos (00000000,00000000-1)",
+    "patients":"Pacientes",
+    "doctors":"Doctores",
+    "recipes":"Recipes",
+    "intro":"Inicio",
+    "isChild":"Es niño",
+    "createPatient":"Crear paciente",
+    "N":"N"
 }

@@ -3,13 +3,19 @@ import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
 import IntlFormatNumber from "@/Components/Custom/IntlFormatNumber";
 import { Box } from "@mui/material";
 import { Fragment } from "react";
-
+const columnVisibility ={
+created_at:false,
+updated_at:false,
+price:false
+}
 export default (props) => {
   return (
     <Fragment>
       <AsyncTable
         routeName="medicament.index"
         routeParams={{ }}
+        initialState={{columnVisibility}}
+        enableRowSelection={false}
        // onAsync={tableUpdate}
         data={props.data}
         columns={[
@@ -20,6 +26,12 @@ export default (props) => {
             header: "price",
             filterVariant: "range",
             Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
+          },
+           {
+            accessorKey: "unit.name",
+            header: "unit",
+           
+         
           },
         /*
 

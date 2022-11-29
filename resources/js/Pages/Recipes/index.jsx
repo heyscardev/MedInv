@@ -1,8 +1,8 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
 import MultiButton from '@/Components/Common/MultiButton'
+import SectionTitle from '@/Components/Common/SectionTitle'
 import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
 import { visit } from '@/HTTPProvider'
-import { formatMessage } from '@formatjs/intl'
 import { PostAdd } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
@@ -18,7 +18,8 @@ export default ({ module, ...props }) => {
   }
   return (
     <Fragment>
-      {console.log(route())}
+    
+    <SectionTitle title="recipes" noTranslateSubtitle subtitle={module?module.name:null} />
       {props.data.data && (
         <AsyncTable
           enableRowSelection={false}

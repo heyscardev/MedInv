@@ -11,7 +11,7 @@ export default (props) => {
       variant="text"
       color="info"
       disabled={active}
-      style={active ? { borderBottom: "2px solid #fff", color: "#fff", borderRadius: 0, userSelect: "contain" } : null}
+      style={active ? { borderBottom: "2px solid #fff", color: "#fff", borderRadius: 0, userSelect: "contain",fontSize:"10px" } : {fontSize:"10px"}}
       {...props}
       onClick={(e) => {
         e.preventDefault();

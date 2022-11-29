@@ -220,31 +220,51 @@ export default ({ ...props }) => {
           },
         ]}
       />
-      <MultiButton
-        actions={[
-          {
-            icon: <PersonAdd />,
-            name: 'addDoctor',
-            disabled:!props.can(`${routeName}.create`),
-            onClick: (e) => {
-              toggleEdit(-1)
-            },
-          },
-          {
-            icon: <RestoreFromTrash />,
-            name: restoreMode ? 'exitRestoreMode' : 'usersRestore',
-            ...(restoreMode
-              ? { sx: { backgroundColor: 'primary.dark', color: '#fff' } }
-              : {}),
-            onClick: (e) => {
-              if (restoreMode) {
-                return visit(route(`${routeName}.index`))
-              }
-              return visit(route(`${routeName}.index`, { deleted: true }))
-            },
-          },
-        ]}
-      />
+
+      {(props.can(`${routeName}.create`) ||
+        props.can(`${routeName}.delete`)) && (
+        <MultiButton
+          actions={[
+            ...(props.can(`${routeName}.create`)
+              ? [
+                  {
+                    icon: <PersonAdd />,
+                    name: 'addDoctor',
+                    disabled: !props.can(`${routeName}.create`),
+                    onClick: (e) => {
+                      toggleEdit(-1)
+                    },
+                  },
+                ]
+              : []),
+
+            ...(props.can(`${routeName}.delete`)
+              ? [
+                  {
+                    icon: <RestoreFromTrash />,
+                    name: restoreMode ? 'exitRestoreMode' : 'usersRestore',
+                    ...(restoreMode
+                      ? {
+                          sx: {
+                            backgroundColor: 'primary.dark',
+                            color: '#fff',
+                          },
+                        }
+                      : {}),
+                    onClick: (e) => {
+                      if (restoreMode) {
+                        return visit(route(`${routeName}.index`))
+                      }
+                      return visit(
+                        route(`${routeName}.index`, { deleted: true }),
+                      )
+                    },
+                  },
+                ]
+              : []),
+          ]}
+        />
+      )}
 
       <ConfirmModal
         open={_.find(dataTable, { id: idToDelete }) ? true : false}

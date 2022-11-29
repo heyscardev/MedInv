@@ -2,6 +2,7 @@ import AsyncTable from '@/Components/Common/AsyncTable'
 import Breadcrums from '@/Components/Common/Breadcrums'
 import CellNumberBox from '@/Components/Common/CellNumberBox'
 import MultiButton from '@/Components/Common/MultiButton'
+import SectionTitle from '@/Components/Common/SectionTitle'
 import Table from '@/Components/Common/Table'
 import IconButton from '@/Components/Custom/IconButton'
 import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
@@ -44,7 +45,7 @@ const tableUpdate = ({
 export default (props) => {
   return (
     <Fragment>
-      <LogoTypography subtitle="transfers" padding={20} />
+      <SectionTitle title="transfers" noTranslateSubtitle subtitle={props.module?props.module.name:null} />
 
       <AsyncTable
         routeName={route().current()}

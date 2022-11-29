@@ -27,7 +27,8 @@ class MedicamentController extends Controller
      */
     public function index(MedicamentRequest $request)
     {
-        $paginate = 10; /* max(min($request->get('page_size',), 100), 10); */
+        
+        $paginate = max( min( $request->get('page_size'), 100), 10);
 
         //start building of query
         $query = Medicament::with('unit:id,name');
