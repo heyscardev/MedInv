@@ -48,7 +48,7 @@ const dateLessOrEqual = (max) => (value) => {
 };
 const passwordEqual = (fieldToValue) => (fieldFromValue, values) =>
   fieldFromValue !== _.get(values, fieldToValue) ? "Contraseñas no coinciden" : null;
-const alpha = (value) => (value && value.match(/^[A-Z]+$/i) ? null : "campo solo letras.");
+const alpha = (value) => (value && value.match(/^[A-Z ]+?$/i) ? null : "fieldError.alpha");
 //it is not  verify
 const greaterThan = (fieldToValue) => (fieldFromValue, values) =>
   !_.get(values, fieldToValue) || !fieldFromValue || Number(fieldFromValue) > Number(_.get(values, fieldToValue))

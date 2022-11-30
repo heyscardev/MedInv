@@ -44,6 +44,7 @@
     "empty": " ",
     "fieldError.required": "Este campo es obligatorio",
     "fieldError.length": "Solamente puedes seleccionar dos atributos",
+    "fieldError.alpha":"Este campo solo puede contener letras",
     "fieldError.weakPassword": "La contraseña debe tener de 7 a 14 caracteres",
     "fieldError.strongZulipPassword": "La contraseña debe tener de 10 a 14 caracteres, al menos un número, una minúscula y una mayúscula",
     "fieldError.greaterThanZero": "Debe ser mayor que 0",
@@ -181,5 +182,7 @@
     "intro":"Inicio",
     "isChild":"Es niño",
     "createPatient":"Crear paciente",
-    "N":"N"
+    "N":"N",
+    "V":"V",
+    "E":"E"
 }

@@ -37,16 +37,20 @@ export default ({ item, open, onClose }) => {
               : data[key]
       }
     }
-    put(route('patient.update', dataToSend.id), dataToSend, {
+    console.log(dataToSend)
+   /*  put(route('patient.update', dataToSend.id), dataToSend, {
       onSuccess: (e) => {
         onClose(null)
       },
-    })
+    }) */
   }
-  const store = (data) => {
+  const store = ({ child, ...data }) => {
     const dataToSend = {
       ...data,
       birth_date: formatStringDateToDatabase(data.birth_date),
+    }
+    if (child & (child.lenght >= 1)) {
+      dataToSend.child = child[0]
     }
 
     post(route('patient.store'), dataToSend, {
@@ -120,6 +124,17 @@ export default ({ item, open, onClose }) => {
                 />
               </Grid>
               <Grid item xs={12} lg={6}>
+                <InputText
+                  name="phone"
+                  label="phone"
+                  autoComplete="nope"
+                  validate={composeValidators(required)}
+                  onlyNumbers
+                  maxLength={11}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} lg={6}>
                 <Grid container wrap="nowrap">
                   <Grid item xs={2} lg={4}>
                     <Select
@@ -147,7 +162,7 @@ export default ({ item, open, onClose }) => {
                       autoComplete="nope"
                       placeholder="00000000-0"
                       validate={composeValidators(required, (value) => {
-                        if (value.match(/^[0-9]+\-?[0-9]+$/)) return null
+                        if (value.match(/^[0-9]{5,8}\-?[0-9]+$/)) return null
                         return 'fielderror.invalid_c_i'
                       })}
                       maxLength={10}
