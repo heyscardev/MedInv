@@ -203,7 +203,6 @@ export default ({ item, open, onClose }) => {
                   fullWidth
                 />
               </Grid>
-              {console.log(values)}
               <Grid item xs={12} lg={6}>
                 <FormControl>
                   <Typography marginLeft={2} variant="body2">

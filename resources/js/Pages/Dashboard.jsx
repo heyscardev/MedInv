@@ -75,7 +75,6 @@ export default ({ can, auth }) => {
   return (
     <Fragment>
       <Head title="DashBoard" />
-      {console.log(auth)}
       <Paper sx={{ marginTop: 2, padding: 2, width: '50%', marginLeft: 3 }}>
         Bienvenido a{" "}
         <Typography variant="span" fontWeight="500" color="primary">

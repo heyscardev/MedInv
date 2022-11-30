@@ -37,7 +37,6 @@ const columnVisibility = {
 const routeName = 'module'
 
 export default ({data=[],...props}) => {
- console.log(props)
 
   const { formatMessage } = useIntl()
   const [idToDelete, setIdToDelete] = useState(null)

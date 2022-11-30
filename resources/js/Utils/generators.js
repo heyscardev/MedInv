@@ -7,7 +7,7 @@ const generatorTableColumns = (data, excludes = { email_verified_at: true }) => 
   const columns = [];
 
   if (data && data[0]) {
-    console.log(format(new Date(data[0].birth_date), "dd MMMM yyyy"));
+   
     for (const key in data[0]) {
       if (excludes[key] === true) continue;
       switch (key) {

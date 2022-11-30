@@ -126,7 +126,6 @@ export default ({ item, open, onClose }) => {
                   fullWidth
                 />
               </Grid>
-             { console.log(values)}
               <Grid item xs={12} lg={6}>
                 <PhoneInput
                   name="phone"

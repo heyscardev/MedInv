@@ -69,7 +69,6 @@ export default ({ medicaments, medicament, units, open, onClose, onSuccess }) =>
         onSubmit={submit}
         render={({ handleSubmit, form }) => (
           <form onSubmit={handleSubmit} id="MedicamentForm" autoComplete="off">
-            {console.log(form.getState().values)}
             <Grid container>
               <Grid item xs={12} sm={4}>
                 <InputText

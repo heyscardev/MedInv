@@ -66,12 +66,9 @@ export default (props) => {
             enableClickToCopy: false,
 
             Cell: ({ cell }) => (
-              <>
-                {console.log(cell)}
                 <IconButton placement="right" color="primary" title="show">
                   <iconsMaterial.Visibility />
                 </IconButton>
-              </>
             ),
           },
           { accessorKey: 'user.first_name', header: 'user' },

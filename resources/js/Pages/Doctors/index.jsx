@@ -24,8 +24,10 @@ import _ from 'lodash'
 import Tooltip from '@/Components/Custom/Tooltip'
 import IconButton from '@/Components/Custom/IconButton'
 import { Switch } from '@mui/material'
-import { Head, usePage } from '@inertiajs/inertia-react'
+import { usePage } from '@inertiajs/inertia-react'
 import EditDoctorModal from '@/Components/Layouts/Doctors/EditDoctorModal'
+import Head from '@/Components/Custom/Head'
+import SectionTitle from '@/Components/Common/SectionTitle'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)
@@ -37,7 +39,7 @@ const formatDataUser = (user) => {
 //const data for table
 const columnVisibility = {
   id: false,
-  last_name: false,
+  last_name: true,
   phone: false,
   direction: false,
   email: false,
@@ -49,7 +51,6 @@ const columnVisibility = {
 const routeName = 'doctor'
 
 export default ({ ...props }) => {
-  console.log(usePage())
   const urlParams = new URLSearchParams(window.location.search)
   const restoreMode = urlParams.has('deleted')
   //Accedemos a los valores
@@ -72,7 +73,8 @@ export default ({ ...props }) => {
   }
   return (
     <Fragment>
-      <Head title={formatMessage({ id: 'users' })} />
+     <Head title="doctors" />
+      <SectionTitle title="doctors" />
       <Table
         initialState={{ columnVisibility }}
         data={dataTable}
