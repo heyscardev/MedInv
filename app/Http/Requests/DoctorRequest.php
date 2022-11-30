@@ -32,8 +32,8 @@ class DoctorRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->routeIs('doctor.store')) return $this->store();
-        if ($this->routeIs('doctor.update')) return $this->update();
+        if ($this->routeIs('doctor.store')) return $this->storeRules();
+        if ($this->routeIs('doctor.update')) return $this->updateRules();
         return [
             //
         ];

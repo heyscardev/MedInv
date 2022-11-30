@@ -32,10 +32,24 @@ class PatientRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->routeIs('patient.store')) return $this->store();
-        if ($this->routeIs('patient.update')) return $this->update();
+        if ($this->routeIs('patient.index')) return $this->indexRules();
+        if ($this->routeIs('patient.store')) return $this->storeRules();
+        if ($this->routeIs('patient.update')) return $this->updateRules();
         return [
             //
+        ];
+    }
+
+    protected function indexRules()
+    {
+        return [
+            'orderBy'           => ['array'],
+            'orderBy.*.id'      => ['required',Rule::in(['c_i','n_history', 'first_name', 'last_name', 'child','gender'])],
+            'orderBy.*.desc'    => ['required','boolean'],
+            'filters'           => ['array'],
+            'filters.*.id'      => ['required',Rule::in(['c_i','n_history', 'first_name', 'last_name', 'child','gender'])],
+            'filters.*.value'   => ['required','nullable'],
+            'page_size'         => ['integer','in:10,20,50,100']
         ];
     }
 

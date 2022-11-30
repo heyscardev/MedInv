@@ -24,7 +24,7 @@ class PatientController extends Controller
      */
     public function index(Request $request)
     {
-        $paginate = max(min($request->get('page_size'), 100), 10);
+        $paginate = $request->get('page_size');
 
         $query = $request->has('deleted')
                     ? Patient::onlyTrashed()->orderBy('deleted_at', 'desc')

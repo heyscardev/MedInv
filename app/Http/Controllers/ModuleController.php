@@ -57,9 +57,9 @@ class ModuleController extends Controller
         //start building of query
         $query = $module->medicaments();
         $query = $this->applyFilters($query, $request);
+        $data  = $query->paginate( $request->get('page_size') );
 
-        $paginate = max( min( $request->get('page_size'), 100), 10);
-        return Inertia::render('Modules/show.employee', ['module' => $module, 'data' => $query->paginate($paginate)]);
+        return Inertia::render('Modules/show.employee', ['module' => $module, 'data' => $data]);
     }
 
     /**

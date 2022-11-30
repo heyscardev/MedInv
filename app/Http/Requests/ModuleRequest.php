@@ -26,9 +26,9 @@ class ModuleRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->routeIs('module.store')) return $this->store();
-        if ($this->routeIs('module.update')) return $this->update();
-        if ($this->routeIs('module.show')) return $this->show();
+        if ($this->routeIs('module.store')) return $this->storeRules();
+        if ($this->routeIs('module.update')) return $this->updateRules();
+        if ($this->routeIs('module.show')) return $this->showRules();
         return [
             //
         ];
@@ -39,7 +39,7 @@ class ModuleRequest extends FormRequest
      *
      * @return array
      */
-    public function store()
+    public function storeRules()
     {
         return [
             'code'    =>'required|max:25|unique:modules',
@@ -53,7 +53,7 @@ class ModuleRequest extends FormRequest
      *
      * @return array
      */
-    public function update()
+    public function updateRules()
     {
         return [
             'code'  =>'sometimes|required|max:25|' . Rule::unique('modules')->ignore($this->id),
@@ -62,7 +62,7 @@ class ModuleRequest extends FormRequest
     }
 
 
-    protected function show()
+    protected function showRules()
     {
         return [
             'orderBy'           => ['array'],

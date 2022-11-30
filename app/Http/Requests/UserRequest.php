@@ -39,8 +39,8 @@ class UserRequest extends FormRequest
         //     'PUT', 'PATCH' => $this->update(),
         // };
 
-        if ($this->routeIs('user.store')) return $this->store();
-        if ($this->routeIs('user.update')) return $this->update();
+        if ($this->routeIs('user.store')) return $this->storeRules();
+        if ($this->routeIs('user.update')) return $this->updateRules();
 
         return [];
     }
@@ -50,7 +50,7 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function store()
+    public function storeRules()
     {
         return [
             'nationality'   => ['required', 'in:V,E'],
@@ -72,7 +72,7 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function update()
+    public function updateRules()
     {
         return [
             'id'            => ['required', 'integer', 'exists:users'],

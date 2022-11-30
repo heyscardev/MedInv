@@ -27,9 +27,16 @@ class ModuleBuyRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->url() === route('module.buy.create',$this->route('module')->id)) return $this->createRules();
         if ($this->method() == 'POST') return $this->storeRules();
-        if($this->url()=== route('module.buy.create',$this->route('module')->id))return $this->createRules();
         return [];
+    }
+
+    private function createRules()
+    {
+        return [
+           'search'=>['string','nullable']
+        ];
     }
     private function storeRules()
     {
@@ -45,14 +52,10 @@ class ModuleBuyRequest extends FormRequest
                 $module = $this->route('module');
                 $medicament = $module->medicaments()->where('medicament_id',$medicament_id)->first();
                 if(isset($medicament->pivot) && ($medicament->pivot->quantity_exist + $quantity)>2000000000) $fail("Al comprar {$medicament->name} excede el maximo por modulo (2.000.000.000). Maximo de compra ".(2000000000 -$medicament->pivot->quantity_exist));
-              
+
             }],
         ];
     }
-    private function createRules()
-    {
-        return [
-           'search'=>['string','nullable']
-        ];
-    }
+
+
 }
