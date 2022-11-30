@@ -41,6 +41,7 @@ class RecipeController extends Controller
 
         return Inertia::render('Recipes/index', ['data' => $query->paginate($paginate), "module" => $moduleDeliver]);
     }
+
     public function create(Request $request, Module $module)
     {
 
@@ -151,25 +152,46 @@ class RecipeController extends Controller
         $orderBy = $request->get('orderBy', [['id' => "updated_at", 'desc' => true]]);
         $filters = $request->get('filters', []);
 
+        $query->selectRaw('recipes.*');
+        $query->join('modules', 'recipes.module_id', '=', 'modules.id');
+        $query->join('doctors', 'recipes.doctor_id', '=', 'doctors.id');
+        $query->join('patients', 'recipes.patient_id', '=', 'patients.id');
+
         //fliters iteration
         array_map(function ($filter) use ($query) {
             $id = $filter['id'];
             $value = $filter['value'];
 
-            // if (str_contains($id, "pivot.")) {
-            //     $column = str_replace("pivot.", "", $id);
-            //     if (is_array($value))
-            //         return $query->wherePivot( $column, ">=",   $value[0] ? $value[0] : 0)
-            //                         ->wherePivot( $column, "<=",   $value[1] ? $value[1] : 9999999999.2);
+            switch ($id) {
+                case 'module':
+                    $query->where('modules.name', "LIKE", "%" . $value . "%");
+                    break;
+                case 'doctor':
+                case 'patient':
+                    $searchValues = preg_split('/\s+/', $value, -1, PREG_SPLIT_NO_EMPTY);
+                    $query->where(function ($q) use ($searchValues, $id) {
+                            foreach ($searchValues as $text) {
+                                $q->orWhere($id.'s.first_name', 'like', "%{$text}%")
+                                ->orWhere($id.'s.last_name', 'like', "%{$text}%");
+                            }
+                    });
+                    break;
+                case 'created_at':
+                    if (is_array($value)){
+                        if( isset($value[0]) && $value[0] !== null ){
+                            $query->where('recipes.' . $id, '>=', $value[0]);
+                        }
+                        if( isset($value[1]) && $value[1] !== null ){
+                            $query->where('recipes.' . $id, '<=', $value[1]);
+                        }
+                    }
+                    break;
+                default:
+                    $query->where('recipes.' . $id, "LIKE", "%" . $value . "%");
+                    break;
+            }
 
-            //     return $query->wherePivot( $column, "LIKE", "%" . $value . "%");
-            // }
-            // if (str_contains($id, "doctor.")){
-            //     $column = str_replace('doctor.', '', $id);
-            //     return $query->whereRelation('doctor', $column, "LIKE", "%" . strtoupper($value) . "%");
-            // }
-
-            return $query->LikeOrBeetween('recipes.' . $id, $value);
+            return $query;
         }, $filters);
 
         //fliters orders
@@ -177,14 +199,22 @@ class RecipeController extends Controller
             $id = $by['id'];
             $sorting = $by['desc'] ? "DESC" : 'ASC';
 
-            // if (str_contains($id, "pivot."))
-            //     return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
-            // if (str_contains($id, "doctor."))
-            //     return $query->orderByDoctor(str_replace('doctor.', '', $id), $sorting);
-            // if ($id === 'patient')
-            //     return $query->orderByPatient($sorting);
+            switch ($id) {
+                case 'module':
+                    $query->orderBy('modules.name', $sorting);
+                    break;
+                case 'doctor':
+                    $query->orderBy('doctors.first_name', $sorting);
+                    break;
+                case 'patient':
+                    $query->orderBy('patients.first_name', $sorting);
+                    break;
+                default:
+                    $query->orderBy('recipes.' . $id, $sorting);
+                    break;
+            }
 
-            return $query->orderBy('recipes.' . $id, $sorting);
+            return $query;
         }, $orderBy);
 
         return $query;
