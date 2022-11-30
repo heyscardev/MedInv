@@ -21,6 +21,7 @@ export default ({
   label,
   onChange,
   validate,
+  noError=false,
   type = "checkbox",
 }) => (
   <Field name={name} type={type} value={value} validate={validate}>
@@ -36,7 +37,7 @@ export default ({
             />
           }
         />
-        {meta.submitFailed && meta.error && <FormHelperText>{meta.error}</FormHelperText>}
+        {!noError &&meta.submitFailed && meta.error && <FormHelperText>{meta.error}</FormHelperText>}
       </FormControl>
     )}
   </Field>

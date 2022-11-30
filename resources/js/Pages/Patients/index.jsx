@@ -1,12 +1,14 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
+import ConfirmModal from '@/Components/Common/ConfirmModal'
 import Select from '@/Components/Common/Inputs/Select'
 import IntlMessage from '@/Components/Common/IntlMessage'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
+import Head from '@/Components/Custom/Head'
 import Tooltip from '@/Components/Custom/Tooltip'
 import EditPatientModal from '@/Components/Layouts/Patients/EditPatientModal'
 import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
-import { visit } from '@/HTTPProvider'
+import { destroy, get, visit } from '@/HTTPProvider'
 import {
   ChildCare,
   Delete,
@@ -14,10 +16,13 @@ import {
   HighlightOff,
   PersonAdd,
   PostAdd,
+  Restore,
+  RestoreFromTrash,
 } from '@mui/icons-material'
 import { IconButton, Stack } from '@mui/material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
+import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
 const columnVisibility = {
@@ -29,9 +34,11 @@ const columnVisibility = {
   phone: false,
   email: false,
 }
+const routeName = 'patient'
 export default ({ module, ...props }) => {
   const { formatMessage } = useIntl()
-
+  const urlParams = new URLSearchParams(window.location.search)
+  const restoreMode = urlParams.has('deleted')
   const [idToEdit, setIdToEdit] = useState(null)
   const toggleEdit = (id) => {
     setIdToEdit(id ? id : null)
@@ -43,6 +50,7 @@ export default ({ module, ...props }) => {
   }
   return (
     <Fragment>
+      <Head title="patients" />
       <SectionTitle title="patients" />
       {props.data.data && (
         <AsyncTable
@@ -61,12 +69,24 @@ export default ({ module, ...props }) => {
               size: 80,
 
               Cell: ({ cell }) => {
-                return cell.row.original.deleted_at ? (
+                return cell.row.original.deleted_at &&
+                  props.can('patient.restore') ? (
                   <Tooltip arrow placement="right" title="delete">
                     <IconButton
                       color="primary"
                       onClick={(e) => {
-                        get(route(`${routeName}.restore`, cell.row.original.id))
+                        const name = cell.row.original.first_name
+                        get(
+                          route(`${routeName}.restore`, cell.row.original.id),
+                          {},
+                          {
+                            onSuccess: () => {
+                              toast.success(
+                                `El paciente ${name}  fue restaurado`,
+                              )
+                            },
+                          },
+                        )
                       }}
                     >
                       <Restore />
@@ -74,22 +94,26 @@ export default ({ module, ...props }) => {
                   </Tooltip>
                 ) : (
                   <>
-                    <Tooltip arrow placement="right" title="delete">
-                      <IconButton
-                        color="error"
-                        onClick={(e) => setIdToDelete(cell.getValue())}
-                      >
-                        <Delete />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip arrow placement="right" title="edit">
-                      <IconButton
-                        color="primary"
-                        onClick={(e) => setIdToEdit(cell.getValue())}
-                      >
-                        <Edit />
-                      </IconButton>
-                    </Tooltip>
+                    {props.can('patient.destroy') && (
+                      <Tooltip arrow placement="right" title="delete">
+                        <IconButton
+                          color="error"
+                          onClick={(e) => setIdToDelete(cell.getValue())}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {props.can('patient.update') && (
+                      <Tooltip arrow placement="right" title="edit">
+                        <IconButton
+                          color="primary"
+                          onClick={(e) => setIdToEdit(cell.getValue())}
+                        >
+                          <Edit />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                   </>
                 )
               },
@@ -192,7 +216,7 @@ export default ({ module, ...props }) => {
             {
               accessorKey: 'deleted_at',
               header: 'deleted_at',
-
+              typeColumn: 'date',
               accessorFn: ({ deleted_at }) =>
                 !deleted_at
                   ? formatMessage({ id: 'active' })
@@ -203,19 +227,60 @@ export default ({ module, ...props }) => {
       )}
       <MultiButton
         actions={[
-          {
-            icon: <PersonAdd />,
-            name: 'createPatient',
-            onClick: (e) => {
-              toggleEdit(-1)
-            },
-          },
+          ...(props.can('patient.store')
+            ? [
+                {
+                  icon: <PersonAdd />,
+                  name: 'createPatient',
+                  onClick: (e) => {
+                    toggleEdit(-1)
+                  },
+                },
+              ]
+            : []),
+          ...(props.can('patient.restore')
+            ? [
+                {
+                  icon: <RestoreFromTrash />,
+                  name: restoreMode ? 'exitRestoreMode' : 'patientRestore',
+                  ...(restoreMode
+                    ? { sx: { backgroundColor: 'primary.dark', color: '#fff' } }
+                    : {}),
+                  onClick: (e) => {
+                    if (restoreMode) {
+                      return visit(route(`${routeName}.index`))
+                    }
+                    return visit(route(`${routeName}.index`, { deleted: true }))
+                  },
+                },
+              ]
+            : []),
         ]}
       />
       <EditPatientModal
         open={idToEdit ? true : false}
         onClose={() => toggleEdit(null)}
         item={{ ..._.find(props.data.data, { id: idToEdit }) }}
+      />
+      <ConfirmModal
+        open={_.find(props.data.data, { id: idToDelete }) ? true : false}
+        onClose={() => toggleConfirmDelete(null)}
+        onSubmit={() => {
+          toggleConfirmDelete(null)
+          destroy(route(routeName + '.destroy', idToDelete))
+        }}
+        message={
+          _.find(props.data.data, { id: idToDelete })
+            ? formatMessage(
+                { id: 'deleteMessage' },
+                {
+                  value: _.find(props.data.data, { id: idToDelete })[
+                    'first_name'
+                  ],
+                },
+              )
+            : null
+        }
       />
     </Fragment>
   )

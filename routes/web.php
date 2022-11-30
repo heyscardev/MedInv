@@ -43,11 +43,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('doctors', DoctorController::class)->only(['index', 'destroy', 'update', 'store'])->names('doctor');
     Route::resource('medicaments', MedicamentController::class)->only(['index', 'destroy', 'update', 'store'])->names('medicament');
     Route::resource('modules', ModuleController::class)->only(['index', 'destroy', 'update', 'store', 'show'])->names('module');
+    //patients
     Route::resource('patients', PatientController::class)->only(['index', 'destroy', 'update', 'store'])->names('patient');
+    Route::get('patients/restore/{id}',[PatientController::class,"restore"])->name('patient.restore');
+    
     Route::resource('recipes', RecipeController::class)->only(['index', 'destroy', 'update', 'store'])->names('recipe');
     Route::get('recipes/create/{module?}', [RecipeController::class, 'create'])->name('recipe.create');
     Route::resource('services', ServiceController::class)->only(['index', 'destroy', 'update', 'store'])->names('service');
     Route::resource('units', UnitController::class)->only(['index', 'destroy', 'update', 'store'])->names('unit');
+    //users
     Route::resource('users', UserController::class)->only(['index', 'destroy', 'update', 'store'])->names('user');
     Route::get('users/restore/{id}',[UserController::class,"restore"])->name('user.restore');
 

@@ -3,6 +3,7 @@ import DatePicker from '@/Components/Common/Inputs/DatePicker'
 import InputText from '@/Components/Common/Inputs/InputText'
 import PasswordField from '@/Components/Common/Inputs/PasswordField'
 import Select from '@/Components/Common/Inputs/Select'
+import IntlMessage from '@/Components/Common/IntlMessage'
 import Modal from '@/Components/Common/Modal'
 import LogoTypography from '@/Components/LogoTypography'
 import {
@@ -19,7 +20,16 @@ import {
 import { post, put } from '@/HTTPProvider'
 import { formatStringDateToDatabase } from '@/Utils/format'
 import { Cancel, Save } from '@mui/icons-material'
-import { Button, DialogActions, Grid, Typography } from '@mui/material'
+import {
+  Button,
+  Container,
+  DialogActions,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  Typography,
+} from '@mui/material'
 import { addYears } from 'date-fns'
 import { Form } from 'react-final-form'
 
@@ -37,20 +47,17 @@ export default ({ item, open, onClose }) => {
               : data[key]
       }
     }
-    console.log(dataToSend)
-   /*  put(route('patient.update', dataToSend.id), dataToSend, {
+
+    put(route('patient.update', dataToSend.id), dataToSend, {
       onSuccess: (e) => {
         onClose(null)
       },
-    }) */
+    })
   }
-  const store = ({ child, ...data }) => {
+  const store = ({ ...data }) => {
     const dataToSend = {
       ...data,
       birth_date: formatStringDateToDatabase(data.birth_date),
-    }
-    if (child & (child.lenght >= 1)) {
-      dataToSend.child = child[0]
     }
 
     post(route('patient.store'), dataToSend, {
@@ -75,9 +82,18 @@ export default ({ item, open, onClose }) => {
         </Typography>
       </div>
       <Form
-        initialValues={{ ...item }}
+        initialValues={{
+          ...item,
+          child: item.child ? item.child.toString() : null,
+        }}
         onSubmit={submit}
-        render={({ handleSubmit, values }) => (
+        validate={(values) => {
+          const error = {}
+          if (!values.child) error.child = 'fieldError.required'
+          if (!values.gender) error.gender = 'fieldError.required'
+          return error
+        }}
+        render={({ handleSubmit, values, errors, submitFailed }) => (
           <form onSubmit={handleSubmit} id="userForm" autoComplete="off">
             <Grid container>
               <Grid item xs={12} lg={6}>
@@ -85,7 +101,7 @@ export default ({ item, open, onClose }) => {
                   name="first_name"
                   label="first_name"
                   autoComplete="nope"
-                  validate={composeValidators(required, alpha)}
+                  /* validate={composeValidators(required, alpha)} */
                   maxLength={80}
                   fullWidth
                 />
@@ -188,15 +204,62 @@ export default ({ item, open, onClose }) => {
                 />
               </Grid>
               {console.log(values)}
-              <Grid
-                item
-                xs={12}
-                lg={6}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <CheckBox name="child" label="isChild" value={true} />
+              <Grid item xs={12} lg={6}>
+                <FormControl>
+                  <Typography marginLeft={2} variant="body2">
+                    <IntlMessage id="isChild" />
+                  </Typography>
+                  <Container>
+                    <CheckBox
+                      noError
+                      type="radio"
+                      name="child"
+                      label="yes"
+                      value={'1'}
+                    />
+                    <CheckBox
+                      noError
+                      type="radio"
+                      name="child"
+                      label="no"
+                      value={'0'}
+                    />
+                  </Container>
+
+                  {submitFailed && errors.child && (
+                    <FormHelperText error>
+                      <IntlMessage id={errors.child} />
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} lg={6}>
+                <FormControl>
+                  <Typography marginLeft={2} variant="body2">
+                    <IntlMessage id="gender" />
+                  </Typography>
+                  <Container>
+                    <CheckBox
+                      noError
+                      type="radio"
+                      name="gender"
+                      label="Female"
+                      value={'Female'}
+                    />
+                    <CheckBox
+                      noError
+                      type="radio"
+                      name="gender"
+                      label="Male"
+                      value={'Male'}
+                    />
+                  </Container>
+                  {submitFailed && errors.child && (
+                    <FormHelperText error>
+                      <IntlMessage id={errors.child} />
+                    </FormHelperText>
+                  )}
+                </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <InputText
@@ -204,9 +267,7 @@ export default ({ item, open, onClose }) => {
                   name="direction"
                   label="direction"
                   autoComplete="nope"
-                  validate={composeValidators(required)}
-                  onlyNumbers
-                  maxLength={30}
+                  maxLength={200}
                   fullWidth
                 />
               </Grid>

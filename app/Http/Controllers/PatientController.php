@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PatientRequest;
 use App\Models\Patient;
+use Hamcrest\Arrays\IsArray;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,11 +28,11 @@ class PatientController extends Controller
         $paginate = $request->get('page_size');
 
         $query = $request->has('deleted')
-                    ? Patient::onlyTrashed()->orderBy('deleted_at', 'desc')
-                    : Patient::withoutTrashed();
+            ? Patient::onlyTrashed()->orderBy('deleted_at', 'desc')
+            : Patient::withoutTrashed();
         $query = $this->applyFilters($query, $request);
 
-        return Inertia::render('Patients/index', ['data' => $query->paginate($paginate) ]);
+        return Inertia::render('Patients/index', ['data' => $query->paginate($paginate)]);
     }
 
     /**
@@ -89,11 +90,19 @@ class PatientController extends Controller
      **/
     private function applyFilters($query, $request)
     {
-        $orderBy = $request->get('orderBy', [ ['id' => "updated_at", 'desc' => true] ]);
+        $orderBy = $request->get('orderBy', [['id' => "updated_at", 'desc' => true]]);
         $filters = $request->get('filters', []);
 
         //fliters iteration
         array_map(function ($filter) use ($query) {
+            if (is_array($filter['value'])) {
+
+                return $query->when(array_key_exists(0, $filter['value']), function ($q) use ($filter) {
+                    return $q->where('patients.' . $filter['id'], ">=", $filter['value'][0]);
+                })->when(array_key_exists(1, $filter['value']), function ($q) use ($filter) {
+                    return $q->where('patients.' . $filter['id'], "<=", $filter['value'][1]);
+                });
+            }
             return $query->where('patients.' . $filter['id'], "LIKE", "%" . $filter['value'] . "%");
         }, $filters);
 
@@ -106,5 +115,4 @@ class PatientController extends Controller
 
         return $query;
     }
-
 }

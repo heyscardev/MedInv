@@ -1,3 +1,4 @@
+import { Head } from "@inertiajs/inertia-react";
 import { format } from "date-fns";
 import { useIntl } from "react-intl"
 

@@ -181,8 +181,12 @@
     "recipes":"Recipes",
     "intro":"Inicio",
     "isChild":"Es niño",
+    "isAdult":"Es Adulto",
     "createPatient":"Crear paciente",
     "N":"N",
     "V":"V",
-    "E":"E"
+    "E":"E",
+    "yes":"Si",
+    "no":"No",
+    "patientRestore":"Restaurar Paciente"
 }

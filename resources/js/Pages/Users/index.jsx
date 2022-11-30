@@ -44,7 +44,7 @@ const columnVisibility = {
 const routeName = 'user'
 
 export default ({ ...props }) => {
-  console.log(usePage())
+  
   const urlParams = new URLSearchParams(window.location.search)
   const restoreMode = urlParams.has('deleted')
   //Accedemos a los valores
