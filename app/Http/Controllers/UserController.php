@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $withTrash = $request->get('deleted');
+        $withTrash = $request->has('deleted');
         if ($withTrash) {
             $users = User::with('roles')->onlyTrashed()->orderBy('created_at', 'asc')->get();
             return Inertia::render('Users/index', ['data' => $users]);

@@ -25,8 +25,13 @@ class PatientController extends Controller
     public function index(Request $request)
     {
         $paginate = max(min($request->get('page_size'), 100), 10);
-        $items = Patient::paginate($paginate);
-        return Inertia::render('Patients/index', ['data' => $items]);
+
+        $query = $request->has('deleted')
+                    ? Patient::onlyTrashed()->orderBy('deleted_at', 'desc')
+                    : Patient::withoutTrashed();
+        $query = $this->applyFilters($query, $request);
+
+        return Inertia::render('Patients/index', ['data' => $query->paginate($paginate) ]);
     }
 
     /**
@@ -77,4 +82,29 @@ class PatientController extends Controller
         Patient::withTrashed()->find($id)->restore();
         return back()->with('success', 'El paciente fue restaurado');
     }
+
+    /////////////////////////////////////////
+    /**
+     * Apply filters and order list
+     **/
+    private function applyFilters($query, $request)
+    {
+        $orderBy = $request->get('orderBy', [ ['id' => "updated_at", 'desc' => true] ]);
+        $filters = $request->get('filters', []);
+
+        //fliters iteration
+        array_map(function ($filter) use ($query) {
+            return $query->where('patients.' . $filter['id'], "LIKE", "%" . $filter['value'] . "%");
+        }, $filters);
+
+        //fliters orders
+        array_map(function ($by) use ($query) {
+            $id = $by['id'];
+            $sorting = $by['desc'] ? "DESC" : 'ASC';
+            return $query->orderBy('patients.' . $id, $sorting);
+        }, $orderBy);
+
+        return $query;
+    }
+
 }
