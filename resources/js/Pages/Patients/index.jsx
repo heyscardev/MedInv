@@ -3,30 +3,43 @@ import Select from '@/Components/Common/Inputs/Select'
 import IntlMessage from '@/Components/Common/IntlMessage'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
+import Tooltip from '@/Components/Custom/Tooltip'
 import EditPatientModal from '@/Components/Layouts/Patients/EditPatientModal'
 import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
 import { visit } from '@/HTTPProvider'
-import { ChildCare, HighlightOff, PersonAdd, PostAdd } from '@mui/icons-material'
+import {
+  ChildCare,
+  Delete,
+  Edit,
+  HighlightOff,
+  PersonAdd,
+  PostAdd,
+} from '@mui/icons-material'
 import { IconButton, Stack } from '@mui/material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 const columnVisibility = {
- id:false,
- deleted_at:false,
- created_at:false,
- updated_at:false,
- direction:false,
- phone:false,
- email:false
-
+  id: false,
+  deleted_at: false,
+  created_at: false,
+  updated_at: false,
+  direction: false,
+  phone: false,
+  email: false,
 }
 export default ({ module, ...props }) => {
-  const {formatMessage}= useIntl();
+  const { formatMessage } = useIntl()
+
   const [idToEdit, setIdToEdit] = useState(null)
   const toggleEdit = (id) => {
     setIdToEdit(id ? id : null)
+  }
+
+  const [idToDelete, setIdToDelete] = useState(null)
+  const toggleConfirmDelete = (id) => {
+    setIdToDelete(id ? id : null)
   }
   return (
     <Fragment>
@@ -40,6 +53,47 @@ export default ({ module, ...props }) => {
           // onAsync={tableUpdate}
           data={props.data}
           columns={[
+            {
+              id: 'actions',
+              accessorKey: 'id',
+              columnDefType: 'display',
+              header: 'actions',
+              size: 80,
+
+              Cell: ({ cell }) => {
+                return cell.row.original.deleted_at ? (
+                  <Tooltip arrow placement="right" title="delete">
+                    <IconButton
+                      color="primary"
+                      onClick={(e) => {
+                        get(route(`${routeName}.restore`, cell.row.original.id))
+                      }}
+                    >
+                      <Restore />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <>
+                    <Tooltip arrow placement="right" title="delete">
+                      <IconButton
+                        color="error"
+                        onClick={(e) => setIdToDelete(cell.getValue())}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip arrow placement="right" title="edit">
+                      <IconButton
+                        color="primary"
+                        onClick={(e) => setIdToEdit(cell.getValue())}
+                      >
+                        <Edit />
+                      </IconButton>
+                    </Tooltip>
+                  </>
+                )
+              },
+            },
             { accessorKey: 'id', header: 'id' },
             {
               accessorKey: 'c_i',
@@ -50,13 +104,29 @@ export default ({ module, ...props }) => {
             { accessorKey: 'first_name', header: 'first_name' },
             { accessorKey: 'last_name', header: 'last_name' },
             {
+              typeColumn: 'date',
+              accessorKey: 'birth_date',
+              header: 'birth_date',
+              accessorFn: ({ birth_date }) => {
+                const birthArray = birth_date.split('-')
+                return format(
+                  new Date(
+                    Number(birthArray[0]),
+                    Number(birthArray[1]) - 1,
+                    Number(birthArray[2]),
+                  ),
+                  'dd 	MMMM yyyy',
+                )
+              },
+            },
+            {
               accessorKey: 'child',
               header: 'isChild',
               accessorFn: ({ child }) =>
                 child ? (
-                  <ChildCare sx={{marginLeft:1}} color="success" />
+                  <ChildCare sx={{ marginLeft: 1 }} color="success" />
                 ) : (
-                  <HighlightOff sx={{marginLeft:1}}  color="error" />
+                  <HighlightOff sx={{ marginLeft: 1 }} color="error" />
                 ),
               size: 30,
               muiTableHeadCellProps: {
@@ -65,15 +135,16 @@ export default ({ module, ...props }) => {
               muiTableBodyCellProps: {
                 align: 'left',
               },
-              enableClickToCopy:false,
+              enableClickToCopy: false,
               Filter: ({ column }) => {
                 const filterValue = column.getFilterValue() || []
                 return (
                   <IconButton
-                    color={column.getFilterValue()?"success":"secondary"}
-                    onClick={()=>{
-                      if(column.getFilterValue()) return column.setFilterValue(false);
-                      column.setFilterValue(true);
+                    color={column.getFilterValue() ? 'success' : 'secondary'}
+                    onClick={() => {
+                      if (column.getFilterValue())
+                        return column.setFilterValue(false)
+                      column.setFilterValue(true)
                     }}
                   >
                     <ChildCare />
@@ -87,33 +158,23 @@ export default ({ module, ...props }) => {
               accessorKey: 'gender',
               header: 'gender',
               accessorFn: ({ gender }) => <IntlMessage id={gender || ''} />,
-              Filter: ({ column }) => {
-                const filterValue = column.getFilterValue() || []
-                return (
-                  <Select
-                    value={column.getFilterValue() || ''}
-                    variant="standard"
-                    fullWidth
-                    options={[
-                      {
-                        label: 'Male',
-                        value: 'Male',
-                      },
-                      {
-                        label: 'Female',
-                        value: 'Female',
-                      },
-                    ]}
-                    onChange={(e) => column.setFilterValue(e.target.value)}
-                  />
-                )
-              },
+              filterSelectOptions: [
+                {
+                  text: formatMessage({ id: 'Male' }),
+                  value: 'Male',
+                },
+                {
+                  text: formatMessage({ id: 'Female' }),
+                  value: 'Female',
+                },
+              ],
+              filterVariant: 'select',
             },
 
             {
-              typeColumn: 'created_at',
+              typeColumn: 'date',
               accessorKey: 'created_at',
-              header: 'date',
+              header: 'created_at',
               accessorFn: ({ created_at }) =>
                 !created_at
                   ? '00/00/0000 00:00:00'
@@ -128,12 +189,14 @@ export default ({ module, ...props }) => {
                   ? '00/00/0000 00:00:00'
                   : format(new Date(updated_at), 'hh:mm dd MMMM yyyy'),
             },
-                {
+            {
               accessorKey: 'deleted_at',
               header: 'deleted_at',
-              
+
               accessorFn: ({ deleted_at }) =>
-                !deleted_at ? formatMessage({ id: 'active' }) : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy'),
+                !deleted_at
+                  ? formatMessage({ id: 'active' })
+                  : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy'),
             },
           ]}
         />
@@ -144,7 +207,7 @@ export default ({ module, ...props }) => {
             icon: <PersonAdd />,
             name: 'createPatient',
             onClick: (e) => {
-             toggleEdit(-1)
+              toggleEdit(-1)
             },
           },
         ]}

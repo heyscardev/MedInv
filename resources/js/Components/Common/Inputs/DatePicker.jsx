@@ -26,7 +26,7 @@ export default ({
   return !noFinalForm ? (
     <Field name={name} validate={validate}>
       {({ input, meta }) => (
-        <FormControl sx={{ margin: 2, ...props }}>
+        <FormControl sx={{ margin: "10px", ...props }} fullWidth={fullWidth}>
           
             <DesktopDatePicker
               {...input}
@@ -42,7 +42,7 @@ export default ({
               renderInput={(params) => (
                 <TextField
                   variant={variant}
-                  fullWidth={fullWidth}
+                  style={{marginRight:"20px"}}
                   {...params}
                   inputProps={{
                     ...params.inputProps,
