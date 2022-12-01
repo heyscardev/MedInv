@@ -1,67 +1,89 @@
-import CheckBox from "@/Components/Common/Inputs/CheckBox";
-import DatePicker from "@/Components/Common/Inputs/DatePicker";
-import InputText from "@/Components/Common/Inputs/InputText";
+import Autocomplete from '@/Components/Common/Inputs/Autocomplete'
+import InputText from '@/Components/Common/Inputs/InputText'
 
-import Modal from "@/Components/Common/Modal";
-import LogoTypography from "@/Components/LogoTypography";
-import {
-  alpha,
-  composeValidators,
-  required,
-} from "@/Config/InputErrors";
-import { post, put } from "@/HTTPProvider";
-import { formatStringDateToDatabase } from "@/Utils/format";
-import { Cancel, Save } from "@mui/icons-material";
-import { Button, DialogActions, Grid, Typography } from "@mui/material";
+import Modal from '@/Components/Common/Modal'
+import LogoTypography from '@/Components/LogoTypography'
+import { alpha, composeValidators, required } from '@/Config/InputErrors'
+import { post, put } from '@/HTTPProvider'
+import { Cancel, Save } from '@mui/icons-material'
+import { Box, Button, DialogActions, Grid, Typography } from '@mui/material'
 
-import { Form } from "react-final-form";
+import { Form } from 'react-final-form'
 
-const routeName = "module";
-export default ({ item, open, onClose }) => {
-  const update = (data, form) => {
+const routeName = 'module'
+export default ({ item, open, users = [], onClose }) => {
+  const update = ({ ...data }, form) => {
     const dataToSend = {
       id: data.id,
-      ...data
-    };
-   
+    }
+    for (const key in data) {
+      if (Object.hasOwnProperty.call(data, key)) {
+        if (form.dirtyFields[key]) {
+          if (key === 'user') {
+            dataToSend['user_id'] = data[key].id
+          } else {
+            dataToSend[key] =
+              key === 'birth_date'
+                ? formatStringDateToDatabase(data[key])
+                : data[key]
+          }
+        }
+      }
+    }
+
     put(route(`${routeName}.update`, dataToSend.id), dataToSend, {
       onSuccess: (e) => {
-        onClose(null);
+        onClose(null)
       },
-    });
-  };
-  const store = (data) => {
+    })
+  }
+  const store = ({ user, ...data }) => {
     const dataToSend = {
       ...data,
-    };
+      user_id: user.id,
+    }
 
     post(route(`${routeName}.store`), dataToSend, {
       onSuccess: (e) => {
-        onClose(null);
+        onClose(null)
       },
-    });
-  };
+    })
+  }
   const submit = (data, { getState }) => {
     if (data.id) {
-     return update(data, getState());
+      return update(data, getState())
     }
-    return store(data);
-  };
+    return store(data)
+  }
 
   return (
     <Modal {...{ open }}>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: 'center' }}>
         <LogoTypography />
         <Typography variant="h5" color="secondary.dark">
-          {item &&  item.id ?  "Acualizar Módulo":"Registrar Módulo" }
+          {item && item.id ? 'Acualizar Módulo' : 'Registrar Módulo'}
         </Typography>
       </div>
+
       <Form
-        initialValues={{ ...item }}
+        initialValues={{
+          ...item,
+          user: _.find(users, { id: item.user_id }, null),
+        }}
         onSubmit={submit}
-        render={({ handleSubmit, form }) => (
+        render={({ handleSubmit, values }) => (
           <form onSubmit={handleSubmit} id="userForm" autoComplete="off">
             <Grid container>
+              <Grid item xs={12} lg={6}>
+                <InputText
+                  name="code"
+                  label="code"
+                  autoComplete="nope"
+                  validate={composeValidators(required)}
+                  maxLength={80}
+                  fullWidth
+                />
+              </Grid>
               <Grid item xs={12} lg={6}>
                 <InputText
                   name="name"
@@ -73,33 +95,53 @@ export default ({ item, open, onClose }) => {
                 />
               </Grid>
               <Grid item xs={12} lg={6}>
-                <InputText
-                  name="code"
-                  label="code"
-                  autoComplete="nope"
+                <Autocomplete
+                  name="user"
+                  label="responsible"
                   validate={composeValidators(required)}
-                  maxLength={80}
+                  options={users}
                   fullWidth
+                  defaultValue={values.user}
+                  getOptionLabel={(option) =>
+                    `C.I: ${option.c_i} ${option.first_name}   `
+                  }
+                  renderOption={(props, option) => (
+                    <Box {...props} key={option.id}>
+                      {`C.I: ${option.c_i}  ${option.first_name} ${option.last_name}`}
+                    </Box>
+                  )}
                 />
               </Grid>
-              
-          {/* 
-              <Grid item xs={12} lg={6} display="flex" justifyContent="center" alignItems="center">
-                <CheckBox type="radio" name="gender" label="male" value="Male" />
-                <CheckBox type="radio" name="gender" label="female" value="Female" />
-              </Grid> */}
             </Grid>
           </form>
         )}
       />
-      <DialogActions sx={{ backgroundColor: "secondary.main", display: "flex", justifyContent: "center" }}>
-        <Button startIcon={<Cancel />} onClick={onClose} variant="contained" color="error" sx={{ color: "#fff" }}>
+      <DialogActions
+        sx={{
+          backgroundColor: 'secondary.main',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Button
+          startIcon={<Cancel />}
+          onClick={onClose}
+          variant="contained"
+          color="error"
+          sx={{ color: '#fff' }}
+        >
           Cancelar
         </Button>
-        <Button startIcon={<Save />} variant="contained" type="submit" sx={{ color: "#fff" }} form="userForm">
+        <Button
+          startIcon={<Save />}
+          variant="contained"
+          type="submit"
+          sx={{ color: '#fff' }}
+          form="userForm"
+        >
           Guardar
         </Button>
       </DialogActions>
     </Modal>
-  );
-};
+  )
+}

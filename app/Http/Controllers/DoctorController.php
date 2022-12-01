@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DoctorRequest;
 use App\Models\Doctor;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -23,10 +24,13 @@ class DoctorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Doctor::orderBy('created_at','asc')->skip(0)->take(500)->get();
-        return Inertia::render('Doctors/index', ['data' => $data]);
+        $data = $request->has('deleted')
+            ? Doctor::onlyTrashed()->orderBy('deleted_at', 'desc')->get()
+            : Doctor::withoutTrashed()->get();
+        $services = Service::get();
+        return Inertia::render('Doctors/index', compact('data', 'services'));
     }
 
     /**

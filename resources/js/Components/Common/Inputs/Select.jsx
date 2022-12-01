@@ -30,6 +30,7 @@ export default ({
   onChange,
   options = [],
   validate,
+  marginRightSelect,
   type,
   ...rest
 }) =>
@@ -43,8 +44,10 @@ export default ({
         >
           <InputLabel>{label && <IntlMessage id={label} />}</InputLabel>
           <Select
+          
             label={label && <IntlMessage id={label} />}
             {...input}
+            style={{marginRight:marginRightSelect}}
             color="primary"
             onChange={
               !onChange

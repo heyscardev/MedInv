@@ -1,7 +1,6 @@
 import CheckBox from '@/Components/Common/Inputs/CheckBox'
 import DatePicker from '@/Components/Common/Inputs/DatePicker'
 import InputText from '@/Components/Common/Inputs/InputText'
-import PasswordField from '@/Components/Common/Inputs/PasswordField'
 import Select from '@/Components/Common/Inputs/Select'
 import IntlMessage from '@/Components/Common/IntlMessage'
 import Modal from '@/Components/Common/Modal'
@@ -12,10 +11,8 @@ import {
   dateGreaterOrEqual,
   dateLessOrEqual,
   email,
-  passwordEqual,
-  passwordWeakValidation,
-  required,
-  validDate,
+  isPhone, required,
+  validDate
 } from '@/Config/InputErrors'
 import { post, put } from '@/HTTPProvider'
 import { formatStringDateToDatabase } from '@/Utils/format'
@@ -24,11 +21,9 @@ import {
   Button,
   Container,
   DialogActions,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
+  FormControl, FormHelperText,
   Grid,
-  Typography,
+  Typography
 } from '@mui/material'
 import { addYears } from 'date-fns'
 import { Form } from 'react-final-form'
@@ -101,7 +96,7 @@ export default ({ item, open, onClose }) => {
                   name="first_name"
                   label="first_name"
                   autoComplete="nope"
-                  /* validate={composeValidators(required, alpha)} */
+                  validate={composeValidators(required, alpha)}
                   maxLength={80}
                   fullWidth
                 />
@@ -144,7 +139,7 @@ export default ({ item, open, onClose }) => {
                   name="phone"
                   label="phone"
                   autoComplete="nope"
-                  validate={composeValidators(required)}
+                  validate={composeValidators(required,isPhone)}
                   onlyNumbers
                   maxLength={11}
                   fullWidth
@@ -179,7 +174,7 @@ export default ({ item, open, onClose }) => {
                       placeholder="00000000-0"
                       validate={composeValidators(required, (value) => {
                         if (value.match(/^[0-9]{5,8}\-?[0-9]+$/)) return null
-                        return 'fielderror.invalid_c_i'
+                        return 'fielderror.invalid_c_i_patients'
                       })}
                       maxLength={10}
                       fullWidth
@@ -253,9 +248,9 @@ export default ({ item, open, onClose }) => {
                       value={'Male'}
                     />
                   </Container>
-                  {submitFailed && errors.child && (
+                  {submitFailed && errors.gender && (
                     <FormHelperText error>
-                      <IntlMessage id={errors.child} />
+                      <IntlMessage id={errors.gender} />
                     </FormHelperText>
                   )}
                 </FormControl>

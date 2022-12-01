@@ -1,78 +1,95 @@
-import CheckBox from "@/Components/Common/Inputs/CheckBox";
-import DatePicker from "@/Components/Common/Inputs/DatePicker";
-import InputText from "@/Components/Common/Inputs/InputText";
-import PasswordField from "@/Components/Common/Inputs/PasswordField";
-import PhoneInput from "@/Components/Common/Inputs/PhoneInput";
-import Modal from "@/Components/Common/Modal";
-import LogoTypography from "@/Components/LogoTypography";
+import CheckBox from '@/Components/Common/Inputs/CheckBox'
+import DatePicker from '@/Components/Common/Inputs/DatePicker'
+import InputText from '@/Components/Common/Inputs/InputText'
+import Select from '@/Components/Common/Inputs/Select'
+import IntlMessage from '@/Components/Common/IntlMessage'
+import Modal from '@/Components/Common/Modal'
+import LogoTypography from '@/Components/LogoTypography'
 import {
   alpha,
   composeValidators,
   dateGreaterOrEqual,
   dateLessOrEqual,
   email,
-  passwordEqual,
-  passwordWeakValidation,
+  isPhone,
   required,
-  validDate,
-} from "@/Config/InputErrors";
-import { post, put } from "@/HTTPProvider";
-import { formatStringDateToDatabase } from "@/Utils/format";
-import { Cancel, Save } from "@mui/icons-material";
-import { Button, DialogActions, Grid, Typography } from "@mui/material";
-import { addYears } from "date-fns";
-import { matchIsValidTel } from "mui-tel-input";
-import { Form } from "react-final-form";
-const routeName = "doctor";
-export default ({ item, open, onClose }) => {
+  validDate
+} from '@/Config/InputErrors'
+import { post, put } from '@/HTTPProvider'
+import { formatStringDateToDatabase } from '@/Utils/format'
+import { Cancel, Save } from '@mui/icons-material'
+import {
+  Button,
+  Container,
+  DialogActions,
+  FormControl,
+  FormHelperText,
+  Grid,
+  Typography
+} from '@mui/material'
+import { addYears } from 'date-fns'
+import { Form } from 'react-final-form'
+
+const routeName = 'doctor'
+
+export default ({ item, open,services=[], onClose }) => {
   const update = (data, form) => {
     const dataToSend = {
       id: data.id,
-    };
+    }
     for (const key in data) {
       if (Object.hasOwnProperty.call(data, key)) {
         if (form.dirtyFields[key])
-          dataToSend[key] = key === "birth_date" ? formatStringDateToDatabase(data[key]) : data[key];
+          dataToSend[key] =
+            key === 'birth_date'
+              ? formatStringDateToDatabase(data[key])
+              : data[key]
       }
     }
     put(route(`${routeName}.update`, dataToSend.id), dataToSend, {
       onSuccess: (e) => {
-        onClose(null);
+        onClose(null)
       },
-    });
-  };
+    })
+  }
   const store = (data) => {
     const dataToSend = {
       ...data,
-      birth_date : formatStringDateToDatabase(data.birth_date)
-    };
+      birth_date: formatStringDateToDatabase(data.birth_date),
+    }
 
     post(route(`${routeName}.store`), dataToSend, {
       onSuccess: (e) => {
-        onClose(null);
+        onClose(null)
       },
-    });
-  };
+    })
+  }
   const submit = (data, { getState }) => {
     if (data.id) {
-     return update(data, getState());
+      return update(data, getState())
     }
-    return store(data);
-  };
+    return store(data)
+  }
 
   return (
     <Modal {...{ open }}>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: 'center' }}>
         <LogoTypography />
         <Typography variant="h5" color="secondary.dark">
-          {item &&  item.id ?  "Acualizar Doctor":"Registrar Doctor" }
+          {item && item.id ? 'Acualizar Doctor' : 'Registrar Doctor'}
         </Typography>
       </div>
       <Form
         initialValues={{ ...item }}
+        validate={(values) => {
+          const errors = {}
+          if (!values.gender) errors.gender = 'fieldError.required'
+          return errors;
+        }}
         onSubmit={submit}
-        render={({ handleSubmit, form,values }) => (
+        render={({ handleSubmit, submitFailed, errors, values }) => (
           <form onSubmit={handleSubmit} id="userForm" autoComplete="off">
+            {console.log(values)}
             <Grid container>
               <Grid item xs={12} lg={6}>
                 <InputText
@@ -94,25 +111,15 @@ export default ({ item, open, onClose }) => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} lg={8}>
+              <Grid item xs={12} lg={12}>
                 <InputText
                   name="email"
                   label="email"
                   autoComplete="nope"
                   spellCheck={false}
-                  validate={composeValidators(required, email)}
+                  optional
+                  validate={composeValidators(email)}
                   type="email"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <InputText
-                  name="c_i"
-                  label="c_i"
-                  autoComplete="nope"
-                  validate={composeValidators(required)}
-                  onlyNumbers
-                  maxLength={8}
                   fullWidth
                 />
               </Grid>
@@ -122,23 +129,71 @@ export default ({ item, open, onClose }) => {
                   label="code"
                   autoComplete="nope"
                   validate={composeValidators(required)}
-                  maxLength={8}
+                  onlyNumbers
+                  maxLength={30}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} lg={6}>
-                <PhoneInput
+                <InputText
                   name="phone"
                   label="phone"
                   autoComplete="nope"
-                  validate={composeValidators(required,(val)=>{
-                    if(!matchIsValidTel(val))return "fielderror.numberPhoneInvalid"
-                    return null;
-                  } )}
-              
+                  validate={composeValidators(required, isPhone)}
+                  onlyNumbers
+                  maxLength={11}
                   fullWidth
                 />
               </Grid>
+              <Grid item xs={12} lg={6}>
+                <Grid container wrap="nowrap">
+                  <Grid item xs={2} lg={4}>
+                    <Select
+                      fullWidth
+                      validate={required}
+                      name="nationality"
+                      label="N"
+                      margin="10px"
+                      options={[
+                        {
+                          label: 'V',
+                          value: 'V',
+                        },
+                        {
+                          label: 'E',
+                          value: 'E',
+                        },
+                      ]}
+                    />
+                  </Grid>
+                  <Grid item xs={8}>
+                    <InputText
+                      name="c_i"
+                      label="c_i"
+                      autoComplete="nope"
+                      placeholder="00000000-0"
+                      validate={composeValidators(required, (value) => {
+                        if (value.match(/^[0-9]{5,8}$/)) return null
+                        return 'fielderror.invalid_c_i'
+                      })}
+                      maxLength={10}
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} lg={6}>
+                    <Select
+                    noTranslateOptions
+                      fullWidth
+                      marginRightSelect="20px"
+                      validate={required}
+                      name="service_id"
+                      label="service"
+                      margin="10px"
+                      options={services.map(({name,id})=>({label:name,value:id}))}
+                    />
+                  </Grid>
               <Grid item xs={12} lg={6}>
                 <DatePicker
                   name="birth_date"
@@ -149,27 +204,80 @@ export default ({ item, open, onClose }) => {
                     required,
                     validDate,
                     dateGreaterOrEqual(addYears(Date.now(), -150)),
-                    dateLessOrEqual(Date.now())
+                    dateLessOrEqual(Date.now()),
                   )}
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} lg={6} display="flex" justifyContent="center" alignItems="center">
-                <CheckBox type="radio" name="gender" label="male" value="Male" />
-                <CheckBox type="radio" name="gender" label="female" value="Female" />
+
+              <Grid item xs={12} lg={6}>
+                <FormControl>
+                  <Typography marginLeft={2} variant="body2">
+                    <IntlMessage id="gender" />
+                  </Typography>
+                  <Container>
+                    <CheckBox
+                      noError
+                      type="radio"
+                      name="gender"
+                      label="Female"
+                      value={'Female'}
+                    />
+                    <CheckBox
+                      noError
+                      type="radio"
+                      name="gender"
+                      label="Male"
+                      value={'Male'}
+                    />
+                  </Container>
+                  {submitFailed && errors.gender && (
+                    <FormHelperText error>
+                      <IntlMessage id={errors.gender} />
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <InputText
+                  optional
+                  name="direction"
+                  label="direction"
+                  autoComplete="nope"
+                  maxLength={200}
+                  fullWidth
+                />
               </Grid>
             </Grid>
           </form>
         )}
       />
-      <DialogActions sx={{ backgroundColor: "secondary.main", display: "flex", justifyContent: "center" }}>
-        <Button startIcon={<Cancel />} onClick={onClose} variant="contained" color="error" sx={{ color: "#fff" }}>
+      <DialogActions
+        sx={{
+          backgroundColor: 'secondary.main',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Button
+          startIcon={<Cancel />}
+          onClick={onClose}
+          variant="contained"
+          color="error"
+          sx={{ color: '#fff' }}
+        >
           Cancelar
         </Button>
-        <Button startIcon={<Save />} variant="contained" type="submit" sx={{ color: "#fff" }} form="userForm">
+        <Button
+          startIcon={<Save />}
+          variant="contained"
+          type="submit"
+          sx={{ color: '#fff' }}
+          form="userForm"
+        >
           Guardar
         </Button>
       </DialogActions>
     </Modal>
-  );
-};
+  )
+}

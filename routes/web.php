@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('doctors', DoctorController::class)->only(['index', 'destroy', 'update', 'store'])->names('doctor');
     Route::resource('medicaments', MedicamentController::class)->only(['index', 'destroy', 'update', 'store'])->names('medicament');
     Route::resource('modules', ModuleController::class)->only(['index', 'destroy', 'update', 'store', 'show'])->names('module');
+    Route::get('modules/restore/{id}',[ModuleController::class,"restore"])->name('module.restore');
     //patients
     Route::resource('patients', PatientController::class)->only(['index', 'destroy', 'update', 'store'])->names('patient');
     Route::get('patients/restore/{id}',[PatientController::class,"restore"])->name('patient.restore');

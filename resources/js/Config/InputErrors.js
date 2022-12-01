@@ -104,7 +104,7 @@ const passwordWeakValidation = (val) =>
   !val || val.match(/^[.!@#$%^&*0-9a-zA-Z]{7,14}$/) ? null : "fieldError.weakPassword";
 
 const validZip = (val) => (val && /^\d{4,5}(?:-\d{4})?$/.test(val) ? null : "This is not a valid zip");
-
+const isPhone = (val)=>(val && /^0[2|4][0-9]{9}$/.test(val) ? null : "fieldError.phoneInvalid");
 const composeValidators = (...validators) => (value, values) =>
   validators.reduce((resultError, validator) => resultError || validator(value, values), undefined);
 
@@ -115,6 +115,7 @@ export {
   dateGreaterOrEqual,
   dateLessOrEqual,
   email,
+  isPhone,
   equalTo,
   passwordEqual,
   minLength,

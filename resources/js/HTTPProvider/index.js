@@ -29,7 +29,7 @@ const post = (route, values, options = {}) =>
     ...defaultMethods(options),
     onSuccess: (visit) => {
       if (options.onSuccess)  options.onSuccess(visit);
-      toast.success("Recurso Guardado con Exito!");
+      if(!options.preventSuccess)toast.success("Recurso Guardado con Exito!");
     },
   });
 const put = (route, values, options = {}) =>

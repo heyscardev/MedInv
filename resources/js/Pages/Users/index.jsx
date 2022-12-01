@@ -25,6 +25,7 @@ import Tooltip from '@/Components/Custom/Tooltip'
 import IconButton from '@/Components/Custom/IconButton'
 import { Switch } from '@mui/material'
 import { Head, usePage } from '@inertiajs/inertia-react'
+import SectionTitle from '@/Components/Common/SectionTitle'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)
@@ -68,6 +69,7 @@ export default ({ ...props }) => {
   return (
     <Fragment>
       <Head title={formatMessage({ id: 'users' })} />
+      <SectionTitle title="users" />
       <Table
         initialState={{ columnVisibility }}
         data={dataTable}
@@ -85,7 +87,18 @@ export default ({ ...props }) => {
                   <IconButton
                     color="primary"
                     onClick={(e) => {
-                      get(route(`${routeName}.restore`, cell.row.original.id))
+                      const name = cell.row.original.first_name
+                      get(
+                        route(`${routeName}.restore`, cell.row.original.id),
+                        {},
+                        {
+                          onSuccess: () => {
+                            toast.success(
+                              `El Usuario ${name}  fue restaurado`,
+                            )
+                          },
+                        },
+                      )
                     }}
                   >
                     <Restore />

@@ -1,5 +1,13 @@
 import Table from '@/Components/Common/Table'
 
+import ConfirmModal from '@/Components/Common/ConfirmModal'
+import MultiButton from '@/Components/Common/MultiButton'
+import SectionTitle from '@/Components/Common/SectionTitle'
+import Head from '@/Components/Custom/Head'
+import IconButton from '@/Components/Custom/IconButton'
+import Tooltip from '@/Components/Custom/Tooltip'
+import EditDoctorModal from '@/Components/Layouts/Doctors/EditDoctorModal'
+import { destroy, get, visit } from '@/HTTPProvider'
 import {
   formatCiFromDataBase,
   formatDateFromDataBase,
@@ -8,26 +16,15 @@ import {
 import {
   Delete,
   Edit,
-  People,
   PersonAdd,
   Restore,
   RestoreFromTrash,
 } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import _ from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
-import ConfirmModal from '@/Components/Common/ConfirmModal'
-import MultiButton from '@/Components/Common/MultiButton'
-import { destroy, get, put, visit } from '@/HTTPProvider'
-import _ from 'lodash'
-import Tooltip from '@/Components/Custom/Tooltip'
-import IconButton from '@/Components/Custom/IconButton'
-import { Switch } from '@mui/material'
-import { usePage } from '@inertiajs/inertia-react'
-import EditDoctorModal from '@/Components/Layouts/Doctors/EditDoctorModal'
-import Head from '@/Components/Custom/Head'
-import SectionTitle from '@/Components/Common/SectionTitle'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)
@@ -50,7 +47,7 @@ const columnVisibility = {
 }
 const routeName = 'doctor'
 
-export default ({ ...props }) => {
+export default ({ services=[],...props }) => {
   const urlParams = new URLSearchParams(window.location.search)
   const restoreMode = urlParams.has('deleted')
   //Accedemos a los valores
@@ -73,7 +70,7 @@ export default ({ ...props }) => {
   }
   return (
     <Fragment>
-     <Head title="doctors" />
+      <Head title="doctors" />
       <SectionTitle title="doctors" />
       <Table
         initialState={{ columnVisibility }}
@@ -92,7 +89,18 @@ export default ({ ...props }) => {
                   <IconButton
                     color="primary"
                     onClick={(e) => {
-                      get(route(`${routeName}.restore`, cell.row.original.id))
+                      const name = cell.row.original.first_name
+                      get(
+                        route(`${routeName}.restore`, cell.row.original.id),
+                        {},
+                        {
+                          onSuccess: () => {
+                            toast.success(
+                              `El doctor ${name}  fue restaurado`,
+                            )
+                          },
+                        },
+                      )
                     }}
                   >
                     <Restore />
@@ -150,7 +158,7 @@ export default ({ ...props }) => {
           {
             accessorKey: 'c_i',
             header: 'c_i',
-            accessorFn: ({ c_i }) => formatCiFromDataBase(c_i),
+            accessorFn: ({ nationality, c_i }) => `${nationality}- ${c_i}`,
           },
           {
             accessorKey: 'birth_date',
@@ -162,6 +170,17 @@ export default ({ ...props }) => {
             accessorKey: 'gender',
             header: 'gender',
             accessorFn: ({ gender }) => formatGenderFromDataBase(gender),
+            filterSelectOptions: [
+              {
+                text: formatMessage({ id: 'Male' }),
+                value: formatMessage({ id: 'Male' }),
+              },
+              {
+                text: formatMessage({ id: 'Female' }),
+                value: formatMessage({ id: 'Female' }),
+              },
+            ],
+            filterVariant: 'select',
           },
           {
             accessorKey: 'phone',
@@ -285,6 +304,7 @@ export default ({ ...props }) => {
       />
 
       <EditDoctorModal
+      services={services}
         open={idToEdit ? true : false}
         onClose={() => toggleEdit(null)}
         item={{ ..._.find(dataTable, { id: idToEdit }) }}

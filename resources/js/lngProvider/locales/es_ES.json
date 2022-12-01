@@ -64,6 +64,7 @@
     "fieldError.lessOrEqualThanValue": "Este campo debe ser menor o igual a {lessOrEqualThanValue}",
     "fieldError.lessOrEqualThanValue2": "Este campo debe ser menor o igual a {lessOrEqualThanValue2}",
     "fieldError.betweenValue": "El campo solo debe tener valores entre {valueMin} y {valueMax}",
+    "fieldError.phoneInvalid": "Numero telefonico invalido.",
     "fieldError.unique":"Este campo debe ser unico y el valor actual ya se encuentra en uso.",
     "fielderror.medicamentGreatherThanOne":"Debe seleccionar por lo menos un medicamento",
     "fielderror.medicamentlessOrThanOne":"Los recipes de tipo (DIARIO) solo pueden contener un solo tipo de medicamento",
@@ -175,7 +176,8 @@
     "addDoctor":"Agregar Doctor",
     "newBuy":"Nueva Compra",
     "newTransfer":"Nueva Transferencia",
-    "fielderror.invalid_c_i":"error cedula inavalida formatos validos (00000000,00000000-1)",
+    "fielderror.invalid_c_i_patients":"error cedula inavalida formatos validos (00000000,00000000-1)",
+    "fielderror.invalid_c_i":"error cedula inavalida formatos validos (12345678)",
     "patients":"Pacientes",
     "doctors":"Doctores",
     "recipes":"Recipes",
@@ -188,5 +190,8 @@
     "E":"E",
     "yes":"Si",
     "no":"No",
-    "patientRestore":"Restaurar Paciente"
+    "patientRestore":"Restaurar Paciente",
+    "service":"Servicio",
+    "createModule":"Crear modulo",
+    "moduleRestore":"Restaurar Modulo"
 }

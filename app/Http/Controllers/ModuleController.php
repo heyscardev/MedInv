@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ModuleRequest;
 use App\Models\Module;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -17,6 +18,7 @@ class ModuleController extends Controller
         $this->middleware('can:module.show')->only(['show']);
         $this->middleware('can:module.destroy')->only(['destroy']);
         $this->middleware('can:module.update')->only(['update']);
+        $this->middleware('can:module.restore')->only(['restore']);
     }
 
     /**
@@ -24,10 +26,13 @@ class ModuleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (auth()->user()->hasRole('administrador')) {
-            return  Inertia::render('Modules/index.admin', ['data' => Module::with('user')->get()]);
+            $modules = $request->has('deleted')
+            ? Module::onlyTrashed()->orderBy('deleted_at', 'desc')->with('user')->get()
+            : Module::withoutTrashed()->orderBy('updated_at', 'desc')->with('user')->get();
+            return  Inertia::render('Modules/index.admin', ['data' => $modules, "users" => User::get()]);
         }
         return Inertia::render('Modules/index.employee', ['data' => auth()->user()->modules]);
     }
@@ -57,7 +62,7 @@ class ModuleController extends Controller
         //start building of query
         $query = $module->medicaments();
         $query = $this->applyFilters($query, $request);
-        $data  = $query->paginate( $request->get('page_size') );
+        $data  = $query->paginate($request->get('page_size'));
 
         return Inertia::render('Modules/show.employee', ['module' => $module, 'data' => $data]);
     }
@@ -85,8 +90,8 @@ class ModuleController extends Controller
     public function destroy(Module $module)
     {
         return $module->delete()
-                ? back()
-                : back(500)->withErrors('save', 'error al eliminar');
+            ? back()
+            : back(500)->withErrors('save', 'error al eliminar');
     }
 
     /**
@@ -100,8 +105,8 @@ class ModuleController extends Controller
         // Restore soft deletes
         $restore = Module::withTrashed()->find($id)->restore();
         return $restore
-                ? back()
-                : back(500)->withErrors('save', 'error al recuperar');
+            ? back()
+            : back(500)->withErrors('save', 'error al recuperar');
     }
 
 
@@ -114,40 +119,40 @@ class ModuleController extends Controller
         $filters = $request->get('filters', []);
 
         //fliters iteration
-            array_map(function ($filter) use ($query) {
-                $id = $filter['id'];
-                $value = $filter['value'];  // [10,100] or  [10,null] or [null,10]
+        array_map(function ($filter) use ($query) {
+            $id = $filter['id'];
+            $value = $filter['value'];  // [10,100] or  [10,null] or [null,10]
 
-                if (str_contains($id, "pivot.")) {
-                    $column = str_replace("pivot.", "", $id);
-                    if (is_array($value))
-                        return $query->wherePivot( $column, ">=",   $value[0] ? $value[0] : 0)
-                                        ->wherePivot( $column, "<=",   $value[1] ? $value[1] : 9999999999.2);
+            if (str_contains($id, "pivot.")) {
+                $column = str_replace("pivot.", "", $id);
+                if (is_array($value))
+                    return $query->wherePivot($column, ">=",   $value[0] ? $value[0] : 0)
+                        ->wherePivot($column, "<=",   $value[1] ? $value[1] : 9999999999.2);
 
-                    return $query->wherePivot( $column, "LIKE", "%" . $value . "%");
-                }
-                if (str_contains($id, "unit.")){
-                    $column = str_replace('unit.', '', $id);
-                    return $query->whereRelation('unit', $column, "LIKE", "%" . strtoupper($value) . "%");
-                }
+                return $query->wherePivot($column, "LIKE", "%" . $value . "%");
+            }
+            if (str_contains($id, "unit.")) {
+                $column = str_replace('unit.', '', $id);
+                return $query->whereRelation('unit', $column, "LIKE", "%" . strtoupper($value) . "%");
+            }
 
-                return $query->LikeOrBeetween('medicaments.' . $id, $value);
-            }, $filters);
+            return $query->LikeOrBeetween('medicaments.' . $id, $value);
+        }, $filters);
 
         //fliters orders
-            array_map(function ($by) use ($query) {
-                $id = $by['id'];
-                $sorting = $by['desc'] ? "DESC" : 'ASC';
+        array_map(function ($by) use ($query) {
+            $id = $by['id'];
+            $sorting = $by['desc'] ? "DESC" : 'ASC';
 
-                if (str_contains($id, "pivot."))
-                    return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
-                if (str_contains($id, "unit."))
-                    return $query->orderByUnit(str_replace('unit.', '', $id), $sorting);
-                if ($id === 'quantity_global')
-                    return $query->orderByGlobalInventory($sorting);
+            if (str_contains($id, "pivot."))
+                return $query->orderByPivot(str_replace("pivot.", "", $id), $sorting);
+            if (str_contains($id, "unit."))
+                return $query->orderByUnit(str_replace('unit.', '', $id), $sorting);
+            if ($id === 'quantity_global')
+                return $query->orderByGlobalInventory($sorting);
 
-                return $query->orderBy('medicaments.' . $id, $sorting);
-            }, $orderBy);
+            return $query->orderBy('medicaments.' . $id, $sorting);
+        }, $orderBy);
 
         return $query;
     }
