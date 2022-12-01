@@ -28,11 +28,11 @@ class Recipe extends Model
      */
     public function patient()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(Patient::class)->withTrashed();;
     }
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class);
+        return $this->belongsTo(Doctor::class)->withTrashed();;
     }
     public function pathology()
     {
@@ -40,7 +40,7 @@ class Recipe extends Model
     }
     public function module()
     {
-        return $this->belongsTo(Module::class);
+        return $this->belongsTo(Module::class)->withTrashed();
     }
     public function user()
     {

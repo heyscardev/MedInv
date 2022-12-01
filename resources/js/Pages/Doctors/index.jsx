@@ -25,6 +25,7 @@ import { es } from 'date-fns/locale'
 import _ from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
+import toast from 'react-hot-toast'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)

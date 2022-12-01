@@ -193,5 +193,6 @@
     "patientRestore":"Restaurar Paciente",
     "service":"Servicio",
     "createModule":"Crear modulo",
-    "moduleRestore":"Restaurar Modulo"
+    "moduleRestore":"Restaurar Modulo",
+    "recurseDeleted":"Este recurso fue eliminado comuniquese con el adiministrador para mas detalles"
 }

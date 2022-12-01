@@ -1,6 +1,8 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
+import EntityDelete from '@/Components/Common/EntityDeleted'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
+import Head from '@/Components/Custom/Head'
 import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
 import { visit } from '@/HTTPProvider'
 import { PostAdd } from '@mui/icons-material'
@@ -18,7 +20,7 @@ export default ({ module, ...props }) => {
   }
   return (
     <Fragment>
-
+<Head title="recipes" />
     <SectionTitle title="recipes" noTranslateSubtitle subtitle={module?module.name:null} />
       {props.data.data && (
         <AsyncTable
@@ -43,13 +45,19 @@ export default ({ module, ...props }) => {
               accessorFn: ({ module: { name } }) => {
                 return `${name}`
               },
+              Cell:({cell})=>{
+                return <EntityDelete deleted_at={cell.row.original.module.deleted_at}>{cell.getValue()}</EntityDelete>
+              }
             },
             {
               accessorKey: 'doctor',
               header: 'doctor',
-              accessorFn: ({ doctor: { first_name, last_name } }) => {
-                return first_name ? `${first_name} ${last_name}` : 'hola'
+              accessorFn: ({ doctor }) => {
+                return doctor ? `${doctor.first_name} ${doctor.last_name}` : ''
               },
+              Cell:({cell})=>{
+                return <EntityDelete deleted_at={cell.row.original.doctor.deleted_at}>{cell.getValue()}</EntityDelete>
+              }
             },
             {
               accessorKey: 'patient',
@@ -57,6 +65,9 @@ export default ({ module, ...props }) => {
               accessorFn: ({ patient: { first_name, last_name } }) => {
                 return `${first_name} ${last_name}`
               },
+              Cell:({cell})=>{
+                return <EntityDelete deleted_at={cell.row.original.patient.deleted_at}>{cell.getValue()}</EntityDelete>
+              }
             },
 
             {

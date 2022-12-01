@@ -16,15 +16,15 @@ class Transfer extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();;
     }
     public function moduleReceive()
     {
-        return $this->belongsTo(Module::class, 'module_receive_id');
+        return $this->belongsTo(Module::class, 'module_receive_id')->withTrashed();
     }
     public function moduleSend()
     {
-        return $this->belongsTo(Module::class, 'module_send_id');
+        return $this->belongsTo(Module::class, 'module_send_id')->withTrashed();
     }
     public function medicaments()
     {

@@ -17,7 +17,7 @@ class Buy extends Model
      * This are the relations
      */
     public function module(){
-        return $this->belongsTo(Module::class);
+        return $this->belongsTo(Module::class)->withTrashed();;
     }
     public function medicaments(){
         return $this->belongsToMany(Medicament::class)->withPivot('price','quantity')->withTimestamps()->using(BuyMedicament::class);

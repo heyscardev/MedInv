@@ -1,5 +1,6 @@
 import AsyncTable from "@/Components/Common/AsyncTable"
 import IntlMessage from "@/Components/Common/IntlMessage"
+import Table from "@/Components/Common/Table"
 import { Person } from "@mui/icons-material"
 import { Grid, Paper, Typography } from "@mui/material"
 import { Fragment } from "react"
@@ -29,13 +30,13 @@ export default (props) =>{
             </Grid>
 
             {/* asyncronous table for view and filters for recipes of doctor */}
-            <AsyncTable
-                routeName={route().current()}
+            <Table
+             
                 routeParams={{ doctor: props.doctor.id }}
                 // renderTopToolbarCustomActions={ActionsTableShow(props.doctor)}
                 enableRowSelection={false}
                 // onAsync={tableUpdate}
-                data={props.recipes}
+                data={{data:props.recipes}}
                 initialState={{ columnVisibility: { id: true } }}
                 columns={[
                 { accessorKey: 'id', header: 'id' },

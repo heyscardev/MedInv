@@ -1,18 +1,10 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
-import Breadcrums from '@/Components/Common/Breadcrums'
-import CellNumberBox from '@/Components/Common/CellNumberBox'
+import EntityDelete from '@/Components/Common/EntityDeleted'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
-import Table from '@/Components/Common/Table'
 import IconButton from '@/Components/Custom/IconButton'
-import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
-import IntlFormatNumber from '@/Components/Custom/IntlFormatNumber'
-import Tooltip from '@/Components/Custom/Tooltip'
-import ActionsTableShow from '@/Components/Layouts/Modules/ActionsTableShow'
-import LogoTypography from '@/Components/LogoTypography'
 import { visit } from '@/HTTPProvider'
 import * as iconsMaterial from '@mui/icons-material'
-import { Box, Container } from '@mui/material'
 import { Fragment } from 'react'
 
 const tableUpdate = ({
@@ -45,7 +37,11 @@ const tableUpdate = ({
 export default (props) => {
   return (
     <Fragment>
-      <SectionTitle title="transfers" noTranslateSubtitle subtitle={props.module?props.module.name:null} />
+      <SectionTitle
+        title="transfers"
+        noTranslateSubtitle
+        subtitle={props.module ? props.module.name : null}
+      />
 
       <AsyncTable
         routeName={route().current()}
@@ -66,14 +62,39 @@ export default (props) => {
             enableClickToCopy: false,
 
             Cell: ({ cell }) => (
-                <IconButton placement="right" color="primary" title="show">
-                  <iconsMaterial.Visibility />
-                </IconButton>
+              <IconButton placement="right" color="primary" title="show">
+                <iconsMaterial.Visibility />
+              </IconButton>
             ),
           },
           { accessorKey: 'user.first_name', header: 'user' },
-          { accessorKey: 'module_send.name', header: 'moduleSend' },
-          { accessorKey: 'module_receive.name', header: 'moduleReceive' },
+          {
+            accessorKey: 'module_send.name',
+            header: 'moduleSend',
+            Cell: ({ cell }) => {
+              return (
+                <EntityDelete
+                  deleted_at={cell.row.original.module_send.deleted_at}
+                >
+                  {cell.getValue()}
+                </EntityDelete>
+              )
+            },
+          },
+          {
+            accessorKey: 'module_receive.name',
+            header: 'moduleReceive',
+            Cell: ({ cell }) => {
+              return (
+                <EntityDelete
+                  deleted_at={cell.row.original.module_receive.deleted_at}
+                >
+                  {cell.getValue()}
+                </EntityDelete>
+              )
+            },
+          },
+
           {
             accessorKey: 'quantity_medicaments',
             header: 'quantityMedicaments',
@@ -96,7 +117,7 @@ export default (props) => {
           },
         ]}
       />
-        <MultiButton
+      <MultiButton
         actions={[
           {
             icon: <iconsMaterial.MoveDown />,

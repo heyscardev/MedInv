@@ -6,7 +6,7 @@ import Tooltip from "./Tooltip";
 export default ({title,placement,onClick,...rest}) => {
     const { formatMessage } = useIntl();
     return title ? (
-        <Tooltip title={formatMessage({ id: title })} placement={placement}>
+        <Tooltip title={title} placement={placement}>
             <IconButton onClick={onClick}{...rest} title={null} />
         </Tooltip>
     ) : (
