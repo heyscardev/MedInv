@@ -40,29 +40,49 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::resource('doctors', DoctorController::class)->only(['index', 'destroy', 'update', 'store','show'])->names('doctor');
-    Route::get('doctor/restore/{id}',[DoctorController::class,"restore"])->name('doctor.restore');
-    Route::resource('medicaments', MedicamentController::class)->only(['index', 'destroy', 'update', 'store'])->names('medicament');
-    Route::resource('modules', ModuleController::class)->only(['index', 'destroy', 'update', 'store', 'show'])->names('module');
-    Route::get('modules/restore/{id}',[ModuleController::class,"restore"])->name('module.restore');
-    //patients
-    Route::resource('patients', PatientController::class)->only(['index', 'destroy', 'update', 'store'])->names('patient');
-    Route::get('patients/restore/{id}',[PatientController::class,"restore"])->name('patient.restore');
-
-    Route::resource('recipes', RecipeController::class)->only(['index', 'destroy', 'update', 'store'])->names('recipe');
-    Route::get('recipes/create/{module?}', [RecipeController::class, 'create'])->name('recipe.create');
-    Route::resource('services', ServiceController::class)->only(['index', 'destroy', 'update', 'store'])->names('service');
-    Route::resource('units', UnitController::class)->only(['index', 'destroy', 'update', 'store'])->names('unit');
-    //users
-    Route::resource('users', UserController::class)->only(['index', 'destroy', 'update', 'store'])->names('user');
+    //* Users
+    Route::resource('users', UserController::class)->except(['create','edit','show'])->names('user');
     Route::get('users/restore/{id}',[UserController::class,"restore"])->name('user.restore');
 
-    Route::get('modules/{module}/buy/create', [ModuleBuyController::class, 'create'])->name('module.buy.create');
-    Route::post('modules/{module}/buy', [ModuleBuyController::class, 'store'])->name('module.buy.store');
-    Route::get('modules/{module}/buy', [ModuleBuyController::class, 'index'])->name('module.buy.index');
-    Route::get('modules/{module}/recipes', [RecipeController::class, 'index'])->name('module.recipe.index');
-    Route::get('modules/{module}/transfers', [TransferController::class, 'index'])->name('module.transfer.index');
+    //* Doctors
+    Route::resource('doctors', DoctorController::class)->except(['create','edit'])->names('doctor');
+    Route::get('doctor/restore/{id}',[DoctorController::class,"restore"])->name('doctor.restore');
+
+    //* Patients
+    Route::resource('patients', PatientController::class)->except(['create','edit','show'])->names('patient');
+    Route::get('patients/restore/{id}',[PatientController::class,"restore"])->name('patient.restore');
+
+    //* Medicaments
+    Route::resource('medicaments', MedicamentController::class)->except(['create','edit','show'])->names('medicament');
+
+    //* Services
+    Route::resource('services', ServiceController::class)->except(['create','edit','show'])->names('service');
+
+    //* Units
+    Route::resource('units', UnitController::class)->except(['create','edit','show'])->names('unit');
+
+    //* Modules
+    Route::resource('modules', ModuleController::class)->except(['create','edit'])->names('module');
+    Route::group(['prefix'=>'modules', 'as'=>'module.'], function()
+    {
+        Route::get('restore/{id}',[ModuleController::class,"restore"])->name('restore');
+
+        Route::get('{module}/transfers', [TransferController::class, 'index'])->name('transfer.index');
+        Route::get('{module}/recipes', [RecipeController::class, 'index'])->name('recipe.index');
+        Route::resource('{module}/buy', ModuleBuyController::class)->only(['index','create','store']);
+    });
+
+    //* Recipes
+    Route::resource('recipes', RecipeController::class)->except(['create','edit','show'])->names('recipe');
+    Route::group(['prefix'=>'recipes', 'as'=>'recipe.'], function()
+    {
+        Route::get('create/{module?}', [RecipeController::class, 'create'])->name('create');
+        Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore');
+    });
+
+    //* Buys
     Route::get('buys',[BuyController::class,'index'])->name('buy.index');
+
 });
 
 require __DIR__.'/medinv/TransfersRoute.php';
