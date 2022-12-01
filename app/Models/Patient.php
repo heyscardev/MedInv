@@ -34,4 +34,12 @@ class Patient extends Model
         return $this->hasMany(Recipe::class);
     }
 
+    /**
+     * This are the Attribute
+     */
+    public function getFullNameAttribute()
+    {
+        return $this->first_name .' '.$this->last_name;
+    }
+
 }

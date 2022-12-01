@@ -18,13 +18,13 @@ export default ({ module, ...props }) => {
   }
   return (
     <Fragment>
-    
+
     <SectionTitle title="recipes" noTranslateSubtitle subtitle={module?module.name:null} />
       {props.data.data && (
         <AsyncTable
           enableRowSelection={false}
           initialState={{ columnVisibility }}
-          routeName={route().current()}
+          routeName={ route().current() }
           routeParams={{ module: module ? module.id : null }}
           // onAsync={tableUpdate}
           data={props.data}
@@ -80,7 +80,7 @@ export default ({ module, ...props }) => {
             /*     {
               accessorKey: 'deleted_at',
               header: 'deleted_at',
-              
+
               accessorFn: ({ deleted_at }) =>
                 !deleted_at ? formatMessage({ id: 'active' }) : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy'),
             }, */

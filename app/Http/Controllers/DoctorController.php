@@ -49,6 +49,21 @@ class DoctorController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(DoctorRequest $request, Doctor $doctor)
+    {
+        $recipes = $doctor->recipes()
+                          ->with(['patient:id,first_name,last_name', 'module:id,name', 'pathology:id,name'])
+                          ->paginate( 10 );
+
+        return Inertia::render('Doctors/show', ['doctor' => $doctor, 'recipes' => $recipes ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
