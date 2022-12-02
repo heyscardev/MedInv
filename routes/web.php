@@ -11,6 +11,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
+use App\Models\Buy;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -69,7 +70,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('{module}/transfers', [TransferController::class, 'index'])->name('transfer.index');
         Route::get('{module}/recipes', [RecipeController::class, 'index'])->name('recipe.index');
-        Route::resource('{module}/buy', ModuleBuyController::class)->only(['index','create','store']);
+        Route::get('{module}/buys', [BuyController::class,'index'])->name('buy.index');
     });
 
     //* Recipes
@@ -81,7 +82,12 @@ Route::middleware('auth')->group(function () {
     });
 
     //* Buys
-    Route::get('buys',[BuyController::class,'index'])->name('buy.index');
+    Route::resource('buys', BuyController::class)->only(['index','store'])->names('buy');
+    Route::group(['prefix'=>'buys', 'as'=>'buy.'], function()
+    {
+        Route::get('create/{module?}', [BuyController::class, 'create'])->name('create');
+       /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
+    });
 
 });
 

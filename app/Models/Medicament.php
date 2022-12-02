@@ -31,7 +31,7 @@ class Medicament extends Model
     }
     public function modules()
     {
-        return $this->belongsToMany(Module::class)->withPivot('quantity_exist')->withTimestamps()->wherePivot('quantity_exist', '>', 0);
+        return $this->belongsToMany(Module::class)->withPivot('quantity_exist')->withTimestamps()->wherePivot('quantity_exist', '>', 0)->withTrashed();;
     }
 /*     public function recipes()
     {

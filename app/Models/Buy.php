@@ -22,6 +22,9 @@ class Buy extends Model
     public function medicaments(){
         return $this->belongsToMany(Medicament::class)->withPivot('price','quantity')->withTimestamps()->using(BuyMedicament::class);
     }
+    public function user(){
+        return $this->belongsTo(User::class)->withTrashed();
+    }
 
     /**
      * This are the Attribute

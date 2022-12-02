@@ -34,7 +34,7 @@ class TransferRequest extends FormRequest
     private function indexAuthorize()
     {
         $module = Module::find($this->get('module', null));
-        if ($module && $module->user_id !== auth()->user()->id) return false;
+        if (!auth()->user()->hasRole('administrador') && $module && $module->user_id !== auth()->user()->id) return false;
         return true;
     }
 
@@ -55,16 +55,16 @@ class TransferRequest extends FormRequest
 
     private function indexRules()
     {
-        $validColumns = ['id','user.first_name', 'module_send.name', 'module_receive.name','created_at'];
+        $validColumns = ['id', 'user.first_name', 'module_send.name', 'module_receive.name', 'created_at'];
         return [
             'module'         => ['numeric', 'exists:modules,id'],
-            'page_size'      => ['integer','in:10,20,50,100'],
+            'page_size'      => ['integer', 'in:10,20,50,100'],
             'orderBy'        => ['array'],
-            'orderBy.*.id'   => ['required',Rule::in($validColumns)],
-            'orderBy.*.desc' => ['required','boolean'],
+            'orderBy.*.id'   => ['required', Rule::in($validColumns)],
+            'orderBy.*.desc' => ['required', 'boolean'],
             'filters'        => ['array'],
-            'filters.*.id'   => ['required',Rule::in($validColumns)],
-            'filters.*.value'=> ['required','nullable'],
+            'filters.*.id'   => ['required', Rule::in($validColumns)],
+            'filters.*.value' => ['required', 'nullable'],
         ];
     }
     private function createRules()

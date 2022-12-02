@@ -1,9 +1,12 @@
 import Breadcrums from '@/Components/Common/Breadcrums'
 import InputText from '@/Components/Common/Inputs/InputText'
 import IntlMessage from '@/Components/Common/IntlMessage'
+import Head from '@/Components/Custom/Head'
 import IconButton from '@/Components/Custom/IconButton'
 import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
 import EditMedicamentModal from '@/Components/Layouts/Medicaments/EditMedicamentModal'
+import ModuleButton from '@/Components/Layouts/Modules/ModuleButton'
+import SelectionModuleModal from '@/Components/Layouts/Modules/SelectionModuleModal'
 import {
   composeValidators,
   greaterOrEqualThanValue,
@@ -13,10 +16,13 @@ import {
   required,
 } from '@/Config/InputErrors'
 import { post, visit } from '@/HTTPProvider'
-import { Add, Clear } from '@mui/icons-material'
+import { Add, Clear, ShoppingCart } from '@mui/icons-material'
 import {
   Autocomplete,
   Button,
+  Divider,
+  FormControl,
+  FormHelperText,
   Grid,
   Stack,
   Table,
@@ -25,6 +31,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from '@mui/material'
 import { Box } from '@mui/system'
 import arrayMutators from 'final-form-arrays'
@@ -35,40 +42,72 @@ import { FieldArray } from 'react-final-form-arrays'
 
 const submit = (values) => {
   const dataToSend = {
+    module_id: values.module_id,
     description: values.description,
-    medicaments: values.medicaments,
+    medicaments: values.medicaments.map(({id,price,quantity})=>({id,price,quantity})),
   }
-  post(route('module.buy.store', values.moduleId), dataToSend)
+  console.log(dataToSend);
+  post(route('buy.store'), dataToSend)
 }
 export default (props) => {
-  const { data, module, can } = props
+  const { data, module, modules = [], can } = props
+  const [propsSelectedModuleTo, setPropsSelectedModuleTo] = useState({
+    open: false,
+    moduleSelected: null,
+    moduleDisableds: [],
+  })
   return (
     <Fragment>
-      <Breadcrums
-        links={[
-          { name: 'dashboard', route: 'dashboard' },
-          { name: 'modules', route: 'module.index' },
-          {
-            noTranslate: true,
-            name: props.module.name,
-            route: 'module.show',
-            id: props.module.id,
-          },
-          {
-            noTranslate: true,
-            name: 'buyMedicaments',
-            route: 'module.buy.create',
-            id: props.module.id,
-          },
-        ]}
-      />
-
+      <Head title="createBuy" />
       <Form
         onSubmit={submit}
         mutators={{ ...arrayMutators }}
-        initialValues={{ moduleId: module.id, description: null }}
-        render={({ handleSubmit, values, form }) => (
+        initialValues={{
+          module_id: module ? module.id : null,
+          description: null,
+        }}
+        validate={(values) => {
+          const errors = {}
+          if (!values.module_id) errors.module_id = 'fieldError.required'
+          return errors
+        }}
+        render={({ handleSubmit, values, form, errors, submitFailed }) => (
           <form onSubmit={handleSubmit}>
+            <Stack spacing={2} padding={4}>
+              <Stack bgcolor="white.main" borderRadius={2} padding={1} gap={2}>
+                <Typography
+                  variant="h3"
+                  align="center"
+                  fontWeight="bolder"
+                  color="primary"
+                  display="flex"
+                  alignItems="center"
+                  alignSelf="center"
+                >
+                  <ShoppingCart sx={{ fontSize: 'inherit', marginRight: 2 }} />
+                  <IntlMessage id="buy" />
+                </Typography>
+                <Divider />
+
+                <FormControl fullWidth>
+                  <ModuleButton
+                    module={module}
+                    onClick={(e) => {
+                      setPropsSelectedModuleTo({
+                        open: true,
+                        moduleSelected: values.module,
+                        moduleDisableds: [values.module],
+                      })
+                    }}
+                  />
+                  {submitFailed && errors.module_id && (
+                    <FormHelperText error sx={{textAlign:"center"}}>
+                      <IntlMessage id={errors.module_id} />
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Stack>
+            </Stack>
             <FieldArray name="medicaments">
               {({ fields }) => (
                 <Stack spacing={2} padding={4}>
@@ -77,8 +116,8 @@ export default (props) => {
                       medicamentsOptions={props.medicaments}
                       onChangeTextField={(e, value) => {
                         visit(
-                          route('module.buy.create', {
-                            module: props.module.id,
+                          route('buy.create', {
+                            module: props.module ? props.module.id : null,
                             search: value ? value : '',
                           }),
                           {
@@ -149,9 +188,9 @@ export default (props) => {
                                   greaterOrEqualThanValue(1),
                                 )}
                                 errorValues={{
-                                    greaterOrEqualThanValue2: 1,
-                                    lessOrEqualThanValue2: 1000000000,
-                                  }}
+                                  greaterOrEqualThanValue2: 1,
+                                  lessOrEqualThanValue2: 1000000000,
+                                }}
                                 inputProps={{
                                   autoComplete: 'off',
                                 }}
@@ -211,7 +250,20 @@ export default (props) => {
                   </Button>
                 </Stack>
               )}
-            </FieldArray>
+            </FieldArray>{' '}
+            <SelectionModuleModal
+              {...propsSelectedModuleTo}
+              modules={modules}
+              onClose={() => {
+                setPropsSelectedModuleTo({ open: false })
+              }}
+              onSelect={(value) => {
+                form.change('medicaments', [])
+                visit(route('buy.create', value.id))
+                form.change('module_id', value.id)
+              }}
+              label="selectModuleToBuy"
+            />
           </form>
         )}
       />

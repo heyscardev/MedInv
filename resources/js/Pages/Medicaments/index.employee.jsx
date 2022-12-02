@@ -1,4 +1,6 @@
 import AsyncTable from "@/Components/Common/AsyncTable";
+import SectionTitle from "@/Components/Common/SectionTitle";
+import Head from "@/Components/Custom/Head";
 import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
 import IntlFormatNumber from "@/Components/Custom/IntlFormatNumber";
 import { Box } from "@mui/material";
@@ -11,6 +13,8 @@ price:false
 export default (props) => {
   return (
     <Fragment>
+      <Head title="medicaments" />
+      <SectionTitle title="medicaments"/>
       <AsyncTable
         routeName="medicament.index"
         routeParams={{ }}

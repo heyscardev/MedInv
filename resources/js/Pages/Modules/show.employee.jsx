@@ -8,7 +8,7 @@ import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
 import IntlFormatNumber from '@/Components/Custom/IntlFormatNumber'
 import ActionsTableShow from '@/Components/Layouts/Modules/ActionsTableShow'
 import { visit } from '@/HTTPProvider'
-import { Link } from '@inertiajs/inertia-react'
+import { Head, Link } from '@inertiajs/inertia-react'
 import {
   AddShoppingCart,
   LowPriority,
@@ -59,6 +59,7 @@ import { Fragment } from 'react'
 export default (props) => {
   return (
     <Fragment>
+      <Head title={`${props.module.name}`} />
       {/* name of module */}
       <Grid container padding={2}>
         <Grid item xs={12} sm={6} lg={4}>
@@ -89,7 +90,7 @@ export default (props) => {
             onClick={() => {
               visit(
                 route('module.buy.index', {
-                  id: props.module.id,
+                  module: props.module.id,
                 }),
               )
             }}
@@ -100,7 +101,7 @@ export default (props) => {
             startIcon={<AddShoppingCart size="large" />}
             onClick={() => {
               visit(
-                route('module.buy.create', {
+                route('buy.create', {
                   id: props.module.id,
                 }),
               )

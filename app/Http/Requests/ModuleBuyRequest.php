@@ -15,9 +15,9 @@ class ModuleBuyRequest extends FormRequest
      */
     public function authorize()
     {
-        $module = $this->route('module');
-        if ($module->user->id === auth()->user()->id) return true;
-        return false;
+      /*   $module = $this->route('module');
+        if ($module->user_id === auth()->user()->id) return true; */
+        return true;
     }
 
     /**
@@ -27,7 +27,7 @@ class ModuleBuyRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->url() === route('module.buy.create',$this->route('module')->id)) return $this->createRules();
+        if ($this->routeIs('buy.create')) return $this->createRules();
         if ($this->method() == 'POST') return $this->storeRules();
         return [];
     }
@@ -41,6 +41,7 @@ class ModuleBuyRequest extends FormRequest
     private function storeRules()
     {
         return [
+            'module_id'=>'required|integer|exists:modules,id',
             'description' => 'max:250',
             'medicaments' => 'required|array',
             'medicaments.*.id' => 'required|distinct:strict|exists:medicaments',
@@ -49,7 +50,7 @@ class ModuleBuyRequest extends FormRequest
                 $index = explode('.', $attribute)[1];
                 $quantity = $this->input("medicaments.{$index}.quantity", null);
                 $medicament_id = $this->input("medicaments.{$index}.id", null);
-                $module = $this->route('module');
+                $module = Module::find($this->input('module_id'));
                 $medicament = $module->medicaments()->where('medicament_id',$medicament_id)->first();
                 if(isset($medicament->pivot) && ($medicament->pivot->quantity_exist + $quantity)>2000000000) $fail("Al comprar {$medicament->name} excede el maximo por modulo (2.000.000.000). Maximo de compra ".(2000000000 -$medicament->pivot->quantity_exist));
 

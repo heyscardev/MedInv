@@ -14,11 +14,11 @@ class CreateBuyRequest extends FormRequest
      */
     public function authorize()
     {
-        $moduleId = $this->route('id');
+   /*      $moduleId = $this->route('id');
         $item = Module::find($moduleId);
         if (!isset($item)) return abort('404');
-        if ($item->user->id === auth()->user()->id) return true;
-        return false;
+        if ($item->user->id === auth()->user()->id) return true; */
+        return true;
     }
 
     /**
@@ -29,6 +29,7 @@ class CreateBuyRequest extends FormRequest
     public function rules()
     {
         return [
+            'module_id'=>'required|integer|exists:modules,id',
             'description'=>'max:250',
             'medicaments'=>'required|array',
             'medicaments.*.id' => 'required|distinct:strict',
