@@ -69,13 +69,13 @@ const FormSigin = () => (
 
         <PasswordField
           name="password"
-          label="contraseña"
+          label="password"
           fullWidth
           validate={composeValidators(required)}
         />
 
         <Box display="flex" justifyContent="end">
-          <CheckBox name="remember" label="Recuerdame" />
+          <CheckBox name="remember" label="remenber me" />
         </Box>
 
         <Grid item display="flex" justifyContent="center" marginTop={1}>

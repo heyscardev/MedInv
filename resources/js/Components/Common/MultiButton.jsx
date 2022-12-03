@@ -63,7 +63,7 @@ export default ({ actions = actionsDefault }) => {
       <Backdrop open={open} />
       <SpeedDial
         ariaLabel="SpeedDial tooltip example"
-        icon={<SpeedDialIcon />}
+        icon={<SpeedDialIcon style={{color:"#fff"}} />}
         onClose={handleClose}
         onOpen={handleOpen}
         open={open}

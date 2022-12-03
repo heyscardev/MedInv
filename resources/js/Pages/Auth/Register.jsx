@@ -86,7 +86,7 @@ export default function Register() {
 
             <PasswordField
               name="password"
-              label="Contraseña"
+              label="password"
               autoComplete="new-password"
               spellCheck={false}
               validate={composeValidators(required, passwordWeakValidation)}
@@ -94,7 +94,7 @@ export default function Register() {
 
             <PasswordField
               name="password_confirmation"
-              label="Confirmar Contraseña"
+              label="password_confirmation"
               autoComplete="new-password"
               spellCheck={false}
               validate={composeValidators(required, passwordWeakValidation, passwordEqual("password"))}

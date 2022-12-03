@@ -197,5 +197,8 @@
     "moduleRestore":"Restaurar Modulo",
     "recurseDeleted":"Este recurso fue eliminado comuniquese con el adiministrador para mas detalles",
     "selectModuleToBuy":"seleccionar Modulo para la compra",
-    "buy":"Compra"
+    "buy":"Compra",
+    "deleteMessageBuy":"Desea eliminar la compra con id N° {value}? \n ¡esta operacion no es reversible!",
+    "remenber me":"Recuerdame",
+    "editBuy":"Editar Compra"
 }

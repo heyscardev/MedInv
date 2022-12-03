@@ -1,27 +1,32 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
+import ConfirmModal from '@/Components/Common/ConfirmModal'
 import EntityDelete from '@/Components/Common/EntityDeleted'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
 import Head from '@/Components/Custom/Head'
-import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
-import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
-import { visit } from '@/HTTPProvider'
-import { AddShoppingCart, PostAdd } from '@mui/icons-material'
+import IconButton from '@/Components/Custom/IconButton'
+import { destroy, visit } from '@/HTTPProvider'
+import {
+  AddShoppingCart,
+  Delete,
+  Edit, Restore
+} from '@mui/icons-material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
-const routeName = "buy";
+const routeName = 'buy'
 const columnVisibility = {
   user: false,
   updated_at: false,
-  deleted_at:false
+  deleted_at: false,
 }
 export default ({ module, ...props }) => {
-    const {formatMessage } = useIntl();
-  const [idToEdit, setIdToEdit] = useState(null)
-  const toggleEdit = (id) => {
-    setIdToEdit(id ? id : null)
+  const { formatMessage } = useIntl()
+  const [idToDelete, setIdToDelete] = useState(null)
+  const toggleConfirmDelete = (id) => {
+    setIdToDelete(id ? id : null)
   }
+
   return (
     <Fragment>
       <Head title="buys" />
@@ -39,6 +44,67 @@ export default ({ module, ...props }) => {
           // onAsync={tableUpdate}
           data={props.data}
           columns={[
+            {
+              id: 'actions',
+              accessorKey: 'id',
+              columnDefType: 'display',
+              header: 'actions',
+              size: 80,
+
+              Cell: ({ cell }) => {
+                return cell.row.original.deleted_at &&
+                  props.can(`${routeName}.restore`) ? (
+          
+                    <IconButton
+                    title="delete"
+                    placement="right"
+                      color="primary"
+                      onClick={(e) => {
+                        const name = cell.row.original.first_name
+                        get(
+                          route(`${routeName}.restore`, cell.row.original.id),
+                          {},
+                          {
+                            onSuccess: () => {
+                              toast.success(
+                                `El Recipe ${name}  fue restaurado`,
+                              )
+                            },
+                          },
+                        )
+                      }}
+                    >
+                      <Restore />
+                    </IconButton>
+                ) : (
+                  <>
+                    {props.can(`${routeName}.destroy`) && (
+                        <IconButton
+                        title="delete"
+                          color="error"
+                          placement="right"
+                          onClick={(e) => setIdToDelete(cell.getValue())}
+                        >
+                          <Delete />
+                        </IconButton>
+                    )}
+                    {props.can(`${routeName}.update`) && (
+                      
+                        <IconButton
+                        title="edit"
+                        placement="right"
+                          color="primary"
+                          onClick={(e) => {
+visit(route(`buy.edit`,{buy:cell.row.original.id}))
+                          }}
+                        >
+                          <Edit />
+                        </IconButton>
+                    )}
+                  </>
+                )
+              },
+            },
             { accessorKey: 'id', header: 'id' },
             {
               accessorKey: 'user',
@@ -80,13 +146,17 @@ export default ({ module, ...props }) => {
                 )
               },
             },
-           {
-                accessorKey: "total_medicaments",
-                header: "totalMedicaments",
-                typeColumn: 'numberBox',
+            {
+              accessorKey: 'total_medicaments',
+              header: 'totalMedicaments',
+              typeColumn: 'numberBox',
             },
-            { accessorKey: "total_quantity", header: "totalQuantity", typeColumn: 'numberBox', },
-           /*  {
+            {
+              accessorKey: 'total_quantity',
+              header: 'totalQuantity',
+              typeColumn: 'numberBox',
+            },
+            /*  {
                 accessorKey: "total_price",
                 header: "totalPrice",
                 filterVariant: "range",
@@ -112,12 +182,14 @@ export default ({ module, ...props }) => {
                   ? '00/00/0000 00:00:00'
                   : format(new Date(updated_at), 'hh:mm dd MMMM yyyy'),
             },
-                {
+            {
               accessorKey: 'deleted_at',
               header: 'deleted_at',
               typeColumn: 'date',
               accessorFn: ({ deleted_at }) =>
-                !deleted_at ? formatMessage({ id: 'active' }) : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy'),
+                !deleted_at
+                  ? formatMessage({ id: 'active' })
+                  : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy'),
             },
           ]}
         />
@@ -137,11 +209,23 @@ export default ({ module, ...props }) => {
           },
         ]}
       />
-      <EditRecipeModal
-        open={idToEdit ? true : false}
-        onClose={() => toggleEdit(null)}
-        item={{ ..._.find(props.data.data, { id: idToEdit }) }}
+       <ConfirmModal
+        open={_.find(props.data.data, { id: idToDelete }) ? true : false}
+        onClose={() => toggleConfirmDelete(null)}
+        onSubmit={() => {
+          toggleConfirmDelete(null)
+          destroy(route(routeName + '.destroy', idToDelete))
+        }}
+        message={
+          _.find(props.data.data, { id: idToDelete })
+            ? formatMessage(
+                { id: 'deleteMessageBuy' },
+                { value: _.find(props.data.data, { id: idToDelete })['id'] },
+              )
+            : null
+        }
       />
+
     </Fragment>
   )
 }

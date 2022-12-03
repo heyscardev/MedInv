@@ -3,7 +3,6 @@ import EntityDelete from '@/Components/Common/EntityDeleted'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
 import Head from '@/Components/Custom/Head'
-import EditRecipeModal from '@/Components/Layouts/Recipes/EditRecipeModal'
 import { visit } from '@/HTTPProvider'
 import { PostAdd } from '@mui/icons-material'
 import { format } from 'date-fns'
@@ -113,11 +112,7 @@ export default ({ module, ...props }) => {
           },
         ]}
       />
-      <EditRecipeModal
-        open={idToEdit ? true : false}
-        onClose={() => toggleEdit(null)}
-        item={{ ..._.find(props.data.data, { id: idToEdit }) }}
-      />
+     
     </Fragment>
   )
 }

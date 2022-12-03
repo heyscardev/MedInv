@@ -34,12 +34,10 @@ class BuyController extends Controller
 
         if ($module->exists) {
             if (!auth()->user()->hasRole('administrador') && $module->user_id !== auth()->user()->id) return back(403);
-            
+
             $query = $query->where('module_id', $module->id);
-           
         } else {
             if (auth()->user()->hasRole('administrador')) {
-                $query = $query->where('user_id', auth()->user()->id);
             } else {
                 $query =  $query->where('user_id', auth()->user()->id)
                     ->orWhereHas('module', function ($query) {
@@ -48,7 +46,7 @@ class BuyController extends Controller
             }
         }
 
-       
+
         $data = $query->orderBy('updated_at', "desc")->paginate($paginate);
         return inertia('Buys/index.employee', compact('data', 'module'));
     }
@@ -87,6 +85,56 @@ class BuyController extends Controller
             $buy->medicaments()->attach($value['id'], ['quantity' => $value['quantity'], 'price' => $value['price']]);
         }, $data['medicaments']);
         return redirect(route('buy.index', $module->id));
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Buy $buy)
+    {
+        // with soft deletes
+        $buy->delete();
+        return back();
+    }
+    /**
+     * Show the form for edit a resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(ModuleBuyRequest $request, Buy $buy, Module $module)
+    {
+        if (!$module->exists) return redirect(route('buy.edit', ["buy" => $buy->id, "module" => $buy->module_id]));
+        $modulesQuery = Module::with('user');
+        $modules = auth()->user()->hasRole('administrador') ? $modulesQuery->get() : $modulesQuery->where('user_id', auth()->user()->id);
+        $search = $request->get('search', null);
+        $Medicaments = $search ? Medicament::whereRelation('unit', 'name', 'LIKE', "%$search%")->orWhere('name', 'LIKE', '%' . $search . '%')->orWhere('code', 'LIKE', '%' . $search . '%')->orderBy('name')->with('unit')->distinct('medicaments.id')->get() : [];
+        $units = Unit::orderBy('name')->get();
+        return inertia('Buys/create', ['module' => $module->exists ? $module : null, 'medicaments' => $Medicaments, 'units' => $units, 'modules' => $modules, 'buyToEdit' => Buy::with('module', 'medicaments')->find($buy->id)]);
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(ModuleBuyRequest $request, Buy $buy)
+    {
+        $validated = $request->validated();
+
+        $buy->update($validated);
+        if (array_key_exists('medicaments', $validated)) {
+            $formatMedicaments = [];
+            foreach ($validated['medicaments'] as $value) {
+                $formatMedicaments[$value['id']] = ['quantity' => $value['quantity'], 'price' => $value['price']];
+            }
+
+            $buy->medicaments()->sync($formatMedicaments);
+        }
+
+        return back();
     }
 
 

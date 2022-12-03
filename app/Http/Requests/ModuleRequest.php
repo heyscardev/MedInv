@@ -58,6 +58,7 @@ class ModuleRequest extends FormRequest
         return [
             'code'  =>'sometimes|required|max:25|' . Rule::unique('modules')->ignore($this->id),
             'name'  =>'sometimes|required|max:100',
+            'user_id' =>'sometimes|required|integer|exists:users,id'
         ];
     }
 

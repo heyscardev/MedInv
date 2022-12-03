@@ -2,6 +2,8 @@ import CheckBox from "@/Components/Common/Inputs/CheckBox";
 import DatePicker from "@/Components/Common/Inputs/DatePicker";
 import InputText from "@/Components/Common/Inputs/InputText";
 import PasswordField from "@/Components/Common/Inputs/PasswordField";
+import Select from "@/Components/Common/Inputs/Select";
+import IntlMessage from "@/Components/Common/IntlMessage";
 import Modal from "@/Components/Common/Modal";
 import LogoTypography from "@/Components/LogoTypography";
 import {
@@ -10,6 +12,7 @@ import {
   dateGreaterOrEqual,
   dateLessOrEqual,
   email,
+  isPhone,
   passwordEqual,
   passwordWeakValidation,
   required,
@@ -18,7 +21,7 @@ import {
 import { post, put } from "@/HTTPProvider";
 import { formatStringDateToDatabase } from "@/Utils/format";
 import { Cancel, Save } from "@mui/icons-material";
-import { Button, DialogActions, Grid, Typography } from "@mui/material";
+import { Button, Container, DialogActions, FormControl, FormHelperText, Grid, Typography } from "@mui/material";
 import { addYears } from "date-fns";
 import { Form } from "react-final-form";
 
@@ -68,8 +71,13 @@ export default ({ item, open, onClose }) => {
       </div>
       <Form
         initialValues={{ ...item }}
+        validate={(values)=>{
+          const errors = {};
+          if(!values.gender)errors.gender = "fieldError.required";
+          return errors;
+        }}
         onSubmit={submit}
-        render={({ handleSubmit, form }) => (
+        render={({ handleSubmit, form,errors,submitFailed }) => (
           <form onSubmit={handleSubmit} id="userForm" autoComplete="off">
             <Grid container>
               <Grid item xs={12} lg={6}>
@@ -103,14 +111,51 @@ export default ({ item, open, onClose }) => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} lg={4}>
+              <Grid item xs={12} lg={6}>
+                <Grid container wrap="nowrap">
+                  <Grid item xs={2} lg={4}>
+                    <Select
+                      fullWidth
+                      validate={required}
+                      name="nationality"
+                      label="N"
+                      margin="10px"
+                      options={[
+                        {
+                          label: 'V',
+                          value: 'V',
+                        },
+                        {
+                          label: 'E',
+                          value: 'E',
+                        },
+                      ]}
+                    />
+                  </Grid>
+                  <Grid item xs={8}>
+                    <InputText
+                      name="c_i"
+                      label="c_i"
+                      autoComplete="nope"
+                      placeholder="00000000-0"
+                      validate={composeValidators(required, (value) => {
+                        if (value.match(/^[0-9]{5,8}\-?[0-9]+$/)) return null
+                        return 'fielderror.invalid_c_i'
+                      })}
+                      maxLength={10}
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} lg={6}>
                 <InputText
-                  name="c_i"
-                  label="c_i"
+                  name="phone"
+                  label="phone"
                   autoComplete="nope"
-                  validate={composeValidators(required)}
+                  validate={composeValidators(required,isPhone)}
                   onlyNumbers
-                  maxLength={8}
+                  maxLength={11}
                   fullWidth
                 />
               </Grid>
@@ -120,7 +165,7 @@ export default ({ item, open, onClose }) => {
                   label="password"
                   autoComplete="new-password"
                   spellCheck={false}
-                  validate={composeValidators(passwordWeakValidation)}
+                  validate={composeValidators(!item.id?required:()=>null,passwordWeakValidation)}
                   fullWidth
                 />
               </Grid>
@@ -130,7 +175,7 @@ export default ({ item, open, onClose }) => {
                   label="password_confirmation"
                   autoComplete="new-password"
                   spellCheck={false}
-                  validate={composeValidators(passwordWeakValidation, passwordEqual("password"))}
+                  validate={composeValidators(!item.id?required:()=>null,passwordWeakValidation, passwordEqual("password"))}
                   fullWidth
                 />
               </Grid>
@@ -150,8 +195,42 @@ export default ({ item, open, onClose }) => {
                 />
               </Grid>
               <Grid item xs={12} lg={6} display="flex" justifyContent="center" alignItems="center">
-                <CheckBox type="radio" name="gender" label="male" value="Male" />
-                <CheckBox type="radio" name="gender" label="female" value="Female" />
+              <FormControl>
+                  <Typography marginLeft={2} variant="body2">
+                    <IntlMessage id="gender" />
+                  </Typography>
+                  <Container>
+                    <CheckBox
+                      noError
+                      type="radio"
+                      name="gender"
+                      label="Female"
+                      value={'Female'}
+                    />
+                    <CheckBox
+                      noError
+                      type="radio"
+                      name="gender"
+                      label="Male"
+                      value={'Male'}
+                    />
+                  </Container>
+                  {submitFailed && errors.gender && (
+                    <FormHelperText error>
+                      <IntlMessage id={errors.gender} />
+                    </FormHelperText>
+                  )}
+                  </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <InputText
+                  optional
+                  name="direction"
+                  label="direction"
+                  autoComplete="nope"
+                  maxLength={200}
+                  fullWidth
+                />
               </Grid>
             </Grid>
           </form>

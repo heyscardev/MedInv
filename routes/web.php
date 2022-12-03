@@ -78,14 +78,15 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix'=>'recipes', 'as'=>'recipe.'], function()
     {
         Route::get('create/{module?}', [RecipeController::class, 'create'])->name('create');
-        Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore');
+     //   Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore');
     });
 
     //* Buys
-    Route::resource('buys', BuyController::class)->only(['index','store'])->names('buy');
+    Route::resource('buys', BuyController::class)->except(['create','edit','show'])->names('buy');
     Route::group(['prefix'=>'buys', 'as'=>'buy.'], function()
     {
         Route::get('create/{module?}', [BuyController::class, 'create'])->name('create');
+        Route::get('edit/{buy}/{module?}', [BuyController::class, 'edit'])->name('edit');
        /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
     });
 

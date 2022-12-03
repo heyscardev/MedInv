@@ -1,4 +1,3 @@
-import Breadcrums from '@/Components/Common/Breadcrums'
 import InputText from '@/Components/Common/Inputs/InputText'
 import IntlMessage from '@/Components/Common/IntlMessage'
 import Head from '@/Components/Custom/Head'
@@ -10,12 +9,10 @@ import SelectionModuleModal from '@/Components/Layouts/Modules/SelectionModuleMo
 import {
   composeValidators,
   greaterOrEqualThanValue,
-  greaterOrEqualValue,
-  lessOrEqualThan,
   lessOrEqualThanValue,
   required,
 } from '@/Config/InputErrors'
-import { post, visit } from '@/HTTPProvider'
+import { post, put, visit } from '@/HTTPProvider'
 import { Add, Clear, ShoppingCart } from '@mui/icons-material'
 import {
   Autocomplete,
@@ -36,35 +33,72 @@ import {
 import { Box } from '@mui/system'
 import arrayMutators from 'final-form-arrays'
 import _ from 'lodash'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 
-const submit = (values) => {
+const submit = (values, { getState }) => {
+  if (values.id) return updateData(values, getState())
+  return storeData(values);
+}
+const updateData = (values, { dirtyFields }) => {
+  const dataToSend = {
+    id: values.id,
+  }
+  if (dirtyFields.description) dataToSend.description = values.description
+  if (dirtyFields.module_id) dataToSend.module_id = values.module_id
+  if (dirtyFields.medicaments) {
+    dataToSend.medicaments = values.medicaments.map(
+      ({ id, price, quantity }) => ({
+        id,
+        price,
+        quantity,
+      }),
+    )
+  }
+
+put(route('buy.update',dataToSend.id),dataToSend);
+}
+
+const storeData = (values) => {
   const dataToSend = {
     module_id: values.module_id,
     description: values.description,
-    medicaments: values.medicaments.map(({id,price,quantity})=>({id,price,quantity})),
+    medicaments: values.medicaments.map(({ id, price, quantity }) => ({
+      id,
+      price,
+      quantity,
+    })),
   }
-  console.log(dataToSend);
+  /* console.log(dataToSend) */
   post(route('buy.store'), dataToSend)
 }
-export default (props) => {
+export default ({ buyToEdit, ...props }) => {
+  const [initialMedicaments , setInitialMedicaments] = useState([])
   const { data, module, modules = [], can } = props
-  const [propsSelectedModuleTo, setPropsSelectedModuleTo] = useState({
-    open: false,
-    moduleSelected: null,
-    moduleDisableds: [],
-  })
+  const [propsSelectedModuleTo, setPropsSelectedModuleTo] = useState([])
+  useEffect(() => {
+    if (buyToEdit)
+      setInitialMedicaments(
+        _.map(buyToEdit.medicaments, ({ id, code, name, pivot }) => ({
+          id,
+          code,
+          name,
+          ...pivot,
+        })),
+      )
+  }, buyToEdit)
   return (
     <Fragment>
-      <Head title="createBuy" />
+      <Head title={buyToEdit ? 'editBuy' : 'createBuy'} />
       <Form
         onSubmit={submit}
         mutators={{ ...arrayMutators }}
         initialValues={{
+          id: buyToEdit ? buyToEdit.id : null,
           module_id: module ? module.id : null,
-          description: null,
+          medicaments: initialMedicaments ,
+          description: buyToEdit ? buyToEdit.description : null,
         }}
         validate={(values) => {
           const errors = {}
@@ -84,8 +118,15 @@ export default (props) => {
                   alignItems="center"
                   alignSelf="center"
                 >
+                  {/*   {console.log(values)} */}
                   <ShoppingCart sx={{ fontSize: 'inherit', marginRight: 2 }} />
                   <IntlMessage id="buy" />
+                  {buyToEdit && (
+                    <>
+                      {' N° '}
+                      {buyToEdit.id}
+                    </>
+                  )}
                 </Typography>
                 <Divider />
 
@@ -101,7 +142,7 @@ export default (props) => {
                     }}
                   />
                   {submitFailed && errors.module_id && (
-                    <FormHelperText error sx={{textAlign:"center"}}>
+                    <FormHelperText error sx={{ textAlign: 'center' }}>
                       <IntlMessage id={errors.module_id} />
                     </FormHelperText>
                   )}
@@ -116,8 +157,9 @@ export default (props) => {
                       medicamentsOptions={props.medicaments}
                       onChangeTextField={(e, value) => {
                         visit(
-                          route('buy.create', {
+                          route(route().current(), {
                             module: props.module ? props.module.id : null,
+                            buy: buyToEdit ? buyToEdit.id : null,
                             search: value ? value : '',
                           }),
                           {
@@ -259,7 +301,12 @@ export default (props) => {
               }}
               onSelect={(value) => {
                 form.change('medicaments', [])
-                visit(route('buy.create', value.id))
+                visit(
+                  route(route().current(), {
+                    module: value.id,
+                    buy: buyToEdit ? buyToEdit.id : null,
+                  }),
+                )
                 form.change('module_id', value.id)
               }}
               label="selectModuleToBuy"

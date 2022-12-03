@@ -48,6 +48,7 @@ class UserController extends Controller
         $validated = $request->validated();
         $user = new User($validated);
         $user->password = Hash::make($request->password);
+        $user->assignRole('empleado');
         return $user->save() ? back() : back(500)->withErrors('save', 'error al guardar');
     }
 
