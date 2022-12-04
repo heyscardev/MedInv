@@ -150,7 +150,7 @@ export default (props) => {
             onClick={() => {
               visit(
                 route('recipe.create', {
-                  id: props.module.id,
+                  module_id: props.module.id,
                 }),
               )
             }}

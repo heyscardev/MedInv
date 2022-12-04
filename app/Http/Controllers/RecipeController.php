@@ -42,9 +42,8 @@ class RecipeController extends Controller
         return Inertia::render('Recipes/index', ['data' => $query->paginate($paginate), "module" => $moduleDeliver]);
     }
 
-    public function create(Request $request, Module $module)
+    public function create(Request $request)
     {
-
         $medicaments = [];
 
         $patients = [];
@@ -52,6 +51,7 @@ class RecipeController extends Controller
 
         $doctorsFind = $request->get('doctors', null);
         $doctors = [];
+
         $pathologies = Pathology::get();
         //  $onlyChilds = $request->get('onlyChilds', null);
 
@@ -65,10 +65,7 @@ class RecipeController extends Controller
                 }) */
                 ->get();
         }
-        if ($module->exists) {
-            if (!auth()->user()->hasRole('administrador') && ($module->user_id != auth()->user()->id)) return abort(403);
-            $medicaments = $module->medicaments()->with('unit')->get();
-        }
+
         if ($doctorsFind !== null) {
             $doctors = Doctor::where('c_i', "LIKE", "%" . $doctorsFind . "%")
                 ->orWhere('first_name', "LIKE", "%" . $doctorsFind . "%")
@@ -76,7 +73,16 @@ class RecipeController extends Controller
                 ->orWhere('code', "LIKE", "%" . $doctorsFind . "%")
                 ->get();
         }
-        $moduleDeliver = $module->exists ? $module : null;
+
+        if( $request->has('module_id') ) {
+            $module = Module::find( $request->get('module_id') );
+
+            if ($module) {
+                if (!auth()->user()->hasRole('administrador') && ($module->user_id != auth()->user()->id)) return abort(403);
+                $medicaments = $module->medicaments()->with('unit')->get();
+            }
+        }
+        $moduleDeliver = $module ?? null;
 
         $modules =  Module::with('user')
             ->when(!auth()->user()->hasRole('administrador'), function ($q) {

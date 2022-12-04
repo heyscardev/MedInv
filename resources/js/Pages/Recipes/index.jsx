@@ -105,14 +105,14 @@ export default ({ module, ...props }) => {
             onClick: (e) => {
               visit(
                 route(`recipe.create`, {
-                  id: module ? module.id : null,
+                  module_id: module ? module.id : null,
                 }),
               )
             },
           },
         ]}
       />
-     
+
     </Fragment>
   )
 }

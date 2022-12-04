@@ -210,7 +210,7 @@ export default ({
                             }
                             renderOption={(props, option) => (
                               <Box {...props} key={option.id}>
-                                {`C.I: ${option.c_i} H:${option.n_history} 
+                                {`C.I: ${option.c_i} H:${option.n_history}
                                 ${option.first_name} ${option.last_name}`}
                               </Box>
                             )}
@@ -242,7 +242,7 @@ export default ({
                           }
                           renderOption={(props, option) => (
                             <Box {...props} key={option.id}>
-                              {`C.I: ${option.c_i} #: ${option.code} 
+                              {`C.I: ${option.c_i} #: ${option.code}
                                 ${option.first_name} ${option.last_name}`}
                             </Box>
                           )}
@@ -681,7 +681,7 @@ export default ({
                     }}
                     onSelect={(value) => {
                       form.change('medicaments', [])
-                      visit(route('recipe.create', value.id))
+                      visit( route('recipe.create',  { module_id: value.id }  ))
                       form.change('moduleDeliver', value)
                     }}
                     label="selectModuleToTransfer"
