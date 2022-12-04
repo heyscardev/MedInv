@@ -21,6 +21,8 @@ class Medicament extends Model
 
     protected $appends = ['quantity_global'];
 
+    protected $with = ['unit'];
+
 
     /**
      * This are the relations

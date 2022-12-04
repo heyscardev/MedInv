@@ -142,8 +142,11 @@ export default ({ recipe, data }) => {
                                 textAlign="right"
                                 color="error"
                             >
-                            { recipe.deleted_at && <IntlMessage id={"deleted_at"} /> }
-                            { recipe.deleted_at && ': ' + format(new Date(recipe.deleted_at), 'dd MMMM yyyy')  }
+                            {   recipe.deleted_at && <span>
+                                                        <IntlMessage id={"deleted_at"} />:
+                                                        { format(new Date(recipe.deleted_at), 'dd MMMM yyyy') }
+                                                    </span>
+                            }
                             </Typography>
                         </Stack>
                       </Grid>
@@ -181,10 +184,10 @@ export default ({ recipe, data }) => {
                         accessorKey: 'name',
                         header: 'medicament',
                     },
-                    // {
-                    //     accessorKey: 'unit_id',
-                    //     header: 'unit',
-                    // },
+                    {
+                        accessorKey: 'unit.name',
+                        header: 'unit',
+                    },
                     {
                         accessorKey: 'pivot.prescribed_amount',
                         header: 'prescribed_amount',
