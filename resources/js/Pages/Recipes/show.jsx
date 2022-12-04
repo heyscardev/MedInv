@@ -142,7 +142,8 @@ export default ({ recipe, data }) => {
                                 textAlign="right"
                                 color="error"
                             >
-                            { recipe.deleted_at && <IntlMessage id={"deleted_at"} />  } {/* format(new Date(recipe.deleted_at), 'dd MMMM yyyy') */}
+                            { recipe.deleted_at && <IntlMessage id={"deleted_at"} /> }
+                            { recipe.deleted_at && ': ' + format(new Date(recipe.deleted_at), 'dd MMMM yyyy')  }
                             </Typography>
                         </Stack>
                       </Grid>

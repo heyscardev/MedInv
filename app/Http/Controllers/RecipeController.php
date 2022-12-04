@@ -108,8 +108,9 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Recipe $recipe)
+    public function show($id)
     {
+        $recipe = Recipe::withTrashed()->whereId($id)->first();
         $data = $recipe->medicaments()->get();
         return Inertia::render('Recipes/show', ['recipe' => $recipe, 'data' => $data]);
     }
