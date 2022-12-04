@@ -103,6 +103,18 @@ class RecipeController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Recipe $recipe)
+    {
+        $data = $recipe->medicaments()->get();
+        return Inertia::render('Recipes/show', ['recipe' => $recipe, 'data' => $data]);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

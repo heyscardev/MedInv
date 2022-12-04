@@ -1,106 +1,199 @@
-import { Masks } from "@mui/icons-material"
-import { Stack } from "@mui/material"
+import IntlMessage from "@/Components/Common/IntlMessage";
+import Table from "@/Components/Common/Table";
+import { Article, Bookmark, Comment, Person, Store } from "@mui/icons-material";
+import { Divider, Grid, Stack, Typography } from "@mui/material";
+import { format } from "date-fns";
+import { Fragment } from "react";
 
-export default ({data})=>{
+export default ({ recipe, data }) => {
     return (
-        <>
- 
-                    <Stack
-                      bgcolor="white.main"
-                      borderRadius={2}
-                      padding={1}
-                      gap={2}
-                    >
-                      <Typography
-                        variant="h5"
+        <Fragment>
+            <Stack spacing={2} padding={4}>
+                <Stack
+                    bgcolor="white.main"
+                    borderRadius={2}
+                    padding={1}
+                    gap={2}
+                >
+                    <Typography
+                        variant="h3"
+                        align="center"
                         fontWeight="bolder"
-                        color="gray"
+                        color="primary"
                         display="flex"
                         alignItems="center"
-                        alignSelf="left"
-                      >
-                        <Masks sx={{ fontSize: 'inherit', marginRight: 2 }} />
-                        <IntlMessage id="patientInformation" />
-                      </Typography>
-                      <Divider />
-                      <Grid container rowSpacing={2} columnSpacing={1}>
-                        <Grid item xs={4}>
-                          <Typography variant="body1">
-                            <b>
-                              <IntlMessage id={'first_name'} />
-                            </b>
-                            {': ' + values.patient.first_name}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                          <Typography variant="body1">
-                            <b>
-                              <IntlMessage id={'last_name'} />
-                            </b>
-                            {': ' + values.patient.last_name}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Typography variant="body1">
-                            <b>
-                              <IntlMessage id={'c_i'} />
-                            </b>{' '}
-                            {': ' + values.patient.c_i}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                          <Typography variant="body1">
-                            <b>
-                              <IntlMessage id={'n_history'} />
-                            </b>
-                            {': ' + values.patient.n_history}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <Typography variant="body1">
-                            <b>
-                              <IntlMessage id={'email'} />
-                            </b>
-                            {': ' + values.patient.email}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                          <Typography variant="body1">
-                            <b>
-                              <IntlMessage id={'gender'} />
-                            </b>
-                            {': '}
-                            <IntlMessage id={values.patient.gender} />
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={5}>
-                          <Typography variant="body1">
-                            <b>
-                              <IntlMessage id={'birth_date'} />
-                            </b>
-                            {': '}
-                            {format(
-                              new Date(
-                                values.patient.birth_date.split('-')[0],
-                                values.patient.birth_date.split('-')[1] - 1,
-                                values.patient.birth_date.split('-')[2],
-                              ),
-                              'dd MMMM yyyy',
-                            )}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                          <Typography variant="body1">
-                            <b>
-                              <IntlMessage id={'phone'} />
-                            </b>
-                            {': '}
-                            {values.patient.phone}
-                          </Typography>
-                        </Grid>
+                        alignSelf="center"
+                    >
+                        <Article sx={{ fontSize: "inherit", marginRight: 2 }} />
+                        <IntlMessage id="Recipe" /> Nº {recipe.id}
+                    </Typography>
+                    <Typography
+                        variant="h6"
+                        align="center"
+                        fontWeight="bolder"
+                        color="primary"
+                        display="flex"
+                        alignItems="center"
+                        alignSelf="center"
+                    >
+                        <Bookmark sx={{ fontSize: "inherit", marginRight: 1 }} />
+                        {recipe.recipe_type}
+
+                        <Bookmark sx={{ fontSize: "inherit", marginLeft: 4, marginRight: 1 }} />
+                        {/* <IntlMessage id={"pathology"} />: */}
+                        { recipe.pathology_id ? recipe.pathology.name : '' }
+                    </Typography>
+                    <Divider />
+                    <Grid
+                      container
+                      alignItems="flex-end"
+                      justifyContent="center"
+                      rowGap={1}
+                      columnSpacing={2}
+                    >
+                      <Grid item xs={12} sm={8}>
+                        <Stack >
+                            <Typography
+                                variant="h5"
+                                textAlign="left"
+                                color="primary"
+                            >
+                                <Person sx={{ fontSize: "inherit", marginRight: 1 }} />
+                                <IntlMessage id={"patient"} />: { recipe.patient_id ? recipe.patient.first_name +' '+recipe.patient.last_name : '' }
+                            </Typography>
+                        </Stack>
                       </Grid>
-                    </Stack>
-             
-        </>
-    )
-}
+                      <Grid item xs={12} sm={4}>
+                        <Stack>
+                          <Typography
+                            variant="span"
+                            textAlign="right"
+                            color="primary"
+                          >
+                            <IntlMessage id={"user"} />: { recipe.user_id ? recipe.user.first_name +' '+recipe.user.last_name : '' }
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12} sm={8}>
+                        <Stack>
+                          <Typography
+                            variant="h5"
+                            textAlign="left"
+                            color="primary"
+                          >
+                            <Person sx={{ fontSize: "inherit", marginRight: 1 }} />
+                            <IntlMessage id={"doctor"} />: { recipe.doctor_id ? recipe.doctor.first_name +' '+recipe.doctor.last_name : '' }
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <Stack>
+                          <Typography
+                            variant="span"
+                            textAlign="right"
+                            color="secondary.dark"
+                          >
+                            <IntlMessage id={"created_at"} />: { format(new Date(recipe.created_at), 'dd MMMM yyyy') }
+                          </Typography>
+                        </Stack>
+                      </Grid>
+
+                      <Grid item xs={12} sm={8}>
+                        <Stack >
+                            <Typography
+                                variant="h5"
+                                textAlign="left"
+                                color="primary"
+                            >
+                                <Store sx={{ fontSize: "inherit", marginRight: 1 }} />
+                                <IntlMessage id={"module"} />: { recipe.module_id ? recipe.module.name : '' }
+                            </Typography>
+                        </Stack>
+                      </Grid>
+
+                      <Grid item xs={12} sm={4}>
+                        <Stack >
+                            <Typography
+                                variant="span"
+                                textAlign="right"
+                                color="primary"
+                            >
+                                <IntlMessage id={"updated_at"} />: { format(new Date(recipe.updated_at), 'dd MMMM yyyy') }
+                            </Typography>
+                        </Stack>
+                      </Grid>
+
+                      <Grid item xs={12} sm={8}>
+                        <Stack >
+                            <Typography
+                                variant="h6"
+                                textAlign="left"
+                                color="primary"
+                            >
+
+                            </Typography>
+                        </Stack>
+                      </Grid>
+
+                      <Grid item xs={12} sm={4}>
+                        <Stack >
+                            <Typography
+                                variant="p"
+                                textAlign="right"
+                                color="error"
+                            >
+                            { recipe.deleted_at && <IntlMessage id={"deleted_at"} />  } {/* format(new Date(recipe.deleted_at), 'dd MMMM yyyy') */}
+                            </Typography>
+                        </Stack>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <Stack >
+                            <Typography
+                                variant="h6"
+                                textAlign="left"
+                                color="secondary.dark"
+                            >
+                                <Comment sx={{ fontSize: "inherit", marginRight: 1 }} />
+                                <IntlMessage id={"description"} />: { recipe.description }
+                            </Typography>
+                        </Stack>
+                      </Grid>
+
+                    </Grid>
+                </Stack>
+            </Stack>
+
+            {/* asyncronous table for view and filters for recipes of doctor */}
+            <Table
+                routeParams={{ recipe: recipe.id }}
+                enableRowSelection={false}
+                data={data}
+                initialState={{ columnVisibility: { id: false } }}
+                columns={[
+                    { accessorKey: "id", header: "id" },
+                    {
+                        accessorKey: 'code',
+                        header: 'code',
+                    },
+                    {
+                        accessorKey: 'name',
+                        header: 'medicament',
+                    },
+                    // {
+                    //     accessorKey: 'unit_id',
+                    //     header: 'unit',
+                    // },
+                    {
+                        accessorKey: 'pivot.prescribed_amount',
+                        header: 'prescribed_amount',
+                    },
+                    {
+                        accessorKey: 'pivot.quantity',
+                        header: 'quantity_deliver',
+                    },
+                ]}
+            />
+        </Fragment>
+    );
+};

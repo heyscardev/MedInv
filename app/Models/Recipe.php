@@ -23,6 +23,8 @@ class Recipe extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $with = ['module','pathology','doctor','patient','user'];
+
     /**
      * This are the relations
      */
@@ -47,7 +49,7 @@ class Recipe extends Model
         return $this->belongsTo(User::class);
     }
     public function medicaments(){
-        return $this->belongsToMany(Medicament::class)->withPivot('prescribed_amount','quantity','price','description')->using(MedicamentRecipe::class);
+        return $this->belongsToMany(Medicament::class)->withPivot('prescribed_amount','quantity','description')->using(MedicamentRecipe::class);
     }
 
 }

@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
     });
 
     //* Recipes
-    Route::resource('recipes', RecipeController::class)->except(['create','edit','show'])->names('recipe');
+    Route::resource('recipes', RecipeController::class)->except(['create','edit'])->names('recipe');
     Route::group(['prefix'=>'recipes', 'as'=>'recipe.'], function()
     {
         Route::get('create/{module?}', [RecipeController::class, 'create'])->name('create');

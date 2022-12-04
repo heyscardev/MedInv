@@ -1,4 +1,3 @@
-import AsyncTable from "@/Components/Common/AsyncTable"
 import IntlMessage from "@/Components/Common/IntlMessage"
 import Table from "@/Components/Common/Table"
 import { Person } from "@mui/icons-material"
@@ -6,8 +5,6 @@ import { Grid, Paper, Typography } from "@mui/material"
 import { Fragment } from "react"
 
 export default (props) =>{
-
-    console.log(props);
 
     return (
         <Fragment>
@@ -31,7 +28,7 @@ export default (props) =>{
 
             {/* asyncronous table for view and filters for recipes of doctor */}
             <Table
-             
+
                 routeParams={{ doctor: props.doctor.id }}
                 // renderTopToolbarCustomActions={ActionsTableShow(props.doctor)}
                 enableRowSelection={false}
