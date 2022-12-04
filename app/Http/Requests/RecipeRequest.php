@@ -61,9 +61,9 @@ class RecipeRequest extends FormRequest
             'recipe_type'   => ['required', 'in:DAILY,MASSIVE,HIGH COST'],
             'patient_id'    => ['required', 'numeric', 'exists:patients,id'],
             'doctor_id'     => ['required', 'numeric', 'exists:doctors,id'],
-            'pathology_id'  => ['required', 'numeric', 'exists:pathologies,id'],
+            'pathology_id'  => [Rule::requiredIf($this->post('recipe_type') === "HIGH COST"), 'numeric', 'exists:pathologies,id'],
             'module_id'     => ['required', 'numeric', 'exists:modules,id'],
-            'user_id'       => ['required', 'numeric', 'exists:users,id'],
+           
         ];
     }
 
@@ -79,7 +79,7 @@ class RecipeRequest extends FormRequest
             'patient_id'    => ['sometimes','required', 'numeric', 'exists:patients,id'],
             'doctor_id'     => ['sometimes','required', 'numeric', 'exists:doctors,id'],
             'pathology_id'  => ['sometimes','required', 'numeric', 'exists:pathologies,id'],
-            'module_id'     => ['sometimes','required', 'numeric', 'exists:modules,id'],
+            'module_id'     => ['sometimes',Rule::requiredIf($this->post('recipe_type') === "HIGH COST"), 'numeric', 'exists:modules,id'],
             'user_id'       => ['sometimes','required', 'numeric', 'exists:users,id'],
         ];
 

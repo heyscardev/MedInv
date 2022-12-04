@@ -36,7 +36,7 @@ import {
 import { Box } from '@mui/system'
 import arrayMutators from 'final-form-arrays'
 import _ from 'lodash'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { useIntl } from 'react-intl'
@@ -44,8 +44,16 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 import SelectionModuleModal from '@/Components/Layouts/Modules/SelectionModuleModal'
 import CellNumberBox from '@/Components/Common/CellNumberBox'
+import Head from '@/Components/Custom/Head'
 
-const submit = (values) => {
+const submit = (values,{getState}) => {
+  if(values.id){
+    return updateSubmit(values,getState());
+  }
+  return storeSubmit()
+ 
+}
+const storeSubmit = (values)=>{
   const dataToSend = {
     module_send_id: values.moduleSend.id,
     module_receive_id: values.moduleReceive.id,
@@ -53,16 +61,21 @@ const submit = (values) => {
   }
   post(route('transfer.store'), dataToSend)
 }
+const updateSubmit = ()=>{
+
+}
 export default ({
   medicaments,
   moduleToTransfers,
   moduleFromTransfers,
   moduleSelected,
-  selectedMedicaments,
+  selectedMedicaments=[],
+  transferToEdit,
   can,
   ...props
 }) => {
   const { formatMessage } = useIntl()
+  const [initialMedicaments , setInitialMedicaments] = useState(selectedMedicaments)
   const [propsSelectedModuleTo, setPropsSelectedModuleTo] = useState({
     open: false,
     moduleSelected: null,
@@ -73,26 +86,19 @@ export default ({
     moduleSelected: null,
     moduleDisableds: [],
   })
+  useEffect(() => {
+    if (transferToEdit && moduleSelected)
+      setInitialMedicaments(
+        _.map(transferToEdit.medicaments, ({ id, code, name, pivot ,modules}) => {
+          return({
+         ...(_.find(medicaments,{id:id},{}) ),
+          ...pivot,
+        })}),
+      )
+  }, transferToEdit,moduleSelected)
   return (
     <Fragment>
-      {/*       <Breadcrums
-        links={[
-          { name: "dashboard", route: "dashboard" },
-          { name: "modules", route: "module.index" },
-            {
-                        noTranslate:true,
-                        name: props.module.name,
-                        route: "module.show",
-                        id: props.module.id,
-                    },
-                    {
-                        noTranslate:true,
-                        name: "buyMedicaments",
-                        route: "module.buy.create",
-                        id: props.module.id,
-                    },
-        ]}
-      /> */}
+     <Head title={transferToEdit?"editTransfer":"createTransfer"} />
 
       <Form
         onSubmit={submit}
@@ -100,7 +106,7 @@ export default ({
         initialValues={{
           moduleReceive: null,
           moduleSend: moduleSelected,
-          medicaments: selectedMedicaments,
+          medicaments: initialMedicaments,
           description: null,
         }}
         validate={(values) => {

@@ -22,7 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 
     /**
@@ -36,6 +35,5 @@ class AppServiceProvider extends ServiceProvider
         MedicamentTransfer::observe(MedicamentTransferObserver::class);
         Transfer::observe(TransferObserver::class);
         Buy::observe(BuyObserver::class);
-
     }
 }

@@ -30,8 +30,8 @@ class ModuleController extends Controller
     {
         if (auth()->user()->hasRole('administrador')) {
             $modules = $request->has('deleted')
-            ? Module::onlyTrashed()->orderBy('deleted_at', 'desc')->with('user')->get()
-            : Module::withoutTrashed()->orderBy('updated_at', 'desc')->with('user')->get();
+                ? Module::onlyTrashed()->orderBy('deleted_at', 'desc')->with('user')->get()
+                : Module::withoutTrashed()->orderBy('updated_at', 'desc')->with('user')->get();
             return  Inertia::render('Modules/index.admin', ['data' => $modules, "users" => User::get()]);
         }
         return Inertia::render('Modules/index.employee', ['data' => auth()->user()->modules]);

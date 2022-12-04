@@ -25,23 +25,24 @@ class TransferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TransferRequest $request,Module $module)
+    public function index(TransferRequest $request, Module $module)
     {
 
         $paginate = max(min($request->get('page_size'), 100), 10);
 
         if ($module->exists) {
+            if (!auth()->user()->hasRole('administrador') && $module->user_id !== auth()->user()->id) return abort(403);
             $query = $module->transfers()->with('moduleSend', 'moduleReceive', 'user');
 
         } else {
-            $query  = Transfer::with('moduleSend', 'moduleReceive', 'user')->where('transfers.user_id',auth()->user()->id);
+            $query  = Transfer::with('moduleSend', 'moduleReceive', 'user')->where('transfers.user_id', auth()->user()->id);
             $module = null;
         }
 
         $query  = $this->applyFilters($query, $request);
         $data   = $query->paginate($paginate);
 
-        return inertia('Transfers/index', compact('data','module'));
+        return inertia('Transfers/index', compact('data', 'module'));
     }
 
     /**
@@ -62,6 +63,31 @@ class TransferController extends Controller
         $moduleFromTransfers = User::find(auth()->user()->id)->modules()->with('user')->get();
         $moduleToTransfers = Module::with('user')->get();
         return inertia('Transfers/Create', compact('moduleToTransfers', 'moduleFromTransfers', 'moduleSelected', 'selectedMedicaments', 'medicaments'));
+    }
+
+    /**
+     * Show the form for edit a resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(TransferRequest $request, Transfer $transfer, Module $module)
+    {
+        $transferToEdit = Transfer::with('moduleSend','moduleReceive')->find($transfer->id);
+        $moduleSelected = null;
+        $medicaments = [];
+        $selectedMedicaments = [];
+        if ($module->exists) {
+            if (!auth()->user()->hasRole('administrador') && $module->user_id !== auth()->user()->id) abort(403);
+            $moduleSelected = $module;
+            $medicaments = $module->medicaments()->get();
+            $selectedMedicaments = $transfer->medicaments()->get();
+        } else {
+            return redirect(route('transfer.edit',  ["transfer" => $transfer->id, "module" => $transfer->module_send_id]));
+        }
+
+        $moduleFromTransfers = User::find(auth()->user()->id)->modules()->with('user')->get();
+        $moduleToTransfers = Module::with('user')->get();
+        return inertia('Transfers/Create', compact('moduleToTransfers', 'moduleFromTransfers', 'moduleSelected', 'selectedMedicaments', 'medicaments', 'transferToEdit'));
     }
 
     /**
@@ -86,6 +112,55 @@ class TransferController extends Controller
             $request->input('medicaments', [])
         );
         return Redirect(route('transfer.create', $request->input('module_send_id')));
+    }
+     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(TransferRequest $request, Transfer $transfer)
+    {
+        $validated = $request->validated();
+
+        $transfer->update($validated);
+        if (array_key_exists('medicaments', $validated)) {
+            $formatMedicaments = [];
+            foreach ($validated['medicaments'] as $value) {
+                $formatMedicaments[$value['id']] = ['quantity' => $value['quantity']];
+            }
+
+            $transfer->medicaments()->sync($formatMedicaments);
+        }
+
+        return back();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Transfer $transfer)
+    {
+        // with soft deletes
+        $transfer->medicaments()->sync([]);
+        $transfer->delete();
+        return back();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Transfer $transfer)
+    {
+        $data = $transfer->medicaments()->get();
+        return Inertia::render('Transfers/show', ['item' => $transfer, 'data' => $data]);
     }
 
     /**

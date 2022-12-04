@@ -104,6 +104,7 @@ class RecipeController extends Controller
     {
         $validated = $request->validated();
         $recipe = new Recipe($validated);
+        $recipe->user_id = auth()->user()->id;
         $recipe->save();
         return back();
     }

@@ -17,24 +17,28 @@ class TransferRequest extends FormRequest
      */
     public function authorize()
     {
-
+        if (auth()->user()->hasRole('administrador')) return true;
         $module = $this->route('module', null);
+
         if ($module && $module->user_id !== auth()->user()->id) return false;
         if ($this->routeIs('transfer.store')) return $this->storeAuthorize();
         if ($this->routeIs('transfer.index')) return $this->indexAuthorize();
+        if ($this->routeIs('transfer.edit')) return $this->indexAuthorize();
         if ($this->routeIs('module.transfer.index')) return $this->indexAuthorize();
         return true;
     }
     private function storeAuthorize()
     {
+        
         $module = Module::find($this->post('module_send_id', null));
         if ($module && $module->user_id !== auth()->user()->id) return false;
         return true;
     }
     private function indexAuthorize()
     {
+     
         $module = Module::find($this->get('module', null));
-        if (!auth()->user()->hasRole('administrador') && $module && $module->user_id !== auth()->user()->id) return false;
+        if ($module && $module->user_id !== auth()->user()->id) return false;
         return true;
     }
 
@@ -94,6 +98,28 @@ class TransferRequest extends FormRequest
                 $itemInventory = DB::table('medicament_module')->where("module_id", $module_send_id)->where("medicament_id", $prefix)->first();
 
                 if ($itemInventory && $itemInventory->quantity_exist < $value) $fail("{$attribute} no puede exceder el inventario del modulo");
+            }],
+
+        ];
+    }
+    private function updateRules()
+    {
+        return [
+            'module_send_id'        => ['sometimes','required', 'exists:modules,id',],
+            'module_receive_id'     => ['sometimes','required', 'exists:modules,id', "different:module_send_id"],
+            'description'           => ['sometimes','string', 'nullable', 'max:250'],
+            'medicaments'           => ['sometimes','required', 'array', 'min:1'],
+            'medicaments.*.id'      => ['sometimes','required', 'distinct', Rule::exists('medicament_module', 'medicament_id')->where(function ($query) {
+                return $query->where('module_id', $this->post("module_send_id"));
+            })],
+            'medicaments.*.quantity' => ['required', 'integer', "min:1", function ($attribute, $value, $fail) {
+                $index = explode('.', $attribute)[1];
+                $prefix = $this->input("medicaments.{$index}.id", null);
+                $module_send_id = $this->input("module_send_id", null);
+                
+                $itemInventory = DB::table('medicament_module')->where("module_id", $module_send_id)->where("medicament_id", $prefix)->first();
+
+                if ($itemInventory && $itemInventory->quantity_exist < $value) $fail("{$attribute} no puede exceder el inventario del modulo ");
             }],
 
         ];

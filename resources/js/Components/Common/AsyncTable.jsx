@@ -72,6 +72,8 @@ const onAsyncDefault = ({
   routeName,
   routeParams,
 }) => {
+  const urlParams = new URLSearchParams(window.location.search)
+  const restoreMode = urlParams.has('deleted')
   setIsLoading(true)
   visit(
     route(routeName, {
@@ -80,6 +82,7 @@ const onAsyncDefault = ({
       orderBy: sorting,
       search: globalFilter,
       filters: columnFilters,
+      deleted:restoreMode?true:null,
       ...routeParams,
     }),
     {

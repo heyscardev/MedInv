@@ -4,7 +4,6 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicamentController;
-use App\Http\Controllers\ModuleBuyController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RecipeController;
@@ -12,7 +11,6 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
-use App\Models\Buy;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -92,6 +90,17 @@ Route::middleware('auth')->group(function () {
         Route::get('edit/{buy}/{module?}', [BuyController::class, 'edit'])->name('edit');
        /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
     });
+   
+   
+ 
+    Route::resource('transfers', TransferController::class)->except(['create','edit','show'])->names('transfer');
+    Route::group(['prefix'=>'transfers', 'as'=>'transfer.'], function()
+    {
+        Route::get('create/{module?}', [TransferController::class, 'create'])->name('create');
+        Route::get('edit/{transfer}/{module?}', [TransferController::class, 'edit'])->name('edit');
+       /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
+    });
+    
 
 });
 

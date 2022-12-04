@@ -14,8 +14,9 @@ class ModuleRequest extends FormRequest
      */
     public function authorize()
     {
-        // $module = $this->route('module');
-        // if ($module->user->id !== auth()->user()->id) return abort(403);
+        if(auth()->user()->hasRole('administrador')) return true;
+         $module = $this->route('module');
+        if ($module && $module->user->id !== auth()->user()->id) return abort(403);
         return true;
     }
 

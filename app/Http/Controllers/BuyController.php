@@ -95,6 +95,7 @@ class BuyController extends Controller
     public function destroy(Buy $buy)
     {
         // with soft deletes
+        $buy->medicaments()->sync([]);
         $buy->delete();
         return back();
     }
