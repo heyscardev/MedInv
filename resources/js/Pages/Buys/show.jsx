@@ -135,7 +135,7 @@ export default ({ item, data }) => {
                         header: 'quantity',
                     },
                     {
-                        header: 'total',
+                        header: 'totalPrice',
                         filterVariant: 'range',
                         accessorFn: ({ pivot: { price, quantity } }) => {
                             return price * quantity
