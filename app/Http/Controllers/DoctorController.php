@@ -54,8 +54,9 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(DoctorRequest $request, Doctor $doctor)
+    public function show($id)
     {
+        $doctor = Doctor::withTrashed()->whereId($id)->first();
         $recipes = $doctor->recipes()
                           ->with(['patient:id,first_name,last_name', 'module:id,name', 'pathology:id,name'])
                           ->paginate( 10 );
