@@ -163,18 +163,6 @@ class TransferController extends Controller
         return Inertia::render('Transfers/show', ['item' => $transfer, 'data' => $data]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Transfer $transfer)
-    {
-        $data = $transfer->medicaments()->get();
-        return Inertia::render('Transfers/show', ['item' => $transfer, 'data' => $data]);
-    }
-
 
     /////////////////////////////////////////
     /**
