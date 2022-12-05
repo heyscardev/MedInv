@@ -65,7 +65,7 @@ export default ({ data }) => {
                 accessorKey: 'user',
                 header: 'user',
                 accessorFn: ({ user: { first_name, last_name } }) => {
-                return `${first_name} ${last_name}`
+                    return `${first_name} ${last_name}`
                 },
             },
             {

@@ -211,5 +211,6 @@
     "deleteMessageTransfer":"Desea eliminar la Tansferencia con id N° {value}? \n ¡esta operacion no es reversible!",
     "reportType":"Tipo de reporte",
     "userRegister":"Registro de Usuarios",
-    "medicamentsMovements":"movimientos de medicamento"
+    "medicamentsMovements":"movimientos de medicamento",
+    "total":"Total"
 }

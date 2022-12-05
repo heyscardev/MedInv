@@ -1,5 +1,6 @@
 import IntlMessage from "@/Components/Common/IntlMessage";
 import Table from "@/Components/Common/Table";
+import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
 import { Article, Comment, Person, Store } from "@mui/icons-material";
 import { Divider, Grid, Stack, Typography } from "@mui/material";
 import { format } from "date-fns";
@@ -7,6 +8,7 @@ import { Fragment } from "react";
 
 export default ({ item, data }) => {
 
+    console.log(data);
     return (
         <Fragment>
             <Stack spacing={2} padding={4}>
@@ -44,14 +46,14 @@ export default ({ item, data }) => {
                                 color="primary"
                             >
                                 <Store sx={{ fontSize: "inherit", marginRight: 1 }} />
-                                <IntlMessage id={"moduleSend"} />: { item.module_id ? item.module.name: '' }
+                                <IntlMessage id={"module"} />: { item.module_id ? item.module.name: '' }
                             </Typography>
                         </Stack>
                       </Grid>
                       <Grid item xs={12} sm={4}>
                         <Stack>
                           <Typography
-                            variant="span"
+                            variant="h6"
                             textAlign="right"
                             color="primary"
                           >
@@ -60,7 +62,7 @@ export default ({ item, data }) => {
                           </Typography>
                         </Stack>
                       </Grid>
-                      <Grid item xs={12} sm={8}>
+                      <Grid item xs={12} sm={8} >
                         <Stack >
                             <Typography
                                 variant="h6"
@@ -82,30 +84,20 @@ export default ({ item, data }) => {
                             <IntlMessage id={"created_at"} />: { format(new Date(item.created_at), 'dd MMMM yyyy') }
                           </Typography>
                         </Stack>
-                      </Grid>
-
-                      {/* <Grid item xs={12} sm={8}>
-                        <Stack >
-                            <Typography
-                                variant="h5"
-                                textAlign="left"
-                                color="primary"
-                            >
-
-                            </Typography>
-                        </Stack>
-                      </Grid> */}
-
-                      <Grid item xs={12} sm={4}>
                         <Stack >
                             <Typography
                                 variant="span"
                                 textAlign="right"
+                                marginTop={1}
                                 color="primary"
                             >
                                 <IntlMessage id={"updated_at"} />: { format(new Date(item.updated_at), 'dd MMMM yyyy') }
                             </Typography>
                         </Stack>
+                      </Grid>
+
+                      <Grid item xs={12} sm={4}>
+
                       </Grid>
 
                     </Grid>
@@ -135,10 +127,20 @@ export default ({ item, data }) => {
                     {
                         accessorKey: 'pivot.price',
                         header: 'price',
+                        filterVariant: 'range',
+                        Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
                     },
                     {
                         accessorKey: 'pivot.quantity',
                         header: 'quantity',
+                    },
+                    {
+                        header: 'total',
+                        filterVariant: 'range',
+                        accessorFn: ({ pivot: { price, quantity } }) => {
+                            return price * quantity
+                        },
+                        Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
                     },
                 ]}
             />
