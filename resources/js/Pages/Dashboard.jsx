@@ -8,6 +8,7 @@ import {
   MoveDown,
   MoveUp,
   People,
+  PeopleAltOutlined,
   Receipt,
   ShoppingCart,
   Sick,
@@ -71,6 +72,13 @@ export default ({ can, auth }) => {
           disabled: true,
         }
       : null,
+    can('user.activity.index')
+        ? {
+            name: 'activity',
+            route: route('user.activity.index'),
+            Icon: PeopleAltOutlined
+        }
+        : null,
   ]
   return (
     <Fragment>

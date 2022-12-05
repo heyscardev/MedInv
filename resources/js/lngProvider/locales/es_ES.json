@@ -200,5 +200,14 @@
     "buy":"Compra",
     "deleteMessageBuy":"Desea eliminar la compra con id N° {value}? \n ¡esta operacion no es reversible!",
     "remenber me":"Recuerdame",
-    "editBuy":"Editar Compra"
+    "editBuy":"Editar Compra",
+
+    "recipe_type":"Tipo de Recipe",
+
+    "user_activity":"Actividad del Usuario",
+    "log_date":"Fecha del evento",
+    "table_name":"Nombre de la tabla",
+    "log_type":"Operación realizada"
+
+
 }

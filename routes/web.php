@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicamentController;
@@ -40,6 +41,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    Route::resource('user-activity', ActivityController::class)->only(['index'])->names('user.activity');
 
     //* Users
     Route::resource('users', UserController::class)->except(['create','edit','show'])->names('user');

@@ -96,5 +96,7 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'patient.store'])->syncRoles([$managerRole, $employeeRole]);
         Permission::create(['name' => 'patient.destroy'])->syncRoles([$managerRole]);
         Permission::create(['name' => 'patient.restore'])->syncRoles([$managerRole]);
+
+        Permission::create(['name' => 'user.activity.index'])->syncRoles([$managerRole]);
     }
 }

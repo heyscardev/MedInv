@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 class Buy extends Model
 {
     use HasFactory;
+    use Loggable;
+
     protected $fillable = ['module_id','user_id','description'];
     protected $appends = ['total_quantity','total_medicaments','total_price'];
 

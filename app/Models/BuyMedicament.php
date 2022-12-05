@@ -4,9 +4,12 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 class BuyMedicament extends Pivot
 {
+    use Loggable;
+
     protected $table = "buy_medicament";
     protected $fillable = ['quantity','price'];
 

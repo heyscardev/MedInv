@@ -6,10 +6,12 @@ use Hamcrest\Description;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
 class Recipe extends Model
 {
     use HasFactory, SoftDeletes;
+    use Loggable;
 
     protected $fillable = [
         'recipe_type',

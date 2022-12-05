@@ -87,9 +87,9 @@ class UserController extends Controller
             $error = 'no puede eliminar un administrador';
         } else {
             // with soft deletes
-            $user->delete();
             $user->state = false;
             $user->save();
+            $user->delete();
         }
         return !$error ? back() : back()->withErrors(['noDelete' => $error]);
     }

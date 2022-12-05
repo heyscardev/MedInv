@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Hamcrest\Arrays\IsArray;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Haruncpi\LaravelUserActivity\Traits\Loggable;
+
 
 class Medicament extends Model
 {
     use HasFactory;
+    use Loggable;
 
     protected $fillable = [
         'code',
