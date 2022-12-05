@@ -41,6 +41,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
+    //* User Activity
     Route::resource('user-activity', ActivityController::class)->only(['index'])->names('user.activity');
 
     //* Users
@@ -75,11 +76,6 @@ Route::middleware('auth')->group(function () {
         Route::get('{module}/buys', [BuyController::class,'index'])->name('buy.index');
     });
 
-    //* Transfers
- /*    Route::resource('transfers', TransferController::class)->only(['index','store','show'])->names('transfer');
-    Route::get('transfers/create/{module?}', [TransferController::class, 'create'])->name('transfer.create'); */
-
-
     //* Recipes
     Route::resource('recipes', RecipeController::class)->except(['edit'])->names('recipe');
 
@@ -89,18 +85,16 @@ Route::middleware('auth')->group(function () {
     {
         Route::get('create/{module?}', [BuyController::class, 'create'])->name('create');
         Route::get('edit/{buy}/{module?}', [BuyController::class, 'edit'])->name('edit');
-       /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
     });
-   
-   
- 
+
+    //* Transfers
     Route::resource('transfers', TransferController::class)->except(['edit'])->names('transfer');
     Route::group(['prefix'=>'transfers', 'as'=>'transfer.'], function()
     {
-      
         Route::get('edit/{transfer}/{module?}', [TransferController::class, 'edit'])->name('edit');
-       /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
     });
+
+    //* Reports
     Route::get('reports',[ReportController::class,'index'])->name('report.index');
 
 });
