@@ -18,15 +18,18 @@ const MedinvTheme = createTheme({
     },
     error: {
       main: "#ff5f76",
+      dark: "red",
     },
     info: {
       main: "#c7ebf6",
     },
     success: {
       main: "#beefbe",
+      dark: "green",
     },
     warning: {
       main: "#ff965f",
+      dark: "orange",
     },
     white: {
       main: "#ffffff",

@@ -5,8 +5,9 @@ import { es } from 'date-fns/locale'
 import { Fragment, useState } from 'react'
 import _ from 'lodash'
 import SectionTitle from '@/Components/Common/SectionTitle'
-import { IconButton } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 import ShowModalActivity from '@/Components/Layouts/Activity/ShowModal'
+
 
 export default ({ data }) => {
 
@@ -46,22 +47,36 @@ export default ({ data }) => {
               return `${first_name} ${last_name}`
             },
           },
-        //   {
-        //     accessorKey: 'log_type',
-        //     header: 'log_type',
-        //   },
-        //   {
-        //     accessorKey: 'table_name',
-        //     header: 'table_name',
-        //   },
           {
             accessorKey: 'log_type',
             header: 'log_type',
-            accessorFn: ({ log_type, table_name }) => {
-              return table_name
-                    ? `${log_type} from ${table_name}`
-                    : `${log_type}`
-            },
+            Cell: ({ cell }) => (
+                <Box
+                sx={(theme) => ({
+                    backgroundColor:
+                        cell.getValue() == 'login'
+                        ? theme.palette.primary.main
+                        : cell.getValue() == 'create'
+                        ? theme.palette.success.dark
+                        : cell.getValue() == 'edit'
+                        ? theme.palette.warning.dark
+                        : cell.getValue() == 'delete'
+                        ? theme.palette.error.dark
+                        : theme.palette.primary.main,
+                    borderRadius: '0.25rem',
+                    color: '#fff',
+                    p: '0.25rem',
+                    textAlign: 'center',
+                    width:'3.5rem',
+                })}
+                >
+                { cell.getValue() }
+                </Box>
+              ),
+          },
+          {
+            accessorKey: 'table_name',
+            header: 'table_name',
           },
           {
             id: 'actions',

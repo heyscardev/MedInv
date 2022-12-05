@@ -74,7 +74,7 @@ export default ({ can, auth }) => {
       : null,
     can('user.activity.index')
         ? {
-            name: 'activity',
+            name: 'user_activity',
             route: route('user.activity.index'),
             Icon: PeopleAltOutlined
         }
