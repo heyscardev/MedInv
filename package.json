@@ -30,6 +30,7 @@
         "date-fns": "^2.29.1",
         "final-form": "^4.20.7",
         "final-form-arrays": "^3.0.2",
+        "jspdf": "^2.5.1",
         "material-react-table": "^0.36.0",
         "moment": "^2.29.4",
         "mui-tel-input": "^2.1.0",

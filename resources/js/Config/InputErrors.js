@@ -13,7 +13,7 @@ const validUrl = (val) => {
   }
   return null;
 };
-const validDate = (value) => (value && !isValid(new Date(value)) ? "Fecha Invalida" : null);
+const validDate = (value) => (value && !isValid(new Date(value)) ? "fieldError.invalidDate" : null);
 const dateGreaterOrEqual = (min) => (value) => {
   if (isValid(min) && isValid(value)) {
     const valueFormated = new Date(value);

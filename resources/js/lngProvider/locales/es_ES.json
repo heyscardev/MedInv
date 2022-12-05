@@ -66,6 +66,7 @@
     "fieldError.lessOrEqualThanValue": "Este campo debe ser menor o igual a {lessOrEqualThanValue}",
     "fieldError.lessOrEqualThanValue2": "Este campo debe ser menor o igual a {lessOrEqualThanValue2}",
     "fieldError.betweenValue": "El campo solo debe tener valores entre {valueMin} y {valueMax}",
+    "fieldError.invalidDate": "Fecha invalida",
     "fieldError.phoneInvalid": "Numero telefonico inválido.",
     "fieldError.unique":"Este campo debe ser unico y el valor actual ya se encuentra en uso.",
     "fielderror.medicamentGreatherThanOne":"Debe seleccionar por lo menos un medicamento",
@@ -216,5 +217,9 @@
     "reportType":"Tipo de reporte",
     "userRegister":"Registro de Usuarios",
     "medicamentsMovements":"movimientos de medicamento",
-    "total":"Total"
+    "total":"Total",
+    "end_date":"Hasta",
+    "start_date":"Desde",
+    "generateReport":"Generar reporte",
+    "report":"Reporte"
 }

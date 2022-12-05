@@ -100,6 +100,7 @@ Route::middleware('auth')->group(function () {
 
     //* Reports
     Route::get('reports',[ReportController::class,'index'])->name('report.index');
+    Route::get('reports/{report_type}',[ReportController::class,'show'])->name('report.show');
 
 });
 

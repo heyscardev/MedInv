@@ -54,7 +54,8 @@ setDefaultOptions({locale:es})
                 dateAdapter={AdapterDateFns}
               >
                 <div>
-                  {route().t.url !== props.ziggy.location &&
+                
+                  {route().t.url !== props.ziggy.location && !props.ziggy.location.includes('/reports/') &&
                     props.auth.user && (
                       <NavBar
                         auth={props.auth}

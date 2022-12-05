@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 const toWelcome = (e)=>{
 visit("/")
 }
-export default ({ variant = "h1", color1, color2, fontWeight = "bolder", fontSize, gutterBottom = false ,WelcomeLink,subtitle,...props}) => {
+export default ({ variant = "h1", color1, color2, colorSubtitle="secondary.dark", fontWeight = "bolder", fontSize, gutterBottom = false ,WelcomeLink,subtitle,...props}) => {
   const { palette } = useTheme();
   const {formatMessage} = useIntl();
   return (
@@ -26,7 +26,7 @@ export default ({ variant = "h1", color1, color2, fontWeight = "bolder", fontSiz
       <span style={{ color: _.get(palette, color2, undefined) || palette.primary.light }}>Inv</span>
     </Typography>
     <div style={{ textAlign: "center" }}>
-        {subtitle && <Typography variant="h5" color="secondary.dark" children={formatMessage({id:subtitle})} />}
+        {subtitle && <Typography variant="h5" color={colorSubtitle} children={formatMessage({id:subtitle})} />}
       </div>
     </span>
   );
