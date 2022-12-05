@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Haruncpi\LaravelUserActivity\Traits\Loggable;
 
@@ -21,6 +21,13 @@ class BuyMedicament extends Pivot
     }
     public function buy(){
         return $this->belongsTo(Buy::class);
+    }
+
+    /**
+     * This are the Attribute
+     */
+    protected function totalPrice():Attribute{
+        return new Attribute(get:fn()=> $this->quantity * $this->price );
     }
 
 }

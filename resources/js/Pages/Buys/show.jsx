@@ -8,6 +8,7 @@ import { Fragment } from "react";
 
 export default ({ item, data }) => {
 
+    console.log(item);
     console.log(data);
     return (
         <Fragment>
@@ -102,48 +103,68 @@ export default ({ item, data }) => {
 
                     </Grid>
                 </Stack>
-            </Stack>
 
-            {/* asyncronous table for view and filters for recipes of doctor */}
-            <Table
-                routeParams={{ item: item.id }}
-                enableRowSelection={false}
-                data={data}
-                initialState={{ columnVisibility: { id: false } }}
-                columns={[
-                    { accessorKey: "id", header: "id" },
-                    {
-                        accessorKey: 'code',
-                        header: 'code',
-                    },
-                    {
-                        accessorKey: 'name',
-                        header: 'medicament',
-                    },
-                    {
-                        accessorKey: 'unit.name',
-                        header: 'unit',
-                    },
-                    {
-                        accessorKey: 'pivot.price',
-                        header: 'price',
-                        filterVariant: 'range',
-                        Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
-                    },
-                    {
-                        accessorKey: 'pivot.quantity',
-                        header: 'quantity',
-                    },
-                    {
-                        header: 'totalPrice',
-                        filterVariant: 'range',
-                        accessorFn: ({ pivot: { price, quantity } }) => {
-                            return price * quantity
+
+                {/* asyncronous table for view and filters for recipes of doctor */}
+                <Table
+                    routeParams={{ item: item.id }}
+                    enableRowSelection={false}
+                    data={data}
+                    initialState={{ columnVisibility: { id: false } }}
+                    columns={[
+                        { accessorKey: "id", header: "id" },
+                        {
+                            accessorKey: 'code',
+                            header: 'code',
                         },
-                        Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
-                    },
-                ]}
-            />
+                        {
+                            accessorKey: 'name',
+                            header: 'medicament',
+                        },
+                        {
+                            accessorKey: 'unit.name',
+                            header: 'unit',
+                        },
+                        {
+                            accessorKey: 'pivot.price',
+                            header: 'price',
+                            filterVariant: 'range',
+                            Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
+                        },
+                        {
+                            accessorKey: 'pivot.quantity',
+                            header: 'quantity',
+                        },
+                        {
+                            header: 'totalPrice',
+                            filterVariant: 'range',
+                            accessorFn: ({ pivot: { price, quantity } }) => {
+                                return price * quantity
+                            },
+                            Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
+                        },
+                    ]}
+                />
+
+                <Stack
+                    bgcolor="white.main"
+                    borderRadius={2}
+                    padding={2}
+                    gap={2}
+                >
+                    <Typography
+                        variant="h4"
+                        fontWeight="bolder"
+                        color="primary"
+                        display="flex"
+                        alignSelf="end"
+                    >
+                        {/* <ShoppingCart sx={{ fontSize: "inherit", marginRight: 2 }} /> */}
+                        <IntlMessage id="total" /> <IntlFormatCurrency value={item.total_price} />
+                    </Typography>
+
+                </Stack>
+            </Stack>
         </Fragment>
     );
 };

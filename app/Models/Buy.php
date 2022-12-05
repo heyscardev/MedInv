@@ -36,14 +36,14 @@ class Buy extends Model
     /**
      * This are the Attribute
      */
-    protected function totalQuantity():Attribute{
-        return new Attribute(get:fn()=>$this->medicaments->sum('pivot.quantity'));
-    }
     protected function totalMedicaments():Attribute{
         return new Attribute(get:fn()=>$this->medicaments->count());
     }
+    protected function totalQuantity():Attribute{
+        return new Attribute(get:fn()=>$this->medicaments->sum('pivot.quantity'));
+    }
     protected function totalPrice():Attribute{
-        return new Attribute(get:fn()=>$this->medicaments->sum('pivot.price'));
+        return new Attribute(get:fn()=>$this->medicaments->sum('pivot.total_price'));
     }
 
 }

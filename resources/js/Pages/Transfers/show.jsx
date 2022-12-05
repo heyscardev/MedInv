@@ -123,34 +123,36 @@ export default ({ item, data }) => {
 
                     </Grid>
                 </Stack>
-            </Stack>
 
-            {/* asyncronous table for view and filters for recipes of doctor */}
-            <Table
-                routeParams={{ item: item.id }}
-                enableRowSelection={false}
-                data={data}
-                initialState={{ columnVisibility: { id: false } }}
-                columns={[
-                    { accessorKey: "id", header: "id" },
-                    {
-                        accessorKey: 'code',
-                        header: 'code',
-                    },
-                    {
-                        accessorKey: 'name',
-                        header: 'medicament',
-                    },
-                    {
-                        accessorKey: 'unit.name',
-                        header: 'unit',
-                    },
-                    {
-                        accessorKey: 'pivot.quantity',
-                        header: 'quantity',
-                    },
-                ]}
-            />
+
+                {/* asyncronous table for view and filters for recipes of doctor */}
+                <Table
+                    routeParams={{ item: item.id }}
+                    enableRowSelection={false}
+                    data={data}
+                    initialState={{ columnVisibility: { id: false } }}
+                    columns={[
+                        { accessorKey: "id", header: "id" },
+                        {
+                            accessorKey: 'code',
+                            header: 'code',
+                        },
+                        {
+                            accessorKey: 'name',
+                            header: 'medicament',
+                        },
+                        {
+                            accessorKey: 'unit.name',
+                            header: 'unit',
+                        },
+                        {
+                            accessorKey: 'pivot.quantity',
+                            header: 'quantity',
+                        },
+                    ]}
+                />
+
+            </Stack>
         </Fragment>
     );
 };

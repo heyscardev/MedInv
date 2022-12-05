@@ -166,38 +166,40 @@ export default ({ recipe, data }) => {
 
                     </Grid>
                 </Stack>
-            </Stack>
 
-            {/* asyncronous table for view and filters for recipes of doctor */}
-            <Table
-                routeParams={{ recipe: recipe.id }}
-                enableRowSelection={false}
-                data={data}
-                initialState={{ columnVisibility: { id: false } }}
-                columns={[
-                    { accessorKey: "id", header: "id" },
-                    {
-                        accessorKey: 'code',
-                        header: 'code',
-                    },
-                    {
-                        accessorKey: 'name',
-                        header: 'medicament',
-                    },
-                    {
-                        accessorKey: 'unit.name',
-                        header: 'unit',
-                    },
-                    {
-                        accessorKey: 'pivot.prescribed_amount',
-                        header: 'prescribed_amount',
-                    },
-                    {
-                        accessorKey: 'pivot.quantity',
-                        header: 'quantity_deliver',
-                    },
-                ]}
-            />
+
+                {/* asyncronous table for view and filters for recipes of doctor */}
+                <Table
+                    routeParams={{ recipe: recipe.id }}
+                    enableRowSelection={false}
+                    data={data}
+                    initialState={{ columnVisibility: { id: false } }}
+                    columns={[
+                        { accessorKey: "id", header: "id" },
+                        {
+                            accessorKey: 'code',
+                            header: 'code',
+                        },
+                        {
+                            accessorKey: 'name',
+                            header: 'medicament',
+                        },
+                        {
+                            accessorKey: 'unit.name',
+                            header: 'unit',
+                        },
+                        {
+                            accessorKey: 'pivot.prescribed_amount',
+                            header: 'prescribed_amount',
+                        },
+                        {
+                            accessorKey: 'pivot.quantity',
+                            header: 'quantity_deliver',
+                        },
+                    ]}
+                />
+
+            </Stack>
         </Fragment>
     );
 };
