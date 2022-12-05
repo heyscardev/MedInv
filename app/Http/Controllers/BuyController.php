@@ -86,6 +86,19 @@ class BuyController extends Controller
         }, $data['medicaments']);
         return redirect(route('buy.index', $module->id));
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Buy $buy)
+    {
+        $data = $buy->medicaments()->get();
+        return Inertia::render('Buys/show', ['item' => $buy, 'data' => $data]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -99,6 +112,7 @@ class BuyController extends Controller
         $buy->delete();
         return back();
     }
+
     /**
      * Show the form for edit a resource.
      *

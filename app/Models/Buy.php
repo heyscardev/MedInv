@@ -13,7 +13,10 @@ class Buy extends Model
     use Loggable;
 
     protected $fillable = ['module_id','user_id','description'];
+
     protected $appends = ['total_quantity','total_medicaments','total_price'];
+
+    protected $with = ['module','user'];
 
 
     /**
@@ -22,12 +25,13 @@ class Buy extends Model
     public function module(){
         return $this->belongsTo(Module::class)->withTrashed();;
     }
-    public function medicaments(){
-        return $this->belongsToMany(Medicament::class)->withPivot('price','quantity')->withTimestamps()->using(BuyMedicament::class);
-    }
     public function user(){
         return $this->belongsTo(User::class)->withTrashed();
     }
+    public function medicaments(){
+        return $this->belongsToMany(Medicament::class)->withPivot('price','quantity')->withTimestamps()->using(BuyMedicament::class);
+    }
+
 
     /**
      * This are the Attribute

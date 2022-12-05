@@ -163,7 +163,6 @@ class TransferController extends Controller
         return Inertia::render('Transfers/show', ['item' => $transfer, 'data' => $data]);
     }
 
-
     /////////////////////////////////////////
     /**
      * Apply filters and order list

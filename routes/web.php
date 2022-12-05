@@ -83,16 +83,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('recipes', RecipeController::class)->except(['edit'])->names('recipe');
 
     //* Buys
-    Route::resource('buys', BuyController::class)->except(['create','edit','show'])->names('buy');
+    Route::resource('buys', BuyController::class)->except(['create','edit'])->names('buy');
     Route::group(['prefix'=>'buys', 'as'=>'buy.'], function()
     {
         Route::get('create/{module?}', [BuyController::class, 'create'])->name('create');
         Route::get('edit/{buy}/{module?}', [BuyController::class, 'edit'])->name('edit');
        /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
     });
-   
-   
- 
+
+
+
     Route::resource('transfers', TransferController::class)->except(['create','edit','show'])->names('transfer');
     Route::group(['prefix'=>'transfers', 'as'=>'transfer.'], function()
     {
@@ -100,7 +100,7 @@ Route::middleware('auth')->group(function () {
         Route::get('edit/{transfer}/{module?}', [TransferController::class, 'edit'])->name('edit');
        /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
     });
-    
+
 
 });
 
