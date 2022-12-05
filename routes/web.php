@@ -5,6 +5,7 @@ use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicamentController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\PathologyController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ReportController;
@@ -58,6 +59,9 @@ Route::middleware('auth')->group(function () {
 
     //* Medicaments
     Route::resource('medicaments', MedicamentController::class)->except(['create','edit','show'])->names('medicament');
+
+    //* Pathologies
+    Route::resource('pathologies', PathologyController::class)->except(['create','edit','show'])->names('pathology');
 
     //* Services
     Route::resource('services', ServiceController::class)->except(['create','edit','show'])->names('service');

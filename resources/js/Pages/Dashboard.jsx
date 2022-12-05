@@ -21,8 +21,6 @@ export default ({ can, auth, page }) => {
 
     let pages;
 
-    console.log(page);
-
     if( page == 'preferences' ){
 
         pages = [
@@ -31,14 +29,21 @@ export default ({ can, auth, page }) => {
               route: route('dashboard'),
               Icon: Dashboard,
             },
-            can('services.index')
+            can('pathology.index')
+              ? {
+                  name: 'pathologies',
+                  route: route('pathology.index'),
+                  Icon: Medication,
+                }
+              : null,
+            can('service.index')
               ? {
                   name: 'services',
                   route: route('service.index'),
                   Icon: Medication,
                 }
               : null,
-            can('units.index')
+            can('unit.index')
               ? {
                   name: 'units',
                   route: route('unit.index'),
