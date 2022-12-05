@@ -2,11 +2,11 @@ import DashboardButton from '@/Components/Common/DashboardButton'
 import { Head } from '@inertiajs/inertia-react'
 import {
   Assessment,
+  Dashboard,
   Home,
   Masks,
   Medication,
   MoveDown,
-  MoveUp,
   People,
   PeopleAltOutlined,
   Receipt,
@@ -17,68 +17,101 @@ import {
 import { Grid, Paper, Typography } from '@mui/material'
 import { Fragment } from 'react'
 
-export default ({ can, auth }) => {
-  const pages = [
-    {
-      name: 'intro',
-      route: route().t.url,
-      Icon: Home,
-    },
+export default ({ can, auth, page }) => {
 
-    can('medicament.index')
-      ? {
-          name: 'medicaments',
-          route: route('medicament.index'),
-          Icon: Medication,
-        }
-      : null,
-    can('module.index')
-      ? { name: 'modules', route: route('module.index'), Icon: Store }
-      : null,
+    let pages;
 
-    can('buy.index')
-      ? { name: 'buys', route: route('buy.index'), Icon: ShoppingCart }
-      : null,
-    can('transfer.index')
-      ? {
-          name: 'transfers',
-          route: route('transfer.index'),
-          Icon: MoveDown,
-        }
-      : null,
-    can('recipe.index')
-      ? {
-          name: 'recipes',
-          route: route('recipe.index'),
-          Icon: Receipt,
-        }
-      : null,
-    can('user.index')
-      ? { name: 'users', route: route('user.index'), Icon: People }
-      : null,
-    can('doctor.index')
-      ? { name: 'doctors', route: route('doctor.index'), Icon: Masks }
-      : null,
-    can('patient.index')
-      ? { name: 'patients', route: route('patient.index'), Icon: Sick }
-      : null,
+    console.log(page);
 
-    can('report.index')
-      ? {
-          name: 'reports',
-          route: route('report.index'),
-          Icon: Assessment,
-        
-        }
-      : null,
-    can('user.activity.index')
-        ? {
-            name: 'user_activity',
-            route: route('user.activity.index'),
-            Icon: PeopleAltOutlined
-        }
-        : null,
-  ]
+    if( page == 'preferences' ){
+
+        pages = [
+            {
+              name: 'dashboard',
+              route: route('dashboard'),
+              Icon: Dashboard,
+            },
+            can('services.index')
+              ? {
+                  name: 'services',
+                  route: route('service.index'),
+                  Icon: Medication,
+                }
+              : null,
+            can('units.index')
+              ? {
+                  name: 'units',
+                  route: route('unit.index'),
+                  Icon: Medication,
+                }
+              : null,
+        ]
+
+    }else{
+
+        pages = [
+            {
+              name: 'intro',
+              route: route().t.url,
+              Icon: Home,
+            },
+
+            can('medicament.index')
+              ? {
+                  name: 'medicaments',
+                  route: route('medicament.index'),
+                  Icon: Medication,
+                }
+              : null,
+            can('module.index')
+              ? { name: 'modules', route: route('module.index'), Icon: Store }
+              : null,
+
+            can('buy.index')
+              ? { name: 'buys', route: route('buy.index'), Icon: ShoppingCart }
+              : null,
+            can('transfer.index')
+              ? {
+                  name: 'transfers',
+                  route: route('transfer.index'),
+                  Icon: MoveDown,
+                }
+              : null,
+            can('recipe.index')
+              ? {
+                  name: 'recipes',
+                  route: route('recipe.index'),
+                  Icon: Receipt,
+                }
+              : null,
+            can('user.index')
+              ? { name: 'users', route: route('user.index'), Icon: People }
+              : null,
+            can('doctor.index')
+              ? { name: 'doctors', route: route('doctor.index'), Icon: Masks }
+              : null,
+            can('patient.index')
+              ? { name: 'patients', route: route('patient.index'), Icon: Sick }
+              : null,
+
+            can('report.index')
+              ? {
+                  name: 'reports',
+                  route: route('report.index'),
+                  Icon: Assessment,
+
+                }
+              : null,
+            can('user.activity.index')
+                ? {
+                    name: 'user_activity',
+                    route: route('user.activity.index'),
+                    Icon: PeopleAltOutlined
+                }
+                : null,
+          ]
+    }
+
   return (
     <Fragment>
       <Head title="DashBoard" />

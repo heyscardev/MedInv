@@ -99,7 +99,11 @@ export default ({
                     </ListItemIcon>
                     Dashboard
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem
+                    onClick={() => {
+                        visit(route("dashboard", {page:'preferences'} ));
+                    }}
+                >
                     <ListItemIcon>
                         <Settings fontSize="small" color="primary" />
                     </ListItemIcon>

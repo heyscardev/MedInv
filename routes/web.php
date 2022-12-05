@@ -35,8 +35,8 @@ Route::get('', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+Route::get('/dashboard/{page?}', function ($page = null) {
+    return Inertia::render('Dashboard', ['page' => $page ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

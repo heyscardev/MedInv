@@ -23,7 +23,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $items = Service::get();
+        $items = Service::orderby('id','desc')->get();
         return Inertia::render('Services/index', ['data' => $items]);
     }
 

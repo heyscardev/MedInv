@@ -23,12 +23,10 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-      /*   $data = User::with('modules')->find(auth()->user()->id);
-        dd($data);
-        $items = Unit::get();
-        return Inertia::render('Units/index', ['data' => $items]); */
+        $data = Unit::orderby('id','desc')->get();
+        return Inertia::render('Units/index', ['data' => $data]);
     }
 
     /**
@@ -40,8 +38,7 @@ class UnitController extends Controller
     public function store(Request $request )
     {
         $validData = $request->validate([
-            'name'=>[ 'required','alpha', 'max:80','unique:units'],
-            'description' => ['max:250']
+            'name'=>[ 'required','alpha', 'max:80','unique:units']
         ]);
         $item = new Unit($validData);
         return $item->save() ? back() : back(500)->withErrors('save', 'error al guardar');
@@ -57,8 +54,7 @@ class UnitController extends Controller
     public function update(Request $request, Unit $unit)
     {
         $validData = $request->validate([
-            'name'=>[ 'alpha', 'max:80',Rule::unique('units')->ignore($unit->id),],
-            'description' => ['max:250']
+            'name'=>[ 'alpha', 'max:80',Rule::unique('units')->ignore($unit->id),]
         ]);
         $unit->update($validData);
         return $unit->save() ? back() : back(500)->withErrors('save', 'error al guardar');

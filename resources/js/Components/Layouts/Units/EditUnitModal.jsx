@@ -15,8 +15,7 @@ export default ({ unit, units, open, onClose, onSuccess }) => {
   const update = (data, form) => {
      const dataToSend = {
             id: data.id,
-            name:data.name,
-            description:data.description
+            name:data.name
         };
         for (const key in data) {
             if (Object.hasOwnProperty.call(data, key)) {
@@ -36,8 +35,7 @@ export default ({ unit, units, open, onClose, onSuccess }) => {
   };
   const store = (data) => {
     const dataToSend = {
-      name: data.name,
-      description: data.description,
+      name: data.name
     };
 
     post(route("unit.store"), dataToSend, {
@@ -67,7 +65,7 @@ export default ({ unit, units, open, onClose, onSuccess }) => {
         render={({ handleSubmit, form }) => (
           <form onSubmit={handleSubmit} id="unitForm" autoComplete="off">
             <Grid container>
-              <Grid item xs={12} sm={5}>
+              <Grid item xs={12} sm={12}>
                 <InputText
                   alphaWithoutSpacing
                   name="name"
@@ -77,14 +75,6 @@ export default ({ unit, units, open, onClose, onSuccess }) => {
                     _.find(units, (un) => un.name === value) && (!unit || unit.name !== value ) ? "fieldError.unique" : null
                   )}
                   maxLength={validationParams.maxLengthStringName}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <InputText
-                  name="description"
-                  label="description"
-                  maxLength={validationParams.maxLengthStringDescription}
                   fullWidth
                 />
               </Grid>

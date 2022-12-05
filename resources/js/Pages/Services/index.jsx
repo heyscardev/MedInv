@@ -10,11 +10,11 @@ export default ({ data }) => {
   const {formatMessage} = useIntl();
   return (
     <Fragment>
-      <SectionTitle title="units" />
+      <SectionTitle title="services" />
       <GenericCrud
         data={data}
         columnVisibility={{}}
-        routeName="unit"
+        routeName="service"
         deleteKeyMessage={"name"}
         EditModal={EditModal}
         multiButtonActions={[

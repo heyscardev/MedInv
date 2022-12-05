@@ -33,12 +33,13 @@ export default ({ columns, EditModal,actions=["create","update","delete"], route
         actions={[
           {
             icon: <PersonAdd />,
-            name: "crear",
+            name: "create",
             onClick: (e) => {
               toggleEdit(-1);
             },
           },
         ]}
+        // actions={ multiButtonActions }
       />
 
       <ConfirmModal

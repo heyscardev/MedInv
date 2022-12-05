@@ -13,10 +13,7 @@ class Unit extends Model
     use SoftDeletes;
     use Loggable;
 
-    protected $fillable = [
-        'name',
-        'description',
-    ];
+    protected $fillable = ['name'];
 
     /**
      * This are the relations
