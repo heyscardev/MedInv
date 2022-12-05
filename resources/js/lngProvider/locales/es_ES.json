@@ -208,5 +208,8 @@
     "log_type":"Operación realizada",
     "editTransfer":"Editar Transferencia",
     "createTransfer":"Crear Transferencia",
-    "deleteMessageTransfer":"Desea eliminar la Tansferencia con id N° {value}? \n ¡esta operacion no es reversible!"
+    "deleteMessageTransfer":"Desea eliminar la Tansferencia con id N° {value}? \n ¡esta operacion no es reversible!",
+    "reportType":"Tipo de reporte",
+    "userRegister":"Registro de Usuarios",
+    "medicamentsMovements":"movimientos de medicamento"
 }

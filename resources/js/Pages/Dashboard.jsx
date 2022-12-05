@@ -66,10 +66,9 @@ export default ({ can, auth }) => {
     can('report.index')
       ? {
           name: 'reports',
-          route: route('buy.index'),
+          route: route('report.index'),
           Icon: Assessment,
-          outlined: true,
-          disabled: true,
+        
         }
       : null,
     can('user.activity.index')

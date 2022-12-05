@@ -7,6 +7,7 @@ use App\Http\Controllers\MedicamentController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UnitController;
@@ -75,8 +76,8 @@ Route::middleware('auth')->group(function () {
     });
 
     //* Transfers
-    Route::resource('transfers', TransferController::class)->only(['index','store','show'])->names('transfer');
-    Route::get('transfers/create/{module?}', [TransferController::class, 'create'])->name('transfer.create');
+ /*    Route::resource('transfers', TransferController::class)->only(['index','store','show'])->names('transfer');
+    Route::get('transfers/create/{module?}', [TransferController::class, 'create'])->name('transfer.create'); */
 
 
     //* Recipes
@@ -90,17 +91,17 @@ Route::middleware('auth')->group(function () {
         Route::get('edit/{buy}/{module?}', [BuyController::class, 'edit'])->name('edit');
        /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
     });
-
-
-
-    Route::resource('transfers', TransferController::class)->except(['create','edit','show'])->names('transfer');
+   
+   
+ 
+    Route::resource('transfers', TransferController::class)->except(['edit'])->names('transfer');
     Route::group(['prefix'=>'transfers', 'as'=>'transfer.'], function()
     {
-        Route::get('create/{module?}', [TransferController::class, 'create'])->name('create');
+      
         Route::get('edit/{transfer}/{module?}', [TransferController::class, 'edit'])->name('edit');
        /*  Route::get('restore/{id}',[RecipeController::class,"restore"])->name('restore'); */
     });
-
+    Route::get('reports',[ReportController::class,'index'])->name('report.index');
 
 });
 

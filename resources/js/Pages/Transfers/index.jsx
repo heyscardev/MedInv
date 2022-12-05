@@ -199,7 +199,7 @@ export default (props) => {
             onClick: (e) => {
               visit(
                 route(`transfer.create`, {
-                  id: props.module ? props.module.id : null,
+                  module: props.module ? props.module.id : null,
                 }),
               )
             },

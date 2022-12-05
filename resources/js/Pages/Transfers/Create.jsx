@@ -50,7 +50,7 @@ const submit = (values,{getState}) => {
   if(values.id){
     return updateSubmit(values,getState());
   }
-  return storeSubmit()
+  return storeSubmit(values)
  
 }
 const storeSubmit = (values)=>{
@@ -350,7 +350,7 @@ export default ({
                     onSelect={(value) => {
                       if (moduleSelected && moduleSelected.id === value.id)
                         return null
-                      visit(route('transfer.create', value.id))
+                      visit(route(route().current(), {module_send:value.id}))
                     }}
                     label="selectModuleFromTransfer"
                   />

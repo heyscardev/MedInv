@@ -50,12 +50,13 @@ class TransferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(TransferRequest $request, Module $module)
+    public function create(TransferRequest $request)
     {
+        $module = Module::find($request->get('module_send'));
         $moduleSelected = null;
         $medicaments = [];
         $selectedMedicaments = [];
-        if ($module->exists) {
+        if ($module) {
             $moduleSelected = $module;
             $medicaments = $module->medicaments()->wherePivot('quantity_exist', ">", 0)->get();
             $selectedMedicaments =  $module->medicaments()->wherePivot('quantity_exist', ">", 0)->findMany($request->get('selected_medicaments'));
