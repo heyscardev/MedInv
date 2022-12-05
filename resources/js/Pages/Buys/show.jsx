@@ -1,7 +1,7 @@
 import IntlMessage from "@/Components/Common/IntlMessage";
 import Table from "@/Components/Common/Table";
 import IntlFormatCurrency from "@/Components/Custom/IntlFormatCurrency";
-import { Article, Comment, Person, Store } from "@mui/icons-material";
+import { Comment, Person, ShoppingCart, Store } from "@mui/icons-material";
 import { Divider, Grid, Stack, Typography } from "@mui/material";
 import { format } from "date-fns";
 import { Fragment } from "react";
@@ -27,7 +27,7 @@ export default ({ item, data }) => {
                         alignItems="center"
                         alignSelf="center"
                     >
-                        <Article sx={{ fontSize: "inherit", marginRight: 2 }} />
+                        <ShoppingCart sx={{ fontSize: "inherit", marginRight: 2 }} />
                         <IntlMessage id="buy" /> Nº {item.id}
                     </Typography>
                     <Divider />
