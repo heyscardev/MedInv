@@ -23,83 +23,82 @@ export default ({ data }) => {
         initialState={{ columnVisibility: { id: false } }}
         data={data}
         columns={[
-          {
-            accessorKey: 'id',
-            header: 'id',
-            enableColumnOrdering: false,
-            enableEditing: false,
-            size: 80,
-          },
-          {
-            accessorKey: 'log_date',
-            header: 'log_date',
-            accessorFn: ({ log_date, dateHumanize }) =>
-              !log_date
-                ? '00/00/0000 00:00:00'
-                : format(new Date(log_date), 'hh:mm dd MMMM yyyy', {
-                    locale: es,
-                  }) + ' ' + dateHumanize,
-          },
-          {
-            accessorKey: 'user',
-            header: 'user',
-            accessorFn: ({ user: { first_name, last_name } }) => {
-              return `${first_name} ${last_name}`
+            {
+                id: 'actions',
+                accessorKey: 'id',
+                columnDefType: 'display',
+                header: 'actions',
+                size: 80,
+                Cell: ({ cell }) => {
+                  return (
+                    <Fragment>
+                      <IconButton
+                        placement="right"
+                        title="show"
+                        color="primary"
+                        onClick={(e) => setIdToShow(cell.getValue())}
+                      >
+                        <Visibility />
+                      </IconButton>
+                    </Fragment>
+                  )
+                },
             },
-          },
-          {
-            accessorKey: 'log_type',
-            header: 'log_type',
-            Cell: ({ cell }) => (
-                <Box
-                sx={(theme) => ({
-                    backgroundColor:
-                        cell.getValue() == 'login'
-                        ? theme.palette.primary.main
-                        : cell.getValue() == 'create'
-                        ? theme.palette.success.dark
-                        : cell.getValue() == 'edit'
-                        ? theme.palette.warning.dark
-                        : cell.getValue() == 'delete'
-                        ? theme.palette.error.dark
-                        : theme.palette.primary.main,
-                    borderRadius: '0.25rem',
-                    color: '#fff',
-                    p: '0.25rem',
-                    textAlign: 'center',
-                    width:'3.5rem',
-                })}
-                >
-                { cell.getValue() }
-                </Box>
-              ),
-          },
-          {
-            accessorKey: 'table_name',
-            header: 'table_name',
-          },
-          {
-            id: 'actions',
-            accessorKey: 'id',
-            columnDefType: 'display',
-            header: 'actions',
-            size: 80,
-            Cell: ({ cell }) => {
-              return (
-                <Fragment>
-                  <IconButton
-                    placement="right"
-                    title="show"
-                    color="primary"
-                    onClick={(e) => setIdToShow(cell.getValue())}
-                  >
-                    <Visibility />
-                  </IconButton>
-                </Fragment>
-              )
+            {
+                accessorKey: 'id',
+                header: 'id',
+                enableColumnOrdering: false,
+                enableEditing: false,
+                size: 80,
             },
-          },
-
+            {
+                accessorKey: 'log_date',
+                header: 'log_date',
+                accessorFn: ({ log_date, dateHumanize }) =>
+                !log_date
+                    ? '00/00/0000 00:00:00'
+                    : format(new Date(log_date), 'hh:mm dd MMMM yyyy', {
+                        locale: es,
+                    }) + ' ' + dateHumanize,
+            },
+            {
+                accessorKey: 'user',
+                header: 'user',
+                accessorFn: ({ user: { first_name, last_name } }) => {
+                return `${first_name} ${last_name}`
+                },
+            },
+            {
+                accessorKey: 'log_type',
+                header: 'log_type',
+                Cell: ({ cell }) => (
+                    <Box
+                    sx={(theme) => ({
+                        backgroundColor:
+                            cell.getValue() == 'login'
+                            ? theme.palette.primary.main
+                            : cell.getValue() == 'create'
+                            ? theme.palette.success.dark
+                            : cell.getValue() == 'edit'
+                            ? theme.palette.warning.dark
+                            : cell.getValue() == 'delete'
+                            ? theme.palette.error.dark
+                            : theme.palette.primary.main,
+                        borderRadius: '0.25rem',
+                        color: '#fff',
+                        p: '0.25rem',
+                        textAlign: 'center',
+                        width:'3.5rem',
+                    })}
+                    >
+                    { cell.getValue() }
+                    </Box>
+                ),
+            },
+            {
+                accessorKey: 'table_name',
+                header: 'table_name',
+            },
         ]}
       />
 
