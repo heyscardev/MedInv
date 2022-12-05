@@ -12,7 +12,10 @@ class Transfer extends Model
     use Loggable;
 
     protected $fillable = ['user_id', 'module_receive_id', 'module_send_id', 'description'];
+
     protected $appends = ['total_quantity_medicaments','quantity_medicaments'];
+
+    protected $with = ['moduleSend','moduleReceive','user'];
 
     /**
      * This are the relations

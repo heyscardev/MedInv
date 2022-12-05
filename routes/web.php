@@ -76,6 +76,11 @@ Route::middleware('auth')->group(function () {
         Route::get('{module}/buys', [BuyController::class,'index'])->name('buy.index');
     });
 
+    //* Transfers
+    Route::resource('transfers', TransferController::class)->only(['index','store','show'])->names('transfer');
+    Route::get('transfers/create/{module?}', [TransferController::class, 'create'])->name('transfer.create');
+
+
     //* Recipes
     Route::resource('recipes', RecipeController::class)->except(['edit'])->names('recipe');
 
@@ -90,5 +95,4 @@ Route::middleware('auth')->group(function () {
 
 });
 
-require __DIR__.'/medinv/TransfersRoute.php';
 require __DIR__ . '/auth.php';

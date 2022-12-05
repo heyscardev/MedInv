@@ -8,6 +8,7 @@ use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class TransferController extends Controller
 {
@@ -26,18 +27,17 @@ class TransferController extends Controller
      */
     public function index(TransferRequest $request,Module $module)
     {
-      
+
         $paginate = max(min($request->get('page_size'), 100), 10);
-      
-        $paginate = max(min($request->get('page_size'), 100), 10);
+
         if ($module->exists) {
             $query = $module->transfers()->with('moduleSend', 'moduleReceive', 'user');
-            
+
         } else {
             $query  = Transfer::with('moduleSend', 'moduleReceive', 'user')->where('transfers.user_id',auth()->user()->id);
             $module = null;
         }
-       
+
         $query  = $this->applyFilters($query, $request);
         $data   = $query->paginate($paginate);
 
@@ -55,7 +55,6 @@ class TransferController extends Controller
         $medicaments = [];
         $selectedMedicaments = [];
         if ($module->exists) {
-
             $moduleSelected = $module;
             $medicaments = $module->medicaments()->wherePivot('quantity_exist', ">", 0)->get();
             $selectedMedicaments =  $module->medicaments()->wherePivot('quantity_exist', ">", 0)->findMany($request->get('selected_medicaments'));
@@ -87,6 +86,18 @@ class TransferController extends Controller
             $request->input('medicaments', [])
         );
         return Redirect(route('transfer.create', $request->input('module_send_id')));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Transfer $transfer)
+    {
+        $data = $transfer->medicaments()->get();
+        return Inertia::render('Transfers/show', ['item' => $transfer, 'data' => $data]);
     }
 
 

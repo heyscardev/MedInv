@@ -12,7 +12,7 @@ export default ({ recipe, data }) => {
                 <Stack
                     bgcolor="white.main"
                     borderRadius={2}
-                    padding={1}
+                    padding={2}
                     gap={2}
                 >
                     <Typography
