@@ -7,6 +7,7 @@ import Head from '@/Components/Custom/Head'
 import IconButton from '@/Components/Custom/IconButton'
 import { destroy, visit } from '@/HTTPProvider'
 import * as iconsMaterial from '@mui/icons-material'
+import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
 const routeName = "transfer";
@@ -61,7 +62,7 @@ export default (props) => {
         // renderTopToolbarCustomActions={ActionsTableShow(props.module)}
         // onAsync={tableUpdate}
         data={props.data}
-        initialState={{ columnVisibility: { id: false } }}
+        initialState={{ columnVisibility: { id: false,updated_at:false } }}
         columns={[
           { accessorKey: 'id', header: 'id', id: 'id' },
 
@@ -188,6 +189,19 @@ export default (props) => {
             accessorKey: 'created_at',
             header: 'created_at',
             typeColumn: 'date',
+            Cell:({ cell }) =>
+            !cell.getValue()
+              ?  ' 00 00 00'
+              : format(new Date(cell.getValue()), 'hh:mm dd MMMM yyyy')
+          },
+          {
+            accessorKey: 'updated_at',
+            header: 'updated_at',
+            typeColumn: 'date',
+            Cell:({ cell }) =>
+            !cell.getValue()
+              ?  ' 00 00 00' 
+              : format(new Date(cell.getValue()), 'hh:mm dd MMMM yyyy')
           },
         ]}
       />
@@ -199,7 +213,7 @@ export default (props) => {
             onClick: (e) => {
               visit(
                 route(`transfer.create`, {
-                  module: props.module ? props.module.id : null,
+                  module_send: props.module ? props.module.id : null,
                 }),
               )
             },

@@ -47,12 +47,12 @@ class DatabaseSeeder extends Seeder
         ]);
         Pathology::factory(200)->create();
         Module::factory(20)->create();
-        Transfer::factory(200)->hasAttached(
+       /*  Transfer::factory(200)->hasAttached(
             Medicament::orderByRaw("RAND()")->limit(rand(1, 20))->get(),
             ['quantity' => 10]
-        )->create();
+        )->create(); */
 
-        Buy::factory(20)->hasAttached(
+       /*  Buy::factory(20)->hasAttached(
             Medicament::orderByRaw('RAND()')->limit(rand(1, 12))->get(),
             function () {
                 return [
@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
                 ];
             },
         )->create();
-
+ */
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

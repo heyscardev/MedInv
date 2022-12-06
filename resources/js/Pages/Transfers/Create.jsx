@@ -59,7 +59,7 @@ const storeSubmit = (values)=>{
     module_receive_id: values.moduleReceive.id,
     medicaments: values.medicaments,
   }
-  post(route('transfer.store'), dataToSend)
+  post(route('transfer.store'), dataToSend,{preserveState:false})
 }
 const updateSubmit = ()=>{
 
