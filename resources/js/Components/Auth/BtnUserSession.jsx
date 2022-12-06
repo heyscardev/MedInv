@@ -12,7 +12,11 @@ import * as React from "react";
 import Person from "@mui/icons-material/Person";
 import { logout } from "@/Services/UserService";
 import { visit } from "@/HTTPProvider";
+<<<<<<< Updated upstream
 import { Dashboard, Logout, Settings } from "@mui/icons-material";
+=======
+import { Dashboard, Logout, ManageAccounts, Settings } from "@mui/icons-material";
+>>>>>>> Stashed changes
 import EditModal from "../Layouts/Users/EditModal";
 import { useState } from "react";
 
@@ -110,6 +114,16 @@ const [openModal,setOpenModal] = useState(false);
                         <Settings fontSize="small" color="primary" />
                     </ListItemIcon>
                     preferencias
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        setOpenModal(true);
+                    }}
+                >
+                    <ListItemIcon>
+                        <ManageAccounts  fontSize="small" color="primary" />
+                    </ListItemIcon>
+                    Mi perfil
                 </MenuItem>
                 <MenuItem onClick={logout}>
                     <ListItemIcon>
