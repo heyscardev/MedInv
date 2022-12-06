@@ -865,7 +865,7 @@ class MedicamentSeeder extends Seeder
             ['code' => 'PS-124', 'name' => 'SOLUC. 3000 ML  GLICINA', 'unit_id' => 16, 'price_sale' => 0.00, 'created_at' => now(), 'updated_at' => now() ],
             ['code' => 'PS-125', 'name' => 'SOLUCION 1%  GLICERINA', 'unit_id' => 16, 'price_sale' => 0.00, 'created_at' => now(), 'updated_at' => now() ],
             ['code' => 'PS-170', 'name' => 'ACIDO TRICLORACETICO AL 85 % X 50 ML.', 'unit_id' => 16, 'price_sale' => 0.00, 'created_at' => now(), 'updated_at' => now() ]
-        , 'created_at' => now(), 'updated_at' => now() ];
+        ];
         Medicament::insert($data);
     }
 }
