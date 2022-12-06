@@ -13,6 +13,8 @@ import Person from "@mui/icons-material/Person";
 import { logout } from "@/Services/UserService";
 import { visit } from "@/HTTPProvider";
 import { Dashboard, Logout, Settings } from "@mui/icons-material";
+import EditModal from "../Layouts/Users/EditModal";
+import { useState } from "react";
 
 export default ({
     auth,
@@ -35,7 +37,7 @@ export default ({
     const handleClose = () => {
         setAnchorEl(null);
     };
-
+const [openModal,setOpenModal] = useState(false);
     return (
         <React.Fragment>
             {BtnOpenMenu ? (
@@ -101,7 +103,7 @@ export default ({
                 </MenuItem>
                 <MenuItem
                     onClick={() => {
-                        visit(route("dashboard", {page:'preferences'} ));
+                        setOpenModal(true);
                     }}
                 >
                     <ListItemIcon>
@@ -116,6 +118,7 @@ export default ({
                     Cerrar Sesión
                 </MenuItem>
             </Menu>
+            <EditModal open={openModal}  onClose={()=>setOpenModal(false)} item={auth.user} />
         </React.Fragment>
     );
 };

@@ -221,5 +221,6 @@
     "end_date":"Hasta",
     "start_date":"Desde",
     "generateReport":"Generar reporte",
-    "report":"Reporte"
+    "report":"Reporte",
+    "viewUserActivity":"Ver actividad del usuario"
 }
