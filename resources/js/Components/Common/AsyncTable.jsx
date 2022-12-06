@@ -51,6 +51,7 @@ const columnsFormat = (columns, formatMessage) => {
     }
     if (item.typeColumn === 'date') {
       dataToColumn.Filter = DatePickerRangeFilter
+     
     }
     if (item.typeColumn === 'numberBox') {
       dataToColumn.Cell = ({ cell }) => (

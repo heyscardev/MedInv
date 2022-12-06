@@ -102,7 +102,7 @@ export default (props) => {
             onClick={() => {
               visit(
                 route('buy.create', {
-                  id: props.module.id,
+                  module: props.module.id,
                 }),
               )
             }}
@@ -126,7 +126,7 @@ export default (props) => {
             onClick={() => {
               visit(
                 route('transfer.create', {
-                  id: props.module.id,
+                  module_send: props.module.id,
                 }),
               )
             }}

@@ -6,6 +6,7 @@ import {
   Container,
   Grid,
   Typography,
+  Divider,
 } from '@mui/material'
 import { format } from 'date-fns'
 import IntlMessage from './Common/IntlMessage'
@@ -18,8 +19,8 @@ import { useIntl } from 'react-intl'
 
 const styles = {
     page: {
-        marginLeft: '5rem',
-        marginRight: '5rem',
+        marginLeft: '3rem',
+        marginRight: '3rem',
         'page-break-after': 'always',
     },
 
@@ -55,9 +56,12 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report' }
     const doc = new jsPDF("p", "pt", "a4");
 
     // Adding the fonts.
-   
 
     doc.html(reportTemplateRef.current, {
+        margin: 10,
+        html2canvas: {
+            scale: 0.60
+        },
         async callback(doc) {
             await doc.save(formatMessage({id:nameReport}));
         },
@@ -67,43 +71,57 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report' }
   return (
     <>
       <Head title={nameReport} />
-      <Container   sx={{marginTop:3,justifyContent:"center",display:"flex"}}>
-        <Paper ref={reportTemplateRef}  sx={{ width: '600px', minHeight: '220px', }}>
+      <Container sx={{marginTop:4,justifyContent:"center",display:"flex"}}>
+        <Paper ref={reportTemplateRef} sx={{ width: '960px', minHeight: '220px' }}>
           <AppBar
             position="relative"
             sx={{
+              color: palette.white.main,
               backgroundColor: palette.primary.dark,
+              padding:2,
+              textAlign:'center'
             }}
           >
-            <LogoTypography subtitle={nameReport} colorSubtitle="error.main" />
-            <Typography variant="h6" color="white.main">Reporte</Typography>
-            <Typography variant="h6" color="white.main">Fecha: {format(new Date(),"hh:mm:aa dd MMMM yyyy")}</Typography>
+            <Grid container>
+                <Grid item xs={8} padding={2}>
+                    <LogoTypography colorSubtitle="success.main" justifyContent="left" />
+                </Grid>
+                <Grid item xs={4} display="block" padding={2} paddingTop={4}>
+                    <Typography variant="h4" color={palette.primary.light} sx={{ fontWeight:"bold", textTransform:"uppercase", lineHeight:1.3 }} >
+                        <IntlMessage id={'report'} />
+                    </Typography>
+                    <Typography variant="h5" color={palette.success.main} children={formatMessage({id:nameReport})} ></Typography>
+                </Grid>
+
+                <Grid item xs={12} paddingBottom={1}>
+                    {/* <Divider color={palette.primary.light} sx={{ height:1, width: '100%', opacity: 0.7 }} /> */} 
+                    <Divider sx={{ height:0, width: '100%', opacity: 0.7, background: palette.primary.light, color: palette.primary.light, borderColor: palette.primary.light }} />
+                </Grid>
+
+                <Grid item xs={8} display="flex" justifyContent="star">
+                    <Typography variant="h6" sx={{ textAlign:'left', fontSize:'.8rem', paddingLeft:1 }}>
+                        <IntlMessage id={'report_date'} />:
+                        <div>
+                            {start_date
+                                ? format(new Date(start_date), 'dd MMMM yyyy')
+                                : ' -- ---- ----'}
+                            {' al '}
+                            {end_date
+                                ? format(new Date(end_date), 'dd MMMM yyyy')
+                                : ' -- ---- ----'}
+                        </div>
+                    </Typography>
+                </Grid>
+                <Grid item xs={4} display="flex" justifyContent="center">
+                    <Typography variant="h6" sx={{ textAlign:'left', fontSize:'.8rem' }}>
+                        <IntlMessage id={'emission_date'} />:
+                        <div> {format(new Date(),"hh:mm:aa dd MMMM yyyy")} </div>
+                    </Typography>
+                </Grid>
+            </Grid>
           </AppBar>
           <Grid container padding={2}>
-            <Grid item xs={12} display="flex" justifyContent="end">
-              <Typography
-                variant="span"
-                textAlign="right"
-                color="secondary.dark"
-              >
-                <IntlMessage id={'start_date'} />:{' '}
-                {start_date
-                  ? format(new Date(start_date), 'dd MMMM yyyy')
-                  : ' -- ---- ----'}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} display="flex" justifyContent="end">
-              <Typography
-                variant="span"
-                textAlign="right"
-                color="secondary.dark"
-              >
-                <IntlMessage id={'end_date'} />:{' '}
-                {end_date
-                  ? format(new Date(end_date), 'dd MMMM yyyy')
-                  : ' -- ---- ----'}
-              </Typography>
-            </Grid><Grid item xs={12}>
+            <Grid item xs={12}>
               {children}
             </Grid>
           </Grid>

@@ -18,21 +18,20 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
           data={data}
           columns={[
             {
-              accessorKey: 'first_name',
+              accessorKey: 'code',
+              header: 'Código',
+
+              minSize: '0px',
+            },
+            {
+              accessorKey: 'name',
               header: 'Nombre',
 
               minSize: '0px',
             },
             {
-              accessorKey: 'last_name',
-              header: 'Apellido',
-
-              minSize: '0px',
-            },
-            {
-              accessorKey: 'c_i',
-              header: 'Cédula',
-              accessorFn: ({ nationality, c_i }) => `${nationality}- ${c_i}`,
+              accessorKey: 'unit.name',
+              header: 'Unidad',
 
               minSize: '0px',
             },
@@ -52,7 +51,7 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
 
         <Grid item xs={6} display="flex" justifyContent="end">
             <Typography variant="h6" sx={{ fontSize:'.8rem' }}>
-                Total de usuarios registrados: {total_rows}
+                Total de medicamentos: {total_rows}
             </Typography>
         </Grid>
       </Grid>

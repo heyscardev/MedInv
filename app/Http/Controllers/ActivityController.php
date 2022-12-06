@@ -15,7 +15,11 @@ class ActivityController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Log::orderBy('id','desc')->get();
+        $userId = $request->get('user');
+        $data = Log::orderBy('id','desc')->when($userId,function($q,$userId){
+            return $q->where('user_id',$userId);
+        })->get();
+      
         return Inertia::render('Activity/index', ['data' => $data]);
     }
 }

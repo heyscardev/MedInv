@@ -12,6 +12,7 @@ import {
   PersonAdd,
   Restore,
   RestoreFromTrash,
+  Visibility,
 } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -104,11 +105,19 @@ export default ({ ...props }) => {
                 </IconButton>
               ) : (
                 <Fragment>
+                   <IconButton
+                    placement="right"
+                    title="viewUserActivity"
+                    color="error"
+                    onClick={(e) => visit(route('user.activity.index',{user:cell.row.original.id}))}
+                  >
+                    <Visibility />
+                  </IconButton>
                   <IconButton
                     placement="right"
                     title="delete"
                     color="error"
-                    onClick={(e) => setIdToDelete(cell.getValue())}
+                    onClick={(e) => {setIdToDelete(cell.getValue())}}
                   >
                     <Delete />
                   </IconButton>
@@ -116,7 +125,13 @@ export default ({ ...props }) => {
                     placement="right"
                     title="edit"
                     color="primary"
-                    onClick={(e) => setIdToEdit(cell.getValue())}
+                    onClick={(e) => {
+<<<<<<< Updated upstream
+                      if(cell.row.original.id ===  props.auth.user.id)return toast.error('el usuario actual solo se edita desde el  menu de la barra de navegacion -> preferencias')
+=======
+                      if(cell.row.original.id ===  props.auth.user.id)return toast.error('el usuario actual solo se edita desde el  menu de la barra de navegacion -> ajuste de usuario')
+>>>>>>> Stashed changes
+                      setIdToEdit(cell.getValue())}}
                   >
                     <Edit />
                   </IconButton>
@@ -173,9 +188,10 @@ export default ({ ...props }) => {
             Cell: ({ cell }) => {
               return (
                 <div>
+                  
                   <Switch
                     checked={!!cell.getValue()}
-                    disabled={!!cell.row.original.deleted_at}
+                    disabled={!!cell.row.original.deleted_at || cell.row.original.id ===  props.auth.user.id}
                     // disabled={cell.row.getValue('roles') && _.find(cell.row.getValue('roles'),{name:"administrador"})}
                     onChange={(e, newValue) => {
                       put(route('user.update', cell.row.getValue('id')), {
