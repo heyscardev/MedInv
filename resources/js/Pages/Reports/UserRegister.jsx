@@ -1,5 +1,5 @@
 import ReportTemplate from '@/Components/ReportTemplate'
-import { Grid } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import MaterialReactTable from 'material-react-table'
 
@@ -50,8 +50,10 @@ export default ({ users, total_users, report_type, start_date, end_date }) => {
       <Grid container sx={{ marginTop: 2 }}>
         <Grid item xs={6}></Grid>
 
-        <Grid item xs={6}>
-          total de usuarios registrados: {total_users}
+        <Grid item xs={6} display="flex" justifyContent="end">
+            <Typography variant="h6" sx={{ fontSize:'.8rem' }}>
+                Total de usuarios registrados: {total_users}
+            </Typography>
         </Grid>
       </Grid>
     </ReportTemplate>
