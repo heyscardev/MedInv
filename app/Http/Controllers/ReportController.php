@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
+use App\Models\Medicament;
+use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -9,11 +12,12 @@ class ReportController extends Controller
 {
     private $reportTypes = [
         'userRegister',
-        'buys',
+        'doctors',
+        'patients',
+        'medicaments',
         'transfers',
-        'patient',
+        'buys',
         'recipes',
-        'medicament',
         'medicamentsMovements'
     ];
     /**
@@ -33,17 +37,44 @@ class ReportController extends Controller
         $end_date = $request->get('end_date');
         switch ($report_type) {
             case "userRegister":
-                $users = User::when($start_date, function ($q, $start_date) {
-
-                    return $q->where('created_at', ">=", $start_date);
-                })
-                    ->when($end_date, function ($q, $end_date) {
-                        return $q->where('created_at', "<=", $end_date);
-                    })->get();
-                $total_users = $users->count();
+                $data = User::whereBetween('created_at', [$start_date, $end_date] )->orderby('first_name')->get();
+                $total_rows = $data->count();
                 return inertia('Reports/UserRegister', compact(
-                    "users",
-                    "total_users",
+                    "data",
+                    "total_rows",
+                    "report_type",
+                    "start_date",
+                    "end_date",
+                ));
+                break;
+            case "doctors":
+                $data = Doctor::whereBetween('created_at', [$start_date, $end_date] )->orderby('first_name')->get();
+                $total_rows = $data->count();
+                return inertia('Reports/Doctors', compact(
+                    "data",
+                    "total_rows",
+                    "report_type",
+                    "start_date",
+                    "end_date",
+                ));
+                break;
+            case "patients":
+                $data = Patient::whereBetween('created_at', [$start_date, $end_date] )->orderby('first_name')->get();
+                $total_rows = $data->count();
+                return inertia('Reports/Patients', compact(
+                    "data",
+                    "total_rows",
+                    "report_type",
+                    "start_date",
+                    "end_date",
+                ));
+                break;
+            case "medicaments":
+                $data = Medicament::whereBetween('created_at', [$start_date, $end_date] )->orderby('name')->get();
+                $total_rows = $data->count();
+                return inertia('Reports/Medicaments', compact(
+                    "data",
+                    "total_rows",
                     "report_type",
                     "start_date",
                     "end_date",

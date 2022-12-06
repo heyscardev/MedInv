@@ -52,7 +52,7 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
 
         <Grid item xs={6} display="flex" justifyContent="end">
             <Typography variant="h6" sx={{ fontSize:'.8rem' }}>
-                Total de usuarios registrados: {total_rows}
+                Total de doctores: {total_rows}
             </Typography>
         </Grid>
       </Grid>
