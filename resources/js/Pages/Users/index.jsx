@@ -126,11 +126,7 @@ export default ({ ...props }) => {
                     title="edit"
                     color="primary"
                     onClick={(e) => {
-<<<<<<< Updated upstream
-                      if(cell.row.original.id ===  props.auth.user.id)return toast.error('el usuario actual solo se edita desde el  menu de la barra de navegacion -> preferencias')
-=======
                       if(cell.row.original.id ===  props.auth.user.id)return toast.error('el usuario actual solo se edita desde el  menu de la barra de navegacion -> ajuste de usuario')
->>>>>>> Stashed changes
                       setIdToEdit(cell.getValue())}}
                   >
                     <Edit />
@@ -188,7 +184,7 @@ export default ({ ...props }) => {
             Cell: ({ cell }) => {
               return (
                 <div>
-                  
+
                   <Switch
                     checked={!!cell.getValue()}
                     disabled={!!cell.row.original.deleted_at || cell.row.original.id ===  props.auth.user.id}
