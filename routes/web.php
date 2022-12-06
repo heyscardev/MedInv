@@ -84,10 +84,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('recipes', RecipeController::class)->except(['edit'])->names('recipe');
 
     //* Buys
-    Route::resource('buys', BuyController::class)->except(['create','edit'])->names('buy');
+    Route::resource('buys', BuyController::class)->except(['edit'])->names('buy');
     Route::group(['prefix'=>'buys', 'as'=>'buy.'], function()
     {
-        Route::get('create/{module?}', [BuyController::class, 'create'])->name('create');
+      
         Route::get('edit/{buy}/{module?}', [BuyController::class, 'edit'])->name('edit');
     });
 

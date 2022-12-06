@@ -224,5 +224,6 @@
     "report":"Reporte",
     "report_date":"Fecha del reporte",
     "print_date":"Fecha de impresión",
-    "emission_date":"Fecha de emisión"
+    "emission_date":"Fecha de emisión",
+    "viewUserActivity":"Ver actividad del usuario"
 }

@@ -3,13 +3,14 @@ import ConfirmModal from '@/Components/Common/ConfirmModal'
 import EntityDelete from '@/Components/Common/EntityDeleted'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
+import Table from '@/Components/Common/Table'
 import Head from '@/Components/Custom/Head'
 import IconButton from '@/Components/Custom/IconButton'
 import { destroy, visit } from '@/HTTPProvider'
 import {
   AddShoppingCart,
   Delete,
-  Edit, Restore
+  Edit, Restore, Visibility
 } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
@@ -35,8 +36,8 @@ export default ({ module, ...props }) => {
         noTranslateSubtitle
         subtitle={module ? module.name : null}
       />
-      {props.data.data && (
-        <AsyncTable
+      {props.data && (
+        <Table
           enableRowSelection={false}
           initialState={{ columnVisibility }}
           routeName={route().current()}
@@ -52,7 +53,21 @@ export default ({ module, ...props }) => {
               size: 80,
 
               Cell: ({ cell }) => {
-                return cell.row.original.deleted_at &&
+                return <>
+                 { props.can(`${routeName}.show`) && (
+                <IconButton
+                  title="show"
+                  placement="right"
+                  color="primary"
+                  onClick={(e) => {
+                    const id = cell.row.original.id
+                  visit(route(`${routeName}.show`,id))
+                  }}
+                >
+                  <Visibility />
+                </IconButton>
+              )}
+                {cell.row.original.deleted_at &&
                   props.can(`${routeName}.restore`) ? (
           
                     <IconButton
@@ -102,7 +117,8 @@ visit(route(`buy.edit`,{buy:cell.row.original.id}))
                         </IconButton>
                     )}
                   </>
-                )
+                )}
+                </>
               },
             },
             { accessorKey: 'id', header: 'id' },
@@ -182,7 +198,7 @@ visit(route(`buy.edit`,{buy:cell.row.original.id}))
                   ? '00/00/0000 00:00:00'
                   : format(new Date(updated_at), 'hh:mm dd MMMM yyyy'),
             },
-            {
+    /*         {
               accessorKey: 'deleted_at',
               header: 'deleted_at',
               typeColumn: 'date',
@@ -190,7 +206,7 @@ visit(route(`buy.edit`,{buy:cell.row.original.id}))
                 !deleted_at
                   ? formatMessage({ id: 'active' })
                   : format(new Date(deleted_at), 'hh:mm dd MMMM yyyy'),
-            },
+            }, */
           ]}
         />
       )}

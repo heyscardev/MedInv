@@ -35,9 +35,30 @@ import { IconButton, Paper, Tooltip, useTheme } from '@mui/material'
 import MaterialReactTable from 'material-react-table'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
+import DatePickerRangeFilter from './FiltersTable/DatePickerRangeFilter'
+import NumberBoxOutput from './FiltersTable/NumberBoxOutput'
 
 //nested data is ok, see accessorKeys in ColumnDef below
-
+const columnsFormat = (columns, formatMessage) => {
+  return columns.map((item) => {
+    const dataToColumn = {
+      enableClickToCopy: true,
+      ...item,
+    }
+    if (item.typeColumn === 'date') {
+      
+    }
+    if (item.typeColumn === 'numberBox') {
+      dataToColumn.Cell = ({ cell }) => (
+        <NumberBoxOutput value={cell.getValue()} />
+      )
+      dataToColumn.muiTableBodyCellProps = { align: 'right' }
+    }
+    if (!item.noTranslate && item.header)
+      dataToColumn.header = formatMessage({ id: item.header })
+    return dataToColumn
+  })
+}
 export default ({ sx = { margin: 2 }, elevation = 2, actions, ...props }) => {
   const { primary, error } = useTheme().palette
   const iconStyle = { color: primary.dark }
@@ -103,16 +124,7 @@ export default ({ sx = { margin: 2 }, elevation = 2, actions, ...props }) => {
           // sorting: [{ id: 'state', desc: false }], //sort by state by default
         }}
         muiTableContainerProps={{ sx: { backgroundColor: 'primary.light' } }}
-        columns={[
-          ...props.columns.map((item) =>
-            item.header && !item.noTranslate
-              ? {
-                  ...item,
-                  header: formatMessage({ id: item.header }),
-                }
-              : item,
-          ),
-        ]}
+        columns={[...columnsFormat(props.columns, formatMessage)]}
         localization={{
           actions: 'Acciones',
           cancel: 'Cancelar',

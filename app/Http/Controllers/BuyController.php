@@ -29,7 +29,7 @@ class BuyController extends Controller
     public function index(Request $request, Module $module)
     {
 
-        $paginate = max(min($request->get('page_size'), 100), 10);
+       /*  $paginate = max(min($request->get('page_size'), 100), 10); */
         $query = Buy::with('module', 'medicaments', 'user');
 
         if ($module->exists) {
@@ -46,8 +46,8 @@ class BuyController extends Controller
             }
         }
 
-
-        $data = $query->orderBy('updated_at', "desc")->paginate($paginate);
+        $data = $query->orderBy('updated_at', "desc")->get();
+       /*  $data = $query->orderBy('updated_at', "desc")->paginate($paginate); */
         return inertia('Buys/index.employee', compact('data', 'module'));
     }
 
@@ -56,14 +56,16 @@ class BuyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(ModuleBuyRequest $request, Module $module)
+    public function create(ModuleBuyRequest $request, )
     {
+        $module = Module::find($request->get('module'));
         $modulesQuery = Module::with('user');
-        $modules = auth()->user()->hasRole('administrador') ? $modulesQuery->get() : $modulesQuery->where('user_id', auth()->user()->id);
+        $modules = auth()->user()->hasRole('administrador') ? $modulesQuery->get() : $modulesQuery->where('user_id', auth()->user()->id)->get();
         $search = $request->get('search', null);
         $Medicaments = $search ? Medicament::whereRelation('unit', 'name', 'LIKE', "%$search%")->orWhere('name', 'LIKE', '%' . $search . '%')->orWhere('code', 'LIKE', '%' . $search . '%')->orderBy('name')->with('unit')->distinct('medicaments.id')->get() : [];
         $units = Unit::orderBy('name')->get();
-        return inertia('Buys/create', ['module' => $module->exists ? $module : null, 'medicaments' => $Medicaments, 'units' => $units, 'modules' => $modules]);
+    
+        return inertia('Buys/create', ['module' => $module , 'medicaments' => $Medicaments, 'units' => $units, 'modules' => $modules]);
     }
 
     /**

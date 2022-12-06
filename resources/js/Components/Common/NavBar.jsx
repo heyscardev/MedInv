@@ -70,59 +70,7 @@ export default ({ auth, can }) => {
   }
 
   const mobileMenuId = 'primary-search-account-menu-mobile'
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        {/*          <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                >
-                    <Badge badgeContent={17} color="error">
-                        <NotificationsIcon color="info" />
-                    </Badge>
-                </IconButton> */}
-        <p>Notificaciones</p>
-      </MenuItem>
-      <BtnUserSession
-        auth={auth}
-        transformOrigin={{
-          horizontal: 'right',
-          vertical: 'top',
-        }}
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'top',
-        }}
-        BtnOpenMenu={({ onclickMenu }) => (
-          <MenuItem onClick={onclickMenu}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="primary-search-account-menu"
-            >
-              <AccountCircle color="primary" />
-            </IconButton>
-            <p>Perfil</p>
-          </MenuItem>
-        )}
-      />
-    </Menu>
-  )
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -166,7 +114,7 @@ export default ({ auth, can }) => {
             )}
           </Box>
 
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box >
             {/*      <IconButton
                             size="large"
                             aria-label="show 17 new notifications"
@@ -192,21 +140,9 @@ export default ({ auth, can }) => {
               )}
             />
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon color="info" />
-            </IconButton>
-          </Box>
+       
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       <SideBar listBtn={pages} open={openSideBar} onClose={toggleSideBar} />
 
       <Toolbar />
