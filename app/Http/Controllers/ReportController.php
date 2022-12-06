@@ -34,16 +34,20 @@ class ReportController extends Controller
         switch ($report_type) {
             case "userRegister":
                 $users = User::when($start_date, function ($q, $start_date) {
-                   
+
                     return $q->where('created_at', ">=", $start_date);
                 })
                     ->when($end_date, function ($q, $end_date) {
                         return $q->where('created_at', "<=", $end_date);
                     })->get();
-                return inertia('Reports/UserRegister', [
-                    "users"=>$users,
-                    "totalUsers"=>$users->count(),
-                ]);
+                $total_users = $users->count();
+                return inertia('Reports/UserRegister', compact(
+                    "users",
+                    "total_users",
+                    "report_type",
+                    "start_date",
+                    "end_date",
+                ));
                 break;
             default:
                 return redirect('report.index');

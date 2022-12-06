@@ -51,11 +51,12 @@ setDefaultOptions({locale:es})
             {({ Component, key, props }) => (
               <LocalizationProvider
                 adapterLocale={es}
+                
                 dateAdapter={AdapterDateFns}
               >
                 <div>
                 
-                  {route().t.url !== props.ziggy.location && !props.ziggy.location.includes('/reports/') &&
+                  {route().t.url !== props.ziggy.location && 
                     props.auth.user && (
                       <NavBar
                         auth={props.auth}

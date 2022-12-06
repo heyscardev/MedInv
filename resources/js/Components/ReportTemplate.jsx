@@ -14,6 +14,7 @@ import Head from './Custom/Head'
 import LogoTypography from './LogoTypography'
 import jsPDF from 'jspdf'
 import { useRef } from 'react'
+import { useIntl } from 'react-intl'
 
 const styles = {
     page: {
@@ -46,38 +47,37 @@ const styles = {
         marginBottom: 0,
     },
 };
-const ReportTemplate = ({ start_date, end_date, nameReport = 'report' }) => {
+const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report' }) => {
   const { palette } = useTheme()
+  const {formatMessage} = useIntl();
   const reportTemplateRef = useRef(null);
   const handleGeneratePdf = () => {
-    const doc = new jsPDF({
-        format: 'a4',
-        unit: 'px',
-    });
+    const doc = new jsPDF("p", "pt", "a4");
 
     // Adding the fonts.
-    doc.setFont('Inter-Regular', 'normal');
+   
 
     doc.html(reportTemplateRef.current, {
         async callback(doc) {
-            await doc.save(nameReport);
+            await doc.save(formatMessage({id:nameReport}));
         },
     });
 };
 
   return (
     <>
-      <Head title="reports" />
-      <Container>
-        <Paper  ref={reportTemplateRef} sx={{ margin: 0, width: '100%', minHeight: '300px',...styles }}>
+      <Head title={nameReport} />
+      <Container   sx={{marginTop:3,justifyContent:"center",display:"flex"}}>
+        <Paper ref={reportTemplateRef}  sx={{ width: '600px', minHeight: '220px', }}>
           <AppBar
             position="relative"
             sx={{
-              background: palette.secondaryGradient.main,
-              backgroundColor: 'transparent',
+              backgroundColor: palette.primary.dark,
             }}
           >
             <LogoTypography subtitle={nameReport} colorSubtitle="error.main" />
+            <Typography variant="h6" color="white.main">Reporte</Typography>
+            <Typography variant="h6" color="white.main">Fecha: {format(new Date(),"hh:mm:aa dd MMMM yyyy")}</Typography>
           </AppBar>
           <Grid container padding={2}>
             <Grid item xs={12} display="flex" justifyContent="end">
@@ -103,6 +103,8 @@ const ReportTemplate = ({ start_date, end_date, nameReport = 'report' }) => {
                   ? format(new Date(end_date), 'dd MMMM yyyy')
                   : ' -- ---- ----'}
               </Typography>
+            </Grid><Grid item xs={12}>
+              {children}
             </Grid>
           </Grid>
         </Paper>

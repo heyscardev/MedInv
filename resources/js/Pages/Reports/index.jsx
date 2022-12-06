@@ -6,6 +6,7 @@ import Head from '@/Components/Custom/Head'
 import { composeValidators, required, validDate } from '@/Config/InputErrors'
 import { get } from '@/HTTPProvider'
 import { Box, Button, Container, Grid, Paper } from '@mui/material'
+import { addHours, setHours } from 'date-fns'
 import { Form } from 'react-final-form'
 import { useIntl } from 'react-intl'
 
@@ -17,9 +18,8 @@ export default ({ reportTypes = [] }) => {
       <SectionTitle title="reports" />
       <Container>
         <Form onSubmit={({report_type,start_date,end_date}) => {
-          const formatEndDate = new Date(new Date(end_date).setHours(23,59,59));
-         
-         get(route('report.show',{report_type,start_date,end_date:formatEndDate,}),{})
+  
+        get(route('report.show',{report_type,start_date,end_date:setHours(end_date,23),}),{})
         }}>
           {({ handleSubmit, values }) => (
             <form onSubmit={handleSubmit}>
