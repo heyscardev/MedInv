@@ -17,11 +17,12 @@ con factura recipe y implementacion de diferentes roles
 
     CREAR .env EN LA RAIZ 
     DAR CREDENCIALES DE BASES DE DATOS A ENV
-    CREAR BD EN SQL
+    CREAR Base de datos  EN SQL
     EJECUTAR para primera vez
         php artisan migrate  //para migrar la bd *si no esta migrada*
+        php artisan db:seed
     
-    Ejecucion del sistema
+    Ejecucion del sistema en (consolas separadas)
         npm run dev
         php artisan serve
 
@@ -34,10 +35,9 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Info Autores
 Esta aplicacion fue desarrollada por 
-Natanael Cordero
 Heyscar Romero
 y siempre se debe retribuir el merito de este
 
 esta es una aplicaciondonde solo se permite el uso gratuito al IVSS
-si quiere ser usada para uso comercial debe comunicarse con los autores del codigo
+si quiere ser usada para uso comercial debe comunicarse con el autor de esta
 
