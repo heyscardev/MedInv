@@ -31,7 +31,7 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             },
             {
               accessorKey: 'c_i',
-              header: 'cedula',
+              header: 'Cédula',
               accessorFn: ({ nationality, c_i }) => `${nationality}- ${c_i}`,
 
               minSize: '0px',
