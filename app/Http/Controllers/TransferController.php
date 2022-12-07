@@ -33,7 +33,6 @@ class TransferController extends Controller
         if ($module->exists) {
             if (!auth()->user()->hasRole('administrador') && $module->user_id !== auth()->user()->id) return abort(403);
             $query = $module->transfers()->with('moduleSend', 'moduleReceive', 'user');
-
         } else {
             $query  = Transfer::with('moduleSend', 'moduleReceive', 'user')->where('transfers.user_id', auth()->user()->id);
             $module = null;
@@ -73,7 +72,7 @@ class TransferController extends Controller
      */
     public function edit(TransferRequest $request, Transfer $transfer, Module $module)
     {
-        $transferToEdit = Transfer::with('moduleSend','moduleReceive')->find($transfer->id);
+        $transferToEdit = Transfer::with('moduleSend', 'moduleReceive')->find($transfer->id);
         $moduleSelected = null;
         $medicaments = [];
         $selectedMedicaments = [];
@@ -114,7 +113,7 @@ class TransferController extends Controller
         );
         return Redirect(route('transfer.show', $transfer->id));
     }
-     /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

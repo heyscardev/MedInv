@@ -227,5 +227,6 @@
     "emission_date":"Fecha de emisión",
     "viewUserActivity":"Ver actividad del usuario",
     "medicamentRestore":"Restaurar Medicamento",
-    "price_sale":"Precio de Venta"
+    "price_sale":"Precio de Venta",
+    "doctorRestore":"Restaurar Doctor"
 }

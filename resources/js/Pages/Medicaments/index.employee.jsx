@@ -70,7 +70,7 @@ export default ({units,...props}) => {
                   </IconButton>
               ) : (
                 <Fragment>
-                  {props.can(`${routeName}.edit`) && (
+          {/*         {props.can(`${routeName}.edit`) && (
                       <IconButton
                       arrow placement="right" title="delete"
                         color="error"
@@ -78,8 +78,8 @@ export default ({units,...props}) => {
                       >
                         <Delete />
                       </IconButton>
-                  )}
-                  {props.can(`${routeName}.delete`) && (
+                  )} */}
+                  {props.can(`${routeName}.edit`) && (
                   
                       <IconButton
                       arrow placement="right" title="edit"
@@ -189,7 +189,7 @@ export default ({units,...props}) => {
               toggleEdit(-1)
             },
           },
-          {
+       /*    {
             icon: <RestoreFromTrash />,
             name: restoreMode ? 'exitRestoreMode' : 'medicamentRestore',
             ...(restoreMode
@@ -201,7 +201,7 @@ export default ({units,...props}) => {
               }
               return visit(route(`${routeName}.index`, { deleted: true }))
             },
-          },
+          }, */
         ]}
       />
       <EditMedicamentModal   units={units}
