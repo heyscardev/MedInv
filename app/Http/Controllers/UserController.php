@@ -63,8 +63,7 @@ class UserController extends Controller
     {
      /*    if ($user->id == Auth::id())
             return back()->withErrors(['noCurrentUser' => 'el usuario actual solo se puede modificar desde preferencias']); */
-      if (!$user->hasRole('administrador') && auth()->user()->id !== $user->id);
-            return abort(403);
+    if (!auth()->user()->hasRole('administrador') && auth()->user()->id !== $user->id) return abort(403);
 
         $validated = $request->validated();
         $user->update($validated);
