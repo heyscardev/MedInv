@@ -222,11 +222,8 @@
     "start_date":"Desde",
     "generateReport":"Generar reporte",
     "report":"Reporte",
-<<<<<<< Updated upstream
     "report_date":"Fecha del reporte",
     "print_date":"Fecha de impresión",
     "emission_date":"Fecha de emisión",
-=======
->>>>>>> Stashed changes
     "viewUserActivity":"Ver actividad del usuario"
 }
