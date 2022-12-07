@@ -6,7 +6,7 @@ import MaterialReactTable from 'material-react-table'
 export default ({ data, total_rows, report_type, start_date, end_date }) => {
   return (
     <ReportTemplate {...{ start_date, end_date, nameReport: report_type }}>
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ margin: "10px" }} >
         <MaterialReactTable
           initialState={{ density: 'compact' }}
           enableTopToolbar={false}
@@ -37,6 +37,18 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
               minSize: '0px',
             },
             {
+                accessorKey: 'email',
+                header: 'Correo',
+
+                minSize: '0px',
+            },
+            {
+                accessorKey: 'phone',
+                header: 'Teléfono',
+
+                minSize: '0px',
+            },
+            {
               accessorKey: 'created_at',
               header: 'Fecha de registro',
               accessorFn: ({ created_at }) =>
@@ -45,17 +57,17 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             },
           ]}
         />
-      </div>
 
-      <Grid container sx={{ marginTop: 2 }}>
-        <Grid item xs={6}></Grid>
+        <Grid container sx={{ marginTop: 3 }}>
+            <Grid item xs={6}></Grid>
 
-        <Grid item xs={6} display="flex" justifyContent="end">
-            <Typography variant="h6" sx={{ fontSize:'.8rem' }}>
-                Total de usuarios registrados: {total_rows}
-            </Typography>
+            <Grid item xs={6} display="flex" justifyContent="end">
+                <Typography>
+                    Total de usuarios registrados: {total_rows}
+                </Typography>
+            </Grid>
         </Grid>
-      </Grid>
+      </div>
     </ReportTemplate>
   )
 }

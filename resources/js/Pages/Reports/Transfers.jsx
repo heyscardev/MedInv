@@ -5,7 +5,7 @@ import MaterialReactTable from 'material-react-table'
 
 export default ({ data, total_rows, report_type, start_date, end_date }) => {
   return (
-    <ReportTemplate {...{ start_date, end_date, nameReport: report_type }}>
+    <ReportTemplate {...{ start_date, end_date, nameReport: report_type, orientation: 'landscape' }}>
       <div style={{ margin: "10px" }}>
         <MaterialReactTable
           initialState={{ density: 'compact' }}
@@ -18,20 +18,27 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
           data={data}
           columns={[
             {
-              accessorKey: 'code',
-              header: 'Código',
+              accessorKey: 'id',
+              header: 'ID',
 
               minSize: '0px',
             },
             {
-              accessorKey: 'name',
-              header: 'Nombre',
+              accessorKey: 'module_send.name',
+              header: 'Módulo envía',
+
+              maxSize: '30px',
+            },
+            {
+              accessorKey: 'module_receive.name',
+              header: 'Módulo recibe',
 
               minSize: '0px',
             },
             {
-              accessorKey: 'unit.name',
-              header: 'Unidad',
+              accessorKey: 'user_id',
+              header: 'Usuario Responsable',
+              accessorFn: ({ user }) => `${user.first_name} ${user.last_name}`,
 
               minSize: '0px',
             },
@@ -44,17 +51,15 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             },
           ]}
         />
-      </div>
 
-      <Grid container sx={{ marginTop: 2 }}>
-        <Grid item xs={6}></Grid>
+        <Grid container sx={{ marginTop: 3 }}>
+            <Grid item xs={6}></Grid>
 
-        <Grid item xs={6} display="flex" justifyContent="end">
-            <Typography>
-                Total de medicamentos: {total_rows}
-            </Typography>
+            <Grid item xs={6} display="flex" justifyContent="end">
+                Total de transferencias: {total_rows}
+            </Grid>
         </Grid>
-      </Grid>
+      </div>
     </ReportTemplate>
   )
 }

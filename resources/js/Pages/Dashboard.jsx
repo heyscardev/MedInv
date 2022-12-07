@@ -17,6 +17,8 @@ import {
 import { Grid, Paper, Typography } from '@mui/material'
 import { Fragment } from 'react'
 
+import imgMedicament from "@/assets/images/medicaments.jpg";
+
 export default ({ can, auth, page }) => {
 
     let pages;
@@ -66,6 +68,7 @@ export default ({ can, auth, page }) => {
                   name: 'medicaments',
                   route: route('medicament.index'),
                   Icon: Medication,
+                  image: imgMedicament,
                 }
               : null,
             can('module.index')

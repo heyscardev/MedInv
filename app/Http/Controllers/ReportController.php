@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Doctor;
 use App\Models\Medicament;
 use App\Models\Patient;
+use App\Models\Transfer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -33,8 +35,9 @@ class ReportController extends Controller
 
     public function show(Request $request, $report_type)
     {
-        $start_date = $request->get('start_date');
-        $end_date = $request->get('end_date');
+        $start_date = Carbon::parse( $request->get('start_date') )->format('Y-m-d');
+        $end_date = Carbon::parse( $request->get('end_date') )->format('Y-m-d');
+
         switch ($report_type) {
             case "userRegister":
                 $data = User::whereBetween('created_at', [$start_date, $end_date] )->orderby('first_name')->get();
@@ -73,6 +76,17 @@ class ReportController extends Controller
                 $data = Medicament::whereBetween('created_at', [$start_date, $end_date] )->orderby('name')->get();
                 $total_rows = $data->count();
                 return inertia('Reports/Medicaments', compact(
+                    "data",
+                    "total_rows",
+                    "report_type",
+                    "start_date",
+                    "end_date",
+                ));
+                break;
+            case "transfers":
+                $data = Transfer::whereBetween('created_at', [$start_date, $end_date] )->orderby('created_at')->get();
+                $total_rows = $data->count();
+                return inertia('Reports/Transfers', compact(
                     "data",
                     "total_rows",
                     "report_type",

@@ -200,7 +200,7 @@ export default (props) => {
             typeColumn: 'date',
             Cell:({ cell }) =>
             !cell.getValue()
-              ?  ' 00 00 00' 
+              ?  ' 00 00 00'
               : format(new Date(cell.getValue()), 'hh:mm dd MMMM yyyy')
           },
         ]}
@@ -235,7 +235,7 @@ export default (props) => {
               },
             ]
           : []),
-   
+
         ]}
       />
         <ConfirmModal

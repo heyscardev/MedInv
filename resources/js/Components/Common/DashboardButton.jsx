@@ -1,16 +1,20 @@
 import VisitButton from "@/Components/Custom/VisitButton";
 import { Store, ViewModule } from "@mui/icons-material";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
 import { useIntl } from "react-intl";
+
+
 
 export default ({
     name = "start",
     route = "/",
     Icon = ViewModule,
+    image,
     subtitle,
     outlined,
     ...rest
 }) => {
+    const { palette } = useTheme();
     const { formatMessage } = useIntl();
     const tema = outlined ? {text:"primary.main",icon:"primary" ,variant:"outlined"}:{text:"white.main",icon:"white",variant:"contained"};
     return (
@@ -31,10 +35,18 @@ export default ({
                     ":hover": {
                         transform: "scale(1.05)",
                     },
+                    ...(image?
+                        {
+                            background: `${palette.gradientTransparent.black75},url(${image})`,
+                            backgroundSize: "cover",
+                            // backgroundAttachment: "fixed",
+                        }:{}
+                    ),
                 }}
                 fullWidth
                 {...rest}
             >
+
                 <Box
                     sx={{
                         bgcolor: "background.default",
