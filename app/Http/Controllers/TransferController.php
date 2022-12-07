@@ -97,7 +97,7 @@ class TransferController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TransferRequest $request)
+    public function store(TransferRequest $request,)
     {
         $transfer = new Transfer(
             [
@@ -112,7 +112,7 @@ class TransferController extends Controller
             fn ($value) => $transfer->medicaments()->attach($value['id'], ['quantity' => $value['quantity']]),
             $request->input('medicaments', [])
         );
-        return Redirect(route('transfer.create', $request->input('module_send_id')));
+        return Redirect(route('transfer.show', $transfer->id));
     }
      /**
      * Update the specified resource in storage.

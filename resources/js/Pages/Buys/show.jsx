@@ -132,6 +132,12 @@ export default ({ item, data }) => {
                             Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
                         },
                         {
+                            accessorKey: 'price_sale',
+                            header: 'price_sale',
+                            filterVariant: 'range',
+                            Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
+                        },
+                        {
                             accessorKey: 'pivot.quantity',
                             header: 'quantity',
                         },

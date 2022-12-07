@@ -155,7 +155,7 @@ export default ({ buyToEdit, ...props }) => {
                   <Stack bgcolor="white.main" borderRadius={2} padding={1}>
                     <AutocompleteMedicaments
                       medicamentsOptions={props.medicaments}
-                      onChangeTextField={(e, value) => {
+                      /* onChangeTextField={(e, value) => {
                         visit(
                           route(route().current(), {
                             module: props.module ? props.module.id : null,
@@ -168,7 +168,7 @@ export default ({ buyToEdit, ...props }) => {
                             only: ['medicaments'],
                           },
                         )
-                      }}
+                      }} */
                       units={props.units}
                       pushMedicament={fields.push}
                       onChange={(e, value) => {
@@ -195,20 +195,23 @@ export default ({ buyToEdit, ...props }) => {
                   <Table sx={{ backgroundColor: 'white.main' }}>
                     <TableHead sx={{ backgroundColor: 'primary.dark' }}>
                       <TableRow>
-                        <TableCell>
+                        <TableCell sx={{color:"#fff"}}>
                           <IntlMessage id="code" />
                         </TableCell>
-                        <TableCell>
+                        <TableCell sx={{color:"#fff"}}>
                           <IntlMessage id="medicament" />
                         </TableCell>
-                        <TableCell align="center">
+                        <TableCell align="center" sx={{color:"#fff"}}>
                           <IntlMessage id="quantity" />
                         </TableCell>
-                        <TableCell align="center">
+                        <TableCell align="center" sx={{color:"#fff"}}>
                           <IntlMessage id="price" />
                         </TableCell>
-                        <TableCell align="center">
+                        <TableCell align="center" sx={{color:"#fff"}}>
                           <IntlMessage id="totalPrice" />
+                        </TableCell>
+                        <TableCell align="center" sx={{color:"#fff"}}>
+                          <IntlMessage id="price_sale" />
                         </TableCell>
                         <TableCell />
                       </TableRow>
@@ -218,6 +221,7 @@ export default ({ buyToEdit, ...props }) => {
                         const itemMed = _.get(values, fieldName)
                         return (
                           <TableRow key={itemMed.id}>
+                            {console.log(itemMed)}
                             <TableCell>{itemMed.code}</TableCell>
                             <TableCell>{itemMed.name}</TableCell>
                             <TableCell align="center" width={200}>
@@ -263,6 +267,13 @@ export default ({ buyToEdit, ...props }) => {
                                 value={
                                   _.get(values, `${fieldName}.price`, 0) *
                                   _.get(values, `${fieldName}.quantity`, 0)
+                                }
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <IntlFormatCurrency
+                                value={
+                                  _.get(values, `${fieldName}.price_sale`, 0) 
                                 }
                               />
                             </TableCell>
@@ -376,7 +387,7 @@ const AutocompleteMedicaments = ({
       <EditMedicamentModal
         units={units}
         medicaments={medicamentsOptions}
-        open={openEdit}
+        open={!!openEdit}
         onClose={() => setOpenEdit(false)}
       />
     </Grid>

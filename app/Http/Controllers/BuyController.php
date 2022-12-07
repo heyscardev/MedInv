@@ -61,8 +61,8 @@ class BuyController extends Controller
         $module = Module::find($request->get('module'));
         $modulesQuery = Module::with('user');
         $modules = auth()->user()->hasRole('administrador') ? $modulesQuery->get() : $modulesQuery->where('user_id', auth()->user()->id)->get();
-        $search = $request->get('search', null);
-        $Medicaments = $search ? Medicament::whereRelation('unit', 'name', 'LIKE', "%$search%")->orWhere('name', 'LIKE', '%' . $search . '%')->orWhere('code', 'LIKE', '%' . $search . '%')->orderBy('name')->with('unit')->distinct('medicaments.id')->get() : [];
+        $search = $request->get('search', "");
+        $Medicaments =  Medicament::whereRelation('unit', 'name', 'LIKE', "%$search%")->orWhere('name', 'LIKE', '%' . $search . '%')->orWhere('code', 'LIKE', '%' . $search . '%')->orderBy('name')->with('unit')->distinct('medicaments.id')->get() ;
         $units = Unit::orderBy('name')->get();
     
         return inertia('Buys/create', ['module' => $module , 'medicaments' => $Medicaments, 'units' => $units, 'modules' => $modules]);
@@ -86,7 +86,7 @@ class BuyController extends Controller
         array_map(function ($value) use ($buy) {
             $buy->medicaments()->attach($value['id'], ['quantity' => $value['quantity'], 'price' => $value['price']]);
         }, $data['medicaments']);
-        return redirect(route('buy.index', $module->id));
+        return redirect(route('buy.show', $buy->id));
     }
 
     /**

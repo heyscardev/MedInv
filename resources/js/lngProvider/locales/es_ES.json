@@ -226,5 +226,6 @@
     "print_date":"Fecha de impresión",
     "emission_date":"Fecha de emisión",
     "viewUserActivity":"Ver actividad del usuario",
-    "medicamentRestore":"Restaurar Medicamento"
+    "medicamentRestore":"Restaurar Medicamento",
+    "price_sale":"Precio de Venta"
 }
