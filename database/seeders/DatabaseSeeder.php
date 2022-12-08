@@ -46,13 +46,13 @@ class DatabaseSeeder extends Seeder
             'gender' => 'MALE'
         ]);
         Pathology::factory(200)->create();
-        Module::factory(20)->create();
+        
        /*  Transfer::factory(200)->hasAttached(
             Medicament::orderByRaw("RAND()")->limit(rand(1, 20))->get(),
             ['quantity' => 10]
         )->create(); */
 
-       /*  Buy::factory(20)->hasAttached(
+      Buy::factory(200)->hasAttached(
             Medicament::orderByRaw('RAND()')->limit(rand(1, 12))->get(),
             function () {
                 return [
@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder
                     'quantity' => rand(0, 10)
                 ];
             },
-        )->create();
+        )->create();  /* 
         Recipe::factory(200)->hasAttached(
             Medicament::orderByRaw('RAND()')->limit(rand(1, 12))->get(),
             function () {

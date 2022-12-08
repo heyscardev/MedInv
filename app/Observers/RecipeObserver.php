@@ -47,7 +47,7 @@ class RecipeObserver
          */
         public function deleting(Recipe $recipe)
         {
-           
+          
             $recipe->medicaments()->each(function ($medicament) use ($recipe) {
                 $recipe->medicaments()->detach($medicament->id);
             });

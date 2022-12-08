@@ -223,6 +223,7 @@ export default ({
                                 {
                                   noLoader: true,
                                   preserveState: true,
+                                  replace:true ,
                                   only: ['patients'],
                                 },
                               )
@@ -254,6 +255,7 @@ export default ({
                               }),
                               {
                                 noLoader: true,
+                                replace:true ,
                                 preserveState: true,
                                 only: ['doctors'],
                               },
@@ -682,7 +684,7 @@ export default ({
                     }}
                     onSelect={(value) => {
                       form.change('medicaments', [])
-                      visit( route('recipe.create',  { module_id: value.id }  ))
+                      visit( route('recipe.create',  { module_id: value.id,replace:true }  ))
                       form.change('moduleDeliver', value)
                     }}
                     label="selectModuleToTransfer"
