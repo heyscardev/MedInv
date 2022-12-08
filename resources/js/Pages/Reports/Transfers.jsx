@@ -14,31 +14,31 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             {
                 accessorKey: 'id',
                 header: 'ID',
-                maxSize:2,
+                maxSize:10,
             },
             {
                 accessorKey: 'module_send.name',
                 header: 'Módulo envía',
-                maxSize:90,
+                maxSize:180,
             },
             {
                 accessorKey: 'module_receive.name',
                 header: 'Módulo recibe',
-                maxSize:90,
+                maxSize:180,
             },
             {
                 accessorKey: 'user_id',
                 header: 'Usuario Responsable',
                 accessorFn: ({ user }) => `${user.first_name} ${user.last_name}`,
 
-                maxSize:30,
+                maxSize:90,
             },
             {
                 accessorKey: 'created_at',
                 header: 'Fecha de registro',
                 accessorFn: ({ created_at }) =>
                   format(new Date(created_at), 'hh:mm:aa dd/MM/yyyy'),
-                maxSize:27,
+                maxSize:90,
             },
         ]
     );
@@ -46,24 +46,38 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
   return (
     <ReportTemplate {...{ start_date, end_date, nameReport: report_type, orientation: 'landscape' }}>
         <MaterialReactTable
-          initialState={{ density: 'compact' }}
-          enableTopToolbar={false}
-          enableColumnActions={false}
-          enableBottomToolbar={false}
-          enabledGlobalFilterOptions={false}
-          enableColumnDragging={false}
-          enableColumnFilters
-          enablePagination={false}
-          enableColumnResizing
-          enableTableFooter
+          initialState={{ density: 'display' }}
           enableStickyHeader
-          autoResetExpanded
+          enableTopToolbar={false}
+          enableBottomToolbar={false}
+          enablePagination={false}
+          enableColumnActions={false}
+        //   enableExpandAll={false}
+        //   enabledGlobalFilterOptions={false}
+        //   enableColumnDragging={false}
+        //   enableColumnFilters={false}
+        //   enableColumnResizing
+        //   autoResetExpanded
           enableRowVirtualization
+          positionExpandColumn="last"
+          displayColumnDefOptions={{
+            'mrt-row-expand': {
+              minSize: 0,
+              size:10,
+              muiTableHeadCellProps: {
+                align: 'center',
+              },
+              muiTableBodyCellProps: {
+                align: 'center',
+              },
+            },
+          }}
+          muiTableContainerProps={{ sx: { maxHeight: '100%' } }}
           data={data}
           columns={columns}
           renderDetailPanel={({ row }) => (
             <Box>
-                <table style={{ width: '98%', background:palette.primary.light }}>
+                <table style={{ width: '95%', background:palette.primary.light }}>
                     <tbody>
                         { row.original.medicaments.map( (item) => (
                             <tr key={item.id}>
@@ -77,19 +91,6 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
                 </table>
             </Box>
           )}
-          positionExpandColumn="last"
-          displayColumnDefOptions={{
-            'mrt-row-expand': {
-              minSize: 0,
-              size:2,
-              muiTableHeadCellProps: {
-                align: 'right',
-              },
-              muiTableBodyCellProps: {
-                align: 'right',
-              },
-            },
-          }}
         />
 
         <Grid container sx={{ marginTop: 3 }}>
