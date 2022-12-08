@@ -230,5 +230,6 @@
     "download":"Descargar",
     "medicamentRestore":"Restaurar Medicamento",
     "price_sale":"Precio de Venta",
-    "doctorRestore":"Restaurar Doctor"
+    "doctorRestore":"Restaurar Doctor",
+    "afterRecipe":"Despues del recipe"
 }
