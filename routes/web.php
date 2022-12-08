@@ -85,18 +85,18 @@ Route::middleware('auth')->group(function () {
 
     //* Buys
     Route::resource('buys', BuyController::class)->except(['edit'])->names('buy');
-    Route::group(['prefix'=>'buys', 'as'=>'buy.'], function()
+ /*    Route::group(['prefix'=>'buys', 'as'=>'buy.'], function()
     {
       
         Route::get('edit/{buy}/{module?}', [BuyController::class, 'edit'])->name('edit');
-    });
+    }); */
 
     //* Transfers
     Route::resource('transfers', TransferController::class)->except(['edit'])->names('transfer');
-    Route::group(['prefix'=>'transfers', 'as'=>'transfer.'], function()
+/*     Route::group(['prefix'=>'transfers', 'as'=>'transfer.'], function()
     {
         Route::get('edit/{transfer}/{module?}', [TransferController::class, 'edit'])->name('edit');
-    });
+    }); */
 
     //* Reports
     Route::get('reports',[ReportController::class,'index'])->name('report.index');

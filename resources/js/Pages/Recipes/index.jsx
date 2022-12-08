@@ -1,21 +1,27 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
+import ConfirmModal from '@/Components/Common/ConfirmModal'
 import EntityDelete from '@/Components/Common/EntityDeleted'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
 import Head from '@/Components/Custom/Head'
-import { visit } from '@/HTTPProvider'
-import { PostAdd } from '@mui/icons-material'
+import IconButton from '@/Components/Custom/IconButton'
+import { destroy, visit } from '@/HTTPProvider'
+import { Delete, PostAdd, Visibility } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
+import { useIntl } from 'react-intl'
 
 const columnVisibility = {
   user: false,
   updated_at: false,
 }
+const routeName = "recipe";
 export default ({ module, ...props }) => {
-  const [idToEdit, setIdToEdit] = useState(null)
-  const toggleEdit = (id) => {
-    setIdToEdit(id ? id : null)
+
+  const { formatMessage } = useIntl()
+  const [idToDelete, setIdToDelete] = useState(null)
+  const toggleConfirmDelete = (id) => {
+    setIdToDelete(id ? id : null)
   }
   return (
     <Fragment>
@@ -30,6 +36,61 @@ export default ({ module, ...props }) => {
           // onAsync={tableUpdate}
           data={props.data}
           columns={[
+               {
+            id: 'actions',
+            accessorKey: 'id',
+            columnDefType: 'display',
+            header: 'actions',
+            size: 80,
+
+            Cell: ({ cell }) => {
+              return <>
+                { props.can(`${routeName}.show`) && (
+                <IconButton
+                  title="show"
+                  placement="right"
+                  color="primary"
+                  onClick={(e) => {
+                    const id = cell.row.original.id
+                  visit(route(`${routeName}.show`,id))
+                  }}
+                >
+                  <Visibility />
+                </IconButton>
+              )}
+               
+          
+                  {props.can(`${routeName}.destroy`) && (
+                    <IconButton
+                      title="delete"
+                      color="error"
+                      placement="right"
+                      onClick={(e) => setIdToDelete(cell.getValue())}
+                    >
+                      <Delete />
+                    </IconButton>
+                  )}
+                {/*   {props.can(`${routeName}.update`) && (
+                    <IconButton
+                      title="edit"
+                      placement="right"
+                      color="primary"
+                      onClick={(e) => {
+                        visit(
+                          route(`${routeName}.edit`, {
+                            transfer: cell.row.original.id,
+                          }),
+                        )
+                      }}
+                    >
+                      <iconsMaterial.Edit />
+                    </IconButton>
+                  )} */}
+            
+        
+              </>
+            },
+          },
             { accessorKey: 'id', header: 'id' },
             {
               accessorKey: 'user',
@@ -112,7 +173,22 @@ export default ({ module, ...props }) => {
           },
         ]}
       />
-
+ <ConfirmModal
+        open={_.find(props.data.data, { id: idToDelete }) ? true : false}
+        onClose={() => toggleConfirmDelete(null)}
+        onSubmit={() => {
+          toggleConfirmDelete(null)
+          destroy(route(routeName + '.destroy', idToDelete))
+        }}
+        message={
+          _.find(props.data.data, { id: idToDelete })
+            ? formatMessage(
+                { id: 'deleteMessageRecipe' },
+                { value: _.find(props.data.data, { id: idToDelete })['id'] },
+              )
+            : null
+        }
+      />
     </Fragment>
   )
 }

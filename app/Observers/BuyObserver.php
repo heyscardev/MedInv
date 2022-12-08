@@ -45,6 +45,7 @@ class BuyObserver
      */
     public function deleting(Buy $buy)
     {
+       
         $buy->medicaments()->each(function ($medicament) use ($buy) {
             $buy->medicaments()->detach($medicament->id);
         });
