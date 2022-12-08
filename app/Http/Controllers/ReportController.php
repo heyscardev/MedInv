@@ -22,7 +22,7 @@ class ReportController extends Controller
         'transfers',
         'buys',
         'recipes',
-        'medicamentsMovements'
+        // 'medicamentsMovements'
     ];
     /**
      * Display a listing of the resource.
