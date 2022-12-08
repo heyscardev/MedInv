@@ -221,7 +221,6 @@ export default ({ buyToEdit, ...props }) => {
                         const itemMed = _.get(values, fieldName)
                         return (
                           <TableRow key={itemMed.id}>
-                            {console.log(itemMed)}
                             <TableCell>{itemMed.code}</TableCell>
                             <TableCell>{itemMed.name}</TableCell>
                             <TableCell align="center" width={200}>
@@ -273,7 +272,7 @@ export default ({ buyToEdit, ...props }) => {
                             <TableCell>
                               <IntlFormatCurrency
                                 value={
-                                  _.get(values, `${fieldName}.price_sale`, 0) 
+                                  _.get(values, `${fieldName}.price_sale`, 0)
                                 }
                               />
                             </TableCell>

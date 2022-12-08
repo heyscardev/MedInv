@@ -8,7 +8,7 @@ export default ({ open, onClose, item = [] }) => {
     const action = item.log_type ?? '';
     const entity = item.table_name ?? '';
     const data   = item.json_data ?? [];
-        console.log(data);
+
     return (
         <Modal {...{ open, onClose }}>
             <div style={{ textAlign: "center" }}>

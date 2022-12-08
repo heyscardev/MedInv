@@ -52,10 +52,16 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
   const { palette } = useTheme()
   const {formatMessage} = useIntl();
   const reportTemplateRef = useRef(null);
-  const handleGeneratePdf = () => {
-    const doc = new jsPDF(orientation);  //p, pt, a4, landscape
 
-    // Adding the fonts.
+  const handleGeneratePdf = () => {
+
+    //Remove TopToobar before the print
+    const topToolbar = Array.from( document.getElementsByClassName("MuiToolbar-root css-xcubvc-MuiToolbar-root") );
+    topToolbar.forEach((element) => {
+      element.remove();
+    });
+
+    const doc = new jsPDF(orientation);  //p, pt, a4, landscape
 
     doc.html(reportTemplateRef.current, {
         margin:8,
@@ -131,7 +137,7 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
               icon: <Download />,
               name: 'download',
               onClick: handleGeneratePdf
-              }
+            }
           ]}
         />
       </Container>

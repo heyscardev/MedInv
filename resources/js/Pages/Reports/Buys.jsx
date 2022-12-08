@@ -1,3 +1,4 @@
+import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
 import ReportTemplate from '@/Components/ReportTemplate'
 import { Box, fabClasses, Grid, Typography, useTheme } from '@mui/material'
 import { width } from '@mui/system'
@@ -17,14 +18,16 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
                 maxSize:10,
             },
             {
-                accessorKey: 'module_send.name',
-                header: 'Módulo envía',
-                maxSize:180,
+                accessorKey: 'created_at',
+                header: 'Fecha de registro',
+                accessorFn: ({ created_at }) =>
+                  format(new Date(created_at), 'hh:mm:aa dd/MM/yyyy'),
+                maxSize:70,
             },
             {
-                accessorKey: 'module_receive.name',
-                header: 'Módulo recibe',
-                maxSize:180,
+                accessorKey: 'module.name',
+                header: 'Módulo',
+                maxSize:200,
             },
             {
                 accessorKey: 'user_id',
@@ -34,12 +37,11 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
                 maxSize:90,
             },
             {
-                accessorKey: 'created_at',
-                header: 'Fecha de registro',
-                accessorFn: ({ created_at }) =>
-                  format(new Date(created_at), 'hh:mm:aa dd/MM/yyyy'),
-                maxSize:90,
-            },
+                accessorKey: 'total_price',
+                header: 'Precio Total',
+                Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
+                maxSize:80,
+          },
         ]
     );
 
@@ -74,13 +76,25 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
           renderDetailPanel={({ row }) => (
             <Box>
                 <table style={{ width: '95%', background:palette.primary.light }}>
+                    <thead>
+                        <tr>
+                          <th>Código</th>
+                          <th>Medicamento</th>
+                          <th>Unidad</th>
+                          <th style={{ textAlign:'right' }}>Precio</th>
+                          <th style={{ textAlign:'right' }}>Cantidad</th>
+                          <th style={{ textAlign:'right' }}>Precio total</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         { row.original.medicaments.map( (item) => (
                             <tr key={item.id}>
                                 <td>{item.code}</td>
                                 <td>{item.name}</td>
                                 <td>{item.unit.name}</td>
-                                <td>{item.pivot.quantity}</td>
+                                <td style={{ textAlign:'right' }}><IntlFormatCurrency value={item.pivot.price} /> </td>
+                                <td style={{ textAlign:'right' }}>{item.pivot.quantity}</td>
+                                <td style={{ textAlign:'right' }}><IntlFormatCurrency value={item.pivot.price * item.pivot.quantity} /> </td>
                             </tr>
                         ) )}
                     </tbody>
@@ -93,7 +107,7 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             <Grid item xs={6}></Grid>
             <Grid item xs={6} display="flex" justifyContent="end">
                 <Typography>
-                    Total de transferencias: {total_rows}
+                    Total de compras realizadas: {total_rows}
                 </Typography>
             </Grid>
         </Grid>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buy;
 use App\Models\Doctor;
 use App\Models\Medicament;
 use App\Models\Patient;
+use App\Models\Recipe;
 use App\Models\Transfer;
 use App\Models\User;
 use Carbon\Carbon;
@@ -87,6 +89,28 @@ class ReportController extends Controller
                 $data = Transfer::whereBetween('created_at', [$start_date, $end_date] )->orderby('created_at')->get();
                 $total_rows = $data->count();
                 return inertia('Reports/Transfers', compact(
+                    "data",
+                    "total_rows",
+                    "report_type",
+                    "start_date",
+                    "end_date",
+                ));
+                break;
+            case "buys":
+                $data = Buy::whereBetween('created_at', [$start_date, $end_date] )->orderby('created_at')->get();
+                $total_rows = $data->count();
+                return inertia('Reports/Buys', compact(
+                    "data",
+                    "total_rows",
+                    "report_type",
+                    "start_date",
+                    "end_date",
+                ));
+                break;
+            case "recipes":
+                $data = Recipe::whereBetween('created_at', [$start_date, $end_date] )->orderby('created_at')->get();
+                $total_rows = $data->count();
+                return inertia('Reports/Recipes', compact(
                     "data",
                     "total_rows",
                     "report_type",

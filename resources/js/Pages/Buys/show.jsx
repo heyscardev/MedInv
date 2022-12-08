@@ -8,8 +8,6 @@ import { Fragment } from "react";
 
 export default ({ item, data }) => {
 
-    console.log(item);
-    console.log(data);
     return (
         <Fragment>
             <Stack spacing={2} padding={4}>

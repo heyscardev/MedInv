@@ -16,16 +16,16 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
                 header: 'ID',
                 maxSize:10,
             },
-            {
-                accessorKey: 'module_send.name',
-                header: 'Módulo envía',
-                maxSize:180,
-            },
-            {
-                accessorKey: 'module_receive.name',
-                header: 'Módulo recibe',
-                maxSize:180,
-            },
+            // {
+            //     accessorKey: 'module_send.name',
+            //     header: 'Módulo envía',
+            //     maxSize:180,
+            // },
+            // {
+            //     accessorKey: 'module_receive.name',
+            //     header: 'Módulo recibe',
+            //     maxSize:180,
+            // },
             {
                 accessorKey: 'user_id',
                 header: 'Usuario Responsable',
@@ -75,14 +75,14 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             <Box>
                 <table style={{ width: '95%', background:palette.primary.light }}>
                     <tbody>
-                        { row.original.medicaments.map( (item) => (
+                        {/* { row.original.medicaments.map( (item) => (
                             <tr key={item.id}>
                                 <td>{item.code}</td>
                                 <td>{item.name}</td>
                                 <td>{item.unit.name}</td>
                                 <td>{item.pivot.quantity}</td>
                             </tr>
-                        ) )}
+                        ) )} */}
                     </tbody>
                 </table>
             </Box>
@@ -93,7 +93,7 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             <Grid item xs={6}></Grid>
             <Grid item xs={6} display="flex" justifyContent="end">
                 <Typography>
-                    Total de transferencias: {total_rows}
+                    Total de recipes: {total_rows}
                 </Typography>
             </Grid>
         </Grid>
