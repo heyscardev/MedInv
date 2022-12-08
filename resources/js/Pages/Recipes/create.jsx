@@ -34,7 +34,7 @@ import {
 import { Box } from '@mui/system'
 import arrayMutators from 'final-form-arrays'
 import _ from 'lodash'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState,useMemo } from 'react'
 import { Field, Form } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { useIntl } from 'react-intl'
@@ -100,6 +100,7 @@ export default ({
         onSubmit={submit}
         mutators={{ ...arrayMutators }}
         initialValues={{
+          moduleDeliver:moduleDeliver,
           medicaments: selectedMedicaments,
           description: null,
         }}
@@ -222,6 +223,7 @@ export default ({
                                 {
                                   noLoader: true,
                                   preserveState: true,
+                                  replace:true ,
                                   only: ['patients'],
                                 },
                               )
@@ -253,6 +255,7 @@ export default ({
                               }),
                               {
                                 noLoader: true,
+                                replace:true ,
                                 preserveState: true,
                                 only: ['doctors'],
                               },
@@ -558,7 +561,7 @@ export default ({
                         </TableCell>
                         <TableCell align="center">
                           <Typography variant="body2" color="#fff">
-                            <IntlMessage id="afterTransfer" />
+                            <IntlMessage id="afterRecipe" />
                           </Typography>
                         </TableCell>
                         <TableCell />
@@ -681,7 +684,7 @@ export default ({
                     }}
                     onSelect={(value) => {
                       form.change('medicaments', [])
-                      visit( route('recipe.create',  { module_id: value.id }  ))
+                      visit( route('recipe.create',  { module_id: value.id,replace:true }  ))
                       form.change('moduleDeliver', value)
                     }}
                     label="selectModuleToTransfer"

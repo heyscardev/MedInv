@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MedicamentRequest;
 use App\Models\Medicament;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -40,7 +41,7 @@ class MedicamentController extends Controller
 
         $query = $this->applyFilters($query, $request);
 
-        return Inertia::render('Medicaments/index.employee', ['data' => $query->paginate($paginate)]);
+        return Inertia::render('Medicaments/index.employee', ['data' => $query->get(),'units'=>Unit::get()]);
     }
 
     /**
@@ -93,7 +94,7 @@ class MedicamentController extends Controller
      **/
     private function applyFilters($query, $request)
     {
-        $orderBy = $request->get('orderBy', [['id' => "updated_at", 'desc' => false]]);
+        $orderBy = $request->get('orderBy', [['id' => "updated_at", 'desc' => true]]);
         $filters = $request->get('filters', []);
 
         //fliters iteration

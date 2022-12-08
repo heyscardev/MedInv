@@ -104,7 +104,8 @@ export default ({
         onSubmit={submit}
         mutators={{ ...arrayMutators }}
         initialValues={{
-          moduleReceive: null,
+          ...transferToEdit,
+          moduleReceive: transferToEdit?transferToEdit.module_receive:null,
           moduleSend: moduleSelected,
           medicaments: initialMedicaments,
           description: null,

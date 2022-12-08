@@ -203,7 +203,8 @@
     "recurseDeleted":"Este recurso fue eliminado comuniquese con el adiministrador para mas detalles",
     "selectModuleToBuy":"seleccionar Módulo para la compra",
     "buy":"Compra",
-    "deleteMessageBuy":"Desea eliminar la compra con id N° {value}? \n ¡esta operación no es reversible!",
+    "deleteMessageBuy":"Desea eliminar la compra con id N° {value}? \n ¡esta operación no es reversible! el stock de los medicamentos afectados sera restablecido en el modulo deshaciendo la operación",
+    "deleteMessageRecipe":"Desea eliminar el Recipe con id N° {value}? \n ¡esta operación no es reversible! el stock de los medicamentos afectados sera restablecido en el modulo deshaciendo la operación",
     "remenber me":"Recuerdame",
     "editBuy":"Editar Compra",
     "recipe_type":"Tipo de Recipe",
@@ -213,7 +214,7 @@
     "log_type":"Operación realizada",
     "editTransfer":"Editar Transferencia",
     "createTransfer":"Crear Transferencia",
-    "deleteMessageTransfer":"Desea eliminar la Tansferencia con id N° {value}? \n ¡esta operación no es reversible!",
+    "deleteMessageTransfer":"Desea eliminar la Tansferencia con id N° {value}? \n ¡esta operación no es reversible! el stock de los medicamentos afectados sera restablecido en ambos modulos deshaciendo la operación",
     "reportType":"Tipo de reporte",
     "userRegister":"Registro de Usuarios",
     "medicamentsMovements":"movimientos de medicamento",
@@ -226,5 +227,8 @@
     "print_date":"Fecha de impresión",
     "emission_date":"Fecha de emisión",
     "viewUserActivity":"Ver actividad del usuario",
-    "download":"Descargar"
+    "download":"Descargar",
+    "medicamentRestore":"Restaurar Medicamento",
+    "price_sale":"Precio de Venta",
+    "doctorRestore":"Restaurar Doctor"
 }

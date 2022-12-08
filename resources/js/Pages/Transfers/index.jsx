@@ -121,7 +121,7 @@ export default (props) => {
                       <iconsMaterial.Delete />
                     </IconButton>
                   )}
-                  {props.can(`${routeName}.update`) && (
+                {/*   {props.can(`${routeName}.update`) && (
                     <IconButton
                       title="edit"
                       placement="right"
@@ -136,7 +136,7 @@ export default (props) => {
                     >
                       <iconsMaterial.Edit />
                     </IconButton>
-                  )}
+                  )} */}
                 </>
               )}
               </>
@@ -218,7 +218,7 @@ export default (props) => {
               )
             },
           },
-          ...(props.can('transfer.restore')
+         /*  ...(props.can('transfer.restore')
           ? [
               {
                 icon: <iconsMaterial.RestoreFromTrash />,
@@ -234,8 +234,8 @@ export default (props) => {
                 },
               },
             ]
-          : []),
-
+          : []), */
+   
         ]}
       />
         <ConfirmModal

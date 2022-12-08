@@ -264,7 +264,7 @@ export default ({ services=[],...props }) => {
               ? [
                   {
                     icon: <RestoreFromTrash />,
-                    name: restoreMode ? 'exitRestoreMode' : 'usersRestore',
+                    name: restoreMode ? 'exitRestoreMode' : 'doctorRestore',
                     ...(restoreMode
                       ? {
                           sx: {

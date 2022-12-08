@@ -63,7 +63,10 @@ class RecipeRequest extends FormRequest
             'doctor_id'     => ['required', 'numeric', 'exists:doctors,id'],
             'pathology_id'  => [Rule::requiredIf($this->post('recipe_type') === "HIGH COST"), 'numeric', 'exists:pathologies,id'],
             'module_id'     => ['required', 'numeric', 'exists:modules,id'],
-           
+            'medicaments'=>'required|array',
+            'medicaments.*.id' => 'required|distinct:strict',
+            'medicaments.*.prescribed_amount' => 'required|numeric|between:0,99999999999,99',
+            'medicaments.*.quantity_deliver' => 'required|integer|min:0',
         ];
     }
 

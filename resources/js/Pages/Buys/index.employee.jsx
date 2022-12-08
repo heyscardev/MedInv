@@ -103,7 +103,7 @@ export default ({ module, ...props }) => {
                           <Delete />
                         </IconButton>
                     )}
-                    {props.can(`${routeName}.update`) && (
+          {/*           {props.can(`${routeName}.update`) && (
                       
                         <IconButton
                         title="edit"
@@ -115,7 +115,7 @@ visit(route(`buy.edit`,{buy:cell.row.original.id}))
                         >
                           <Edit />
                         </IconButton>
-                    )}
+                    )} */}
                   </>
                 )}
                 </>
@@ -226,17 +226,17 @@ visit(route(`buy.edit`,{buy:cell.row.original.id}))
         ]}
       />
        <ConfirmModal
-        open={_.find(props.data.data, { id: idToDelete }) ? true : false}
+        open={_.find(props.data, { id: idToDelete }) ? true : false}
         onClose={() => toggleConfirmDelete(null)}
         onSubmit={() => {
           toggleConfirmDelete(null)
           destroy(route(routeName + '.destroy', idToDelete))
         }}
         message={
-          _.find(props.data.data, { id: idToDelete })
+          _.find(props.data, { id: idToDelete })
             ? formatMessage(
                 { id: 'deleteMessageBuy' },
-                { value: _.find(props.data.data, { id: idToDelete })['id'] },
+                { value: _.find(props.data, { id: idToDelete })['id'] },
               )
             : null
         }

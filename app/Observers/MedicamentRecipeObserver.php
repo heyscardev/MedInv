@@ -16,9 +16,9 @@ class MedicamentRecipeObserver
     {
         $recipe  = $medicamentRecipe->recipe;
 
-        if ($recipe->state !== "DELIVER") {
-            $recipe->module->addMedicaments($medicamentRecipe->medicament_id, $medicamentRecipe->quantity);
-        }
+       
+            $recipe->module->removeMedicament($medicamentRecipe->medicament_id, $medicamentRecipe->quantity);
+
     }
 
     /**
@@ -42,9 +42,11 @@ $quantity = $medicamentRecipe->getAttribute('quantity') -  $medicamentRecipe->ge
      * @param  \App\Models\MedicamentRecipe  $medicamentRecipe
      * @return void
      */
-    public function deleted(MedicamentRecipe $medicamentRecipe)
+    public function deleting(MedicamentRecipe $medicamentRecipe)
     {
-        //
+        $medTra = MedicamentRecipe::where('medicament_id', $medicamentRecipe->medicament_id)->where('recipe_id', $medicamentRecipe->recipe_id)->first();
+       
+       return $medicamentRecipe->recipe->module->addMedicament($medTra->medicament_id, $medTra->quantity);
     }
 
 }

@@ -15,8 +15,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $admin =  [
-            'c_i' => "0000000",
+        $userProps =  [
+            'c_i' => "0000001",
+            'nationality'=>fake()->randomElement(['V','E']),
             'first_name' => "Super Admin",
             'last_name' => "Powerfull",
             'birth_date' => fake()->date(),
@@ -26,22 +27,86 @@ class UserSeeder extends Seeder
             'phone'=> fake()->phoneNumber(),
             'direction'=> null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            
         ];
-        $user1 = User::create($admin);
-        $user1->assignRole('administrador');
-        $admin =  [
-            'c_i' => "0000001",
-            'first_name' => "Employee",
-            'last_name' => "Test",
+        $user = User::create($userProps);
+        $user->assignRole('administrador');
+
+        $userProps =  [
+            'c_i' => "000002",
+            'nationality'=>fake()->randomElement(['V','E']),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'birth_date' => fake()->date(),
-            'gender' => 'Male',
+            'gender' => fake()->randomElement(['Male','Female']),
             'email' => 'employee@medinv.com',
             'email_verified_at' => now(),
             'phone'=> fake()->phoneNumber(),
             'direction'=> null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ];
-        $user2 = User::create($admin);
-        $user2->assignRole('empleado');
+        $user = User::create($userProps);
+        $user->assignRole('empleado');
+     
+        $userProps =  [
+            'c_i' => "000003",
+            'nationality'=>fake()->randomElement(['V','E']),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'birth_date' => fake()->date(),
+            'gender' => fake()->randomElement(['Male','Female']),
+            'email' => fake()->unique()->email(),
+            'email_verified_at' => now(),
+            'phone'=> fake()->phoneNumber(),
+            'direction'=> null,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ];
+        $user = User::create($userProps);
+        $user->assignRole('empleado');
+        $userProps =  [
+            'c_i' => "000004",
+            'nationality'=>fake()->randomElement(['V','E']),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'birth_date' => fake()->date(),
+            'gender' => fake()->randomElement(['Male','Female']),
+            'email' => fake()->unique()->email(),
+            'email_verified_at' => now(),
+            'phone'=> fake()->phoneNumber(),
+            'direction'=> null,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ];
+        $user = User::create($userProps);
+        $user->assignRole('empleado');
+        $userProps =  [
+            'c_i' => "00005",
+            'nationality'=>fake()->randomElement(['V','E']),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'birth_date' => fake()->date(),
+            'gender' => fake()->randomElement(['Male','Female']),
+            'email' => fake()->unique()->email(),
+            'email_verified_at' => now(),
+            'phone'=> fake()->phoneNumber(),
+            'direction'=> null,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ];
+        $user = User::create($userProps);
+        $user->assignRole('empleado');
+        $userProps =  [
+            'c_i' => "00000006",
+            'nationality'=>fake()->randomElement(['V','E']),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'birth_date' => fake()->date(),
+            'gender' => fake()->randomElement(['Male','Female']),
+            'email' => fake()->unique()->email(),
+            'email_verified_at' => now(),
+            'phone'=> fake()->phoneNumber(),
+            'direction'=> null,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ];
+        $user = User::create($userProps);
+        $user->assignRole('empleado');
     }
 }

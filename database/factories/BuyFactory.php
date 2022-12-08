@@ -18,10 +18,11 @@ class BuyFactory extends Factory
      */
     public function definition()
     {
+        $module =  Module::orderByRaw("RAND()")->limit(5)->first();
         return [
-            'user_id' => User::orderByRaw("RAND()")->limit(5)->first(),
+            'user_id' => $module->user,
             'description'=> fake()->text(200),
-            'module_id'=> Module::orderByRaw("RAND()")->limit(5)->first()
+            'module_id'=> $module
         ];
     }
 }
