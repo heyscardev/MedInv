@@ -37,7 +37,7 @@ export default ({
                     },
                     ...(image?
                         {
-                            background: `${palette.gradientTransparent.black75},url(${image})`,
+                            background: `${palette.gradientTransparent.black50},url(${image})`,
                             backgroundSize: "cover",
                             // backgroundAttachment: "fixed",
                         }:{}
@@ -52,15 +52,17 @@ export default ({
                         bgcolor: "background.default",
                         display: "flex",
                         flexDirection: "column",
-                        alignItems: "center",
+                        alignSelf: "flex-end",
                         backgroundColor: "transparent",
                         gap: 2,
                     }}
                 >
-                    {<Icon color={tema.icon} fontSize="large" />}
+                    {/* {<Icon color={tema.icon} fontSize="large" />} */}
                     <Typography
                         variant="subtitle1"
                         color={tema.text}
+                        fontWeight="bold"
+                        paddingBottom={1}
                         children={formatMessage({ id: name })}
                     />
                     {subtitle && (

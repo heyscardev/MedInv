@@ -17,7 +17,21 @@ import {
 import { Grid, Paper, Typography } from '@mui/material'
 import { Fragment } from 'react'
 
-import imgMedicament from "@/assets/images/medicaments.jpg";
+import imgHome from "@/assets/images/welcome-principal.jpg";
+import imgUnits from "@/assets/images/units.jpg";
+import imgServices from "@/assets/images/services.png";
+import imgPathologies from "@/assets/images/pathologies.jpg";
+import imgMedicaments from "@/assets/images/medicaments.jpg";
+import imgModules from "@/assets/images/modules.jpg";
+import imgDoctors from "@/assets/images/doctors.jpg";
+import imgUsers from "@/assets/images/users.jpg";
+import imgPatients from "@/assets/images/patients.jpg";
+import imgRecipes from "@/assets/images/recipes.jpg";
+import imgBuys from "@/assets/images/buys.jpg";
+import imgTransfers from "@/assets/images/transfers.jpg";
+import imgReports from "@/assets/images/reports.jpg";
+import imgActivities from "@/assets/images/activities.jpg";
+
 
 export default ({ can, auth, page }) => {
 
@@ -36,6 +50,7 @@ export default ({ can, auth, page }) => {
                   name: 'pathologies',
                   route: route('pathology.index'),
                   Icon: Medication,
+                  image: imgPathologies,
                 }
               : null,
             can('service.index')
@@ -43,6 +58,7 @@ export default ({ can, auth, page }) => {
                   name: 'services',
                   route: route('service.index'),
                   Icon: Medication,
+                  image: imgServices,
                 }
               : null,
             can('unit.index')
@@ -50,6 +66,7 @@ export default ({ can, auth, page }) => {
                   name: 'units',
                   route: route('unit.index'),
                   Icon: Medication,
+                  image: imgUnits,
                 }
               : null,
         ]
@@ -61,6 +78,7 @@ export default ({ can, auth, page }) => {
               name: 'intro',
               route: route().t.url,
               Icon: Home,
+              image: imgHome,
             },
 
             can('medicament.index')
@@ -68,21 +86,32 @@ export default ({ can, auth, page }) => {
                   name: 'medicaments',
                   route: route('medicament.index'),
                   Icon: Medication,
-                  image: imgMedicament,
+                  image: imgMedicaments,
                 }
               : null,
             can('module.index')
-              ? { name: 'modules', route: route('module.index'), Icon: Store }
+              ? {
+                    name: 'modules',
+                    route: route('module.index'),
+                    Icon: Store,
+                    image: imgModules,
+                }
               : null,
 
             can('buy.index')
-              ? { name: 'buys', route: route('buy.index'), Icon: ShoppingCart }
+              ? {
+                    name: 'buys',
+                    route: route('buy.index'),
+                    Icon: ShoppingCart,
+                    image: imgBuys,
+                }
               : null,
             can('transfer.index')
               ? {
                   name: 'transfers',
                   route: route('transfer.index'),
                   Icon: MoveDown,
+                  image: imgTransfers,
                 }
               : null,
             can('recipe.index')
@@ -90,31 +119,48 @@ export default ({ can, auth, page }) => {
                   name: 'recipes',
                   route: route('recipe.index'),
                   Icon: Receipt,
+                  image: imgRecipes,
                 }
               : null,
             can('user.index')
-              ? { name: 'users', route: route('user.index'), Icon: People }
+              ? {
+                    name: 'users',
+                    route: route('user.index'),
+                    Icon: People,
+                    image: imgUsers,
+                }
               : null,
             can('doctor.index')
-              ? { name: 'doctors', route: route('doctor.index'), Icon: Masks }
+              ? {
+                    name: 'doctors',
+                    route: route('doctor.index'),
+                    Icon: Masks,
+                    image: imgDoctors,
+                }
               : null,
             can('patient.index')
-              ? { name: 'patients', route: route('patient.index'), Icon: Sick }
+              ? {
+                    name: 'patients',
+                    route: route('patient.index'),
+                    Icon: Sick,
+                    image: imgPatients,
+                }
               : null,
 
             can('report.index')
               ? {
-                  name: 'reports',
-                  route: route('report.index'),
-                  Icon: Assessment,
-
+                    name: 'reports',
+                    route: route('report.index'),
+                    Icon: Assessment,
+                    image: imgReports,
                 }
               : null,
             can('user.activity.index')
                 ? {
                     name: 'user_activity',
                     route: route('user.activity.index'),
-                    Icon: PeopleAltOutlined
+                    Icon: PeopleAltOutlined,
+                    image: imgActivities,
                 }
                 : null,
           ]

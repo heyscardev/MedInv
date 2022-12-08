@@ -15,6 +15,7 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
           enabledGlobalFilterOptions={false}
           enableColumnDragging={false}
           enableColumnFilters={false}
+          enablePagination={false}
           data={data}
           columns={[
             {
@@ -26,7 +27,7 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             {
               accessorKey: 'module_send.name',
               header: 'Módulo envía',
-
+              size:"20px",
               maxSize: '30px',
             },
             {

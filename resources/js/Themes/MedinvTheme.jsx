@@ -36,6 +36,8 @@ const MedinvTheme = createTheme({
     },
     gradientTransparent: {
       black75: "linear-gradient(rgba(0,0,0,.25) 0%, rgba(0,0,0,.70) 100%)",
+    //   black50: "linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 8%, rgba(0,0,0,0.1) 20%)",
+      black50: "linear-gradient(0deg, rgba(24,161,216,1) 0%, rgba(88,187,227,0.7766456924566701) 21%, rgba(0,0,0,0) 39%)",
     },
     skewOrnament: {
       main: "rgba(199,235,246,.78)",
