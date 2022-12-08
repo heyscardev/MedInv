@@ -25,7 +25,7 @@ class Recipe extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $with = ['module','pathology','doctor','patient','user'];
+    protected $with = ['module','pathology','doctor','patient','user','medicaments'];
 
     /**
      * This are the relations
