@@ -56,13 +56,11 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
     const doc = new jsPDF(orientation);  //p, pt, a4, landscape
 
     // Adding the fonts.
-    console.log('daniela');
-    console.log(reportTemplateRef.current);
 
     doc.html(reportTemplateRef.current, {
-        margin:6,
+        margin:8,
         html2canvas: {
-            scale: orientation == 'landscape' ? 0.26 : 0.18
+            scale: orientation == 'landscape' ? 0.256 : 0.177
         },
         async callback(doc) {
             await doc.save(formatMessage({id:nameReport}));
@@ -74,7 +72,7 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
     <>
       <Head title={nameReport} />
       <Container sx={{marginTop:4,justifyContent:"center",display:"flex"}}>
-        <Paper ref={reportTemplateRef} sx={{ width: '1100px', minHeight: '220px', marginBottom:1 }}>
+        <Paper ref={reportTemplateRef} sx={{ width: '1100px', minHeight: '220px' }}>
           <AppBar
             position="relative"
             sx={{
