@@ -87,7 +87,7 @@ class RecipeController extends Controller
         $modules =  Module::with('user')
             ->when(!auth()->user()->hasRole('administrador'), function ($q) {
                 return $q->where('user_id', auth()->user()->id);
-            })
+            })->withoutTrashed()
             ->get();
 
 
@@ -106,7 +106,17 @@ class RecipeController extends Controller
         $recipe = new Recipe($validated);
         $recipe->user_id = auth()->user()->id;
         $recipe->save();
-        return back();
+   
+         
+            if (array_key_exists('medicaments', $validated)) {
+                array_map(function ($value) use ($recipe) {
+                    $recipe->medicaments()->attach($value['id'], ['prescribed_amount' => $value['prescribed_amount'], 'quantity' => $value['quantity_deliver']]);
+                }, $validated['medicaments']);
+            }
+           
+  
+       
+        return redirect(route("recipe.show",$recipe->id));
     }
 
     /**

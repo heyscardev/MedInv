@@ -16,9 +16,9 @@ class MedicamentRecipeObserver
     {
         $recipe  = $medicamentRecipe->recipe;
 
-        if ($recipe->state !== "DELIVER") {
-            $recipe->module->addMedicaments($medicamentRecipe->medicament_id, $medicamentRecipe->quantity);
-        }
+       
+            $recipe->module->removeMedicament($medicamentRecipe->medicament_id, $medicamentRecipe->quantity);
+
     }
 
     /**

@@ -18,7 +18,7 @@ class Module extends Model
         'user_id'
     ];
 
-    protected $dates = ['deleted_at'];
+    //protected $dates = ['deleted_at'];
 
     /**
      * This are the relations

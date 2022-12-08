@@ -137,7 +137,7 @@ class BuyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ModuleBuyRequest $request, Buy $buy)
+/*     public function update(ModuleBuyRequest $request, Buy $buy)
     {
         $validated = $request->validated();
 
@@ -152,7 +152,7 @@ class BuyController extends Controller
         }
 
         return back();
-    }
+    } */
 
 
     /////////////////////////////////////////

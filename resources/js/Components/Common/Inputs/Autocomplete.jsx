@@ -33,6 +33,7 @@ export default ({
           autoHighlight
           clearOnEscape
           openOnFocus
+          value={input.value || null}
           onChange={(e, value) => {
             input.onChange(value)
           }}
