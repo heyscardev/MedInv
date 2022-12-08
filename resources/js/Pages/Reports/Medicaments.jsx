@@ -6,7 +6,6 @@ import MaterialReactTable from 'material-react-table'
 export default ({ data, total_rows, report_type, start_date, end_date }) => {
   return (
     <ReportTemplate {...{ start_date, end_date, nameReport: report_type }}>
-      <div style={{ margin: "10px" }}>
         <MaterialReactTable
           initialState={{ density: 'compact' }}
           enableTopToolbar={false}
@@ -44,7 +43,6 @@ export default ({ data, total_rows, report_type, start_date, end_date }) => {
             },
           ]}
         />
-      </div>
 
       <Grid container sx={{ marginTop: 2 }}>
         <Grid item xs={6}></Grid>

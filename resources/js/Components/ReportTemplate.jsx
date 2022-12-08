@@ -48,7 +48,7 @@ const styles = {
         marginBottom: 0,
     },
 };
-const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', orientation = ''  }) => {
+const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', orientation = 'p'  }) => {
   const { palette } = useTheme()
   const {formatMessage} = useIntl();
   const reportTemplateRef = useRef(null);
@@ -56,11 +56,13 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
     const doc = new jsPDF(orientation);  //p, pt, a4, landscape
 
     // Adding the fonts.
+    console.log('daniela');
+    console.log(reportTemplateRef.current);
 
     doc.html(reportTemplateRef.current, {
-        // margin: 10,
+        margin:6,
         html2canvas: {
-            scale: orientation == 'landscape' ? 0.27 : 0.191
+            scale: orientation == 'landscape' ? 0.26 : 0.18
         },
         async callback(doc) {
             await doc.save(formatMessage({id:nameReport}));
@@ -72,7 +74,7 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
     <>
       <Head title={nameReport} />
       <Container sx={{marginTop:4,justifyContent:"center",display:"flex"}}>
-        <Paper ref={reportTemplateRef} sx={{ width: '1100px', minHeight: '220px' }}>
+        <Paper ref={reportTemplateRef} sx={{ width: '1100px', minHeight: '220px', marginBottom:1 }}>
           <AppBar
             position="relative"
             sx={{
@@ -93,7 +95,7 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
                     <Typography variant="h5" color={palette.success.main} children={formatMessage({id:nameReport})} ></Typography>
                 </Grid>
 
-                <Grid item xs={12} paddingBottom={1}>
+                <Grid item xs={12} paddingBottom={2}>
                     <Divider sx={{ height:0, width: '100%', opacity: 0.7, background: palette.primary.light, color: palette.primary.light, borderColor: palette.primary.light }} />
                 </Grid>
 
@@ -111,8 +113,8 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
                         </div>
                     </Typography>
                 </Grid>
-                <Grid item xs={3} display="flex" justifyContent="center">
-                    <Typography variant="h6" sx={{ textAlign:'left', fontSize:'.8rem' }}>
+                <Grid item xs={3} display="flex" justifyContent="end">
+                    <Typography variant="h6" sx={{ textAlign:'left', fontSize:'.8rem', paddingRight:1 }}>
                         <IntlMessage id={'emission_date'} />:
                         <div> {format(new Date(),"hh:mm:aa dd MMMM yyyy")} </div>
                     </Typography>
