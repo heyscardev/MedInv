@@ -1,6 +1,6 @@
 import GenericCrud from "@/Components/Common/GenericCrud";
 import SectionTitle from "@/Components/Common/SectionTitle";
-import EditModal from "@/Components/Layouts/Units/EditUnitModal";
+import EditModal from "@/Components/Layouts/Services/EditServiceModal";
 import { formatCrtUpdtAt } from "@/Utils/format";
 import { BookmarkAdd } from "@mui/icons-material";
 import { Fragment } from "react";

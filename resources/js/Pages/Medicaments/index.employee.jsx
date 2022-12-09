@@ -8,7 +8,7 @@ import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
 import IntlFormatNumber from '@/Components/Custom/IntlFormatNumber'
 import EditMedicamentModal from '@/Components/Layouts/Medicaments/EditMedicamentModal'
 import { visit } from '@/HTTPProvider'
-import { Delete, Edit, PersonAdd, Restore, RestoreFromTrash } from '@mui/icons-material'
+import { DataSaverOn, Delete, Edit, PersonAdd, Restore, RestoreFromTrash } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
@@ -183,8 +183,8 @@ export default ({units,...props}) => {
        <MultiButton
         actions={[
           {
-            icon: <PersonAdd />,
-            name: 'user',
+            icon: <DataSaverOn />,
+            name: 'create',
             onClick: (e) => {
               toggleEdit(-1)
             },

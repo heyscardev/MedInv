@@ -126,6 +126,7 @@ export default ({ auth, can }) => {
                         </IconButton> */}
             <BtnUserSession
               auth={auth}
+              can={can}
               BtnOpenMenu={({ onclickMenu }) => (
                 <IconButton
                   size="large"

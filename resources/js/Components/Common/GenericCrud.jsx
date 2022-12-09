@@ -2,7 +2,7 @@ import ConfirmModal from "@/Components/Common/ConfirmModal";
 import MultiButton from "@/Components/Common/MultiButton";
 import { destroy } from "@/HTTPProvider";
 import { generatorTableColumns } from "@/Utils/generators";
-import { PersonAdd } from "@mui/icons-material";
+import { DataSaverOn, PersonAdd } from "@mui/icons-material";
 import _ from "lodash";
 import { Fragment, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -32,8 +32,8 @@ export default ({ columns, EditModal,actions=["create","update","delete"], route
       <MultiButton
         actions={[
           {
-            icon: <PersonAdd />,
-            name: "create",
+            icon: <DataSaverOn />,
+            name: 'create',
             onClick: (e) => {
               toggleEdit(-1);
             },

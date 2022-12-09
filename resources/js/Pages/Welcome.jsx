@@ -20,7 +20,7 @@ export default function Welcome(props) {
       height: "100%"
     }} >
       <Head title="Bienvenido"/>
-   <WelcomeViewFirst styleContainer={styleContainers} auth={props.auth} />
+   <WelcomeViewFirst styleContainer={styleContainers} {...props}/>
     </div>
   );
 }

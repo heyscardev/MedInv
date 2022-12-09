@@ -16,7 +16,7 @@ class UserController extends Controller
         $this->middleware('can:user.index')->only(['index']);
         $this->middleware('can:user.store')->only(['store']);
         $this->middleware('can:user.destroy')->only(['destroy']);
-        $this->middleware('can:user.update')->only(['update']);
+    /* $this->middleware('can:user.update')->only(['update']); */
         $this->middleware('can:user.restore')->only(['restore']);
     }
 

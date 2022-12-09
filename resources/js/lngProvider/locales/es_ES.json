@@ -231,5 +231,8 @@
     "medicamentRestore":"Restaurar Medicamento",
     "price_sale":"Precio de Venta",
     "doctorRestore":"Restaurar Doctor",
-    "afterRecipe":"Despues del recipe"
+    "afterRecipe":"Despues del recipe",
+    "updateService":"Actualizar Servicio",
+    "newService":"Nuevo Servicio"
+
 }

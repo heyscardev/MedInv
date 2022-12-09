@@ -23,7 +23,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $items = Service::orderby('id','desc')->get();
+        $items = Service::orderby('id', 'desc')->get();
         return Inertia::render('Services/index', ['data' => $items]);
     }
 
@@ -35,7 +35,12 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $valid = $request->validate(["name" => ["required", "string", "max:100"]]);
+        $service = new Service(
+            $valid
+        );
+        $service->save();
+        return back();
     }
 
     /**
@@ -45,9 +50,12 @@ class ServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Service $service)
     {
-        //
+        $valid = $request->validate(["name" => ["sometimes", "required", "string", "max:100"]]);
+        $service->update($valid);
+        $service->save();
+        return back();
     }
 
     /**

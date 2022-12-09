@@ -8,7 +8,8 @@ import { showLoader } from "@/Config/Loader";
 import BtnUserSession from "@/Components/Auth/BtnUserSession";
 import { visit } from "@/HTTPProvider";
 
-export default ({ styleContainer,auth }) => {
+export default ({ styleContainer,auth,can }) => {
+
   const { palette } = useTheme();
   const [openSigIn, setOpenSigIn] = useState(false);
   return (
@@ -28,7 +29,7 @@ export default ({ styleContainer,auth }) => {
       </div>
       <Box sx={{ top: 15, right: 15, position: "absolute", zIndex: "9" }}>
         {auth.user 
-        ?(<BtnUserSession auth={auth}/>)
+        ?(<BtnUserSession auth={auth} can={can}/>)
         :(<IconButton
           size="small"
           sx={{ border: `1px solid`, borderColor: "primary.light" }}

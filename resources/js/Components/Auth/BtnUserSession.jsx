@@ -18,6 +18,7 @@ import { useState } from "react";
 
 export default ({
     auth,
+    can,
     BtnOpenMenu,
     transformOrigin = {
         vertical: "top",
@@ -111,7 +112,7 @@ const [openModal,setOpenModal] = useState(false);
                     </ListItemIcon>
                     Mi perfil
                 </MenuItem>
-                <MenuItem
+          {can("user.update") &&(      <MenuItem
                     onClick={() => {
                         visit(route("dashboard", {page:'preferences'}));
                     }}
@@ -120,7 +121,7 @@ const [openModal,setOpenModal] = useState(false);
                         <Settings fontSize="small" color="primary" />
                     </ListItemIcon>
                     preferencias
-                </MenuItem>
+                </MenuItem>)}
                 <MenuItem onClick={logout}>
                     <ListItemIcon>
                         <Logout fontSize="small" color="primary" />
