@@ -50,7 +50,8 @@ class MedicamentRequest extends FormRequest
             'code'       =>'required|max:25|unique:medicaments',
             'name'       =>'required|max:100',
             'price_sale' =>'required|numeric|min:0.00|max:99999999999.99',
-            'unit_id'    =>'required|integer|exists:units,id'
+            'unit_id'    =>'required|integer|exists:units,id',
+            'medicament_group_id' =>'sometimes|integer|exists:medicament_groups,id'
         ];
     }
 
@@ -60,7 +61,8 @@ class MedicamentRequest extends FormRequest
             'code'       =>'sometimes|required|max:25|unique:medicaments,id',
             'name'       =>'sometimes|required|max:100',
             'price_sale' =>'sometimes|required|numeric|min:0.00|max:99999999999.99',
-            'unit_id'    =>'sometimes|required|integer|exists:units,id'
+            'unit_id'    =>'sometimes|required|integer|exists:units,id',
+            'medicament_group_id' =>'sometimes|integer|exists:medicament_groups,id',
         ];
     }
 }

@@ -233,6 +233,10 @@
     "doctorRestore":"Restaurar Doctor",
     "afterRecipe":"Despues del recipe",
     "updateService":"Actualizar Servicio",
-    "newService":"Nuevo Servicio"
+    "newService":"Nuevo Servicio",
+    "group":"Grupo",
+    "medicamentGroups":"Grupos de Medicamentos",
+    "newMedicamentGroup":"Nuevo Grupo de Medicamento",
+    "updateMedicamentGroup":"Actualizar Grupo de Medicamento"
 
 }

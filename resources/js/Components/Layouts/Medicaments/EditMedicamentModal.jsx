@@ -22,6 +22,7 @@ export default ({
   medicaments,
   medicament,
   units,
+  groups,
   open,
   onClose,
   onSuccess,
@@ -29,13 +30,13 @@ export default ({
   const { formatMessage } = useIntl()
   const [openCreateUnit, setOpenCreateUnit] = useState([false, null])
   const update = (data, form) => {
-   
+
      const dataToSend = {
             id: data.id,
         };
         for (const key in data) {
             if (Object.hasOwnProperty.call(data, key)) {
-              
+
                 if (form.dirtyFields[key]){
                   if(key === "unit"){
                     dataToSend["unit_id"] = data[key].id
@@ -43,14 +44,14 @@ export default ({
                     dataToSend[key] = data[key];
                   }
                 }
-                   
+
             }
         }
         put(route("medicament.update", dataToSend.id), dataToSend, {
             onSuccess: (e) => {
                 onClose(null);
             },
-        }); 
+        });
   }
   const store = (data) => {
     const dataToSend = {
@@ -177,6 +178,29 @@ export default ({
                 >
                   <Add color="primary" fontSize="small" />
                 </IconButton>
+              </Grid>
+              <Grid item xs={11}>
+                <Autocomplete
+                  name="medicament_group_id"
+                  label="group"
+                  options={groups}
+                  defaultValue={
+                    medicament
+                      ? _.find(groups, { id: medicament.medicament_group_id })
+                      : null
+                  }
+                  renderOption={(props, option) => (
+                    <Stack
+                      width="100%"
+                      direction="row"
+                      justifyContent="space-between"
+                    >
+                      {option.name}{' '}
+                    </Stack>
+                  )}
+                  getOptionLabel={(option) => option.name}
+                  fullWidth
+                />
               </Grid>
             </Grid>
           </form>

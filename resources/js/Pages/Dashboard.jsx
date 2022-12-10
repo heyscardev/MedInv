@@ -61,6 +61,14 @@ export default ({ can, auth, page }) => {
                   image: imgServices,
                 }
               : null,
+            can('medicament.group.index')
+              ? {
+                  name: 'medicamentGroups',
+                  route: route('medicament.group.index'),
+                  Icon: Medication,
+                //   image: imgUnits,
+                }
+              : null,
             can('unit.index')
               ? {
                   name: 'units',

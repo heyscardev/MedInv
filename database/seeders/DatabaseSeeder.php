@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             ModuleSeeder::class,
+            MedicamentGroupSeeder::class,
             UnitSeeder::class,
             MedicamentSeeder::class
         ]);
@@ -39,20 +40,20 @@ class DatabaseSeeder extends Seeder
             $user->assignRole('empleado');
         })->create();
         \App\Models\Doctor::factory(200)->create();
-        
+
  */
         Doctor::factory(200)->create();
         Patient::factory(200)->create([
             'gender' => 'MALE'
         ]);
         Pathology::factory(200)->create();
-        
+
        /*  Transfer::factory(200)->hasAttached(
             Medicament::orderByRaw("RAND()")->limit(rand(1, 20))->get(),
             ['quantity' => 10]
         )->create(); */
 
-      Buy::factory(200)->hasAttached(
+        Buy::factory(200)->hasAttached(
             Medicament::orderByRaw('RAND()')->limit(rand(1, 12))->get(),
             function () {
                 return [
@@ -60,14 +61,14 @@ class DatabaseSeeder extends Seeder
                     'quantity' => rand(0, 10)
                 ];
             },
-        )->create();  /* 
+        )->create();  /*
         Recipe::factory(200)->hasAttached(
             Medicament::orderByRaw('RAND()')->limit(rand(1, 12))->get(),
             function () {
                 return [
                     'quantity' => rand(0, 20),
                     'prescribed_amount' => rand(0, 20),
-                    
+
                 ];
             },
         )->create();

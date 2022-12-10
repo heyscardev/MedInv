@@ -20,7 +20,8 @@ const columnVisibility = {
   id:false
 }
 const routeName ="medicaments"
-export default ({units,...props}) => {
+export default ({units, groups, ...props}) => {
+
   const urlParams = new URLSearchParams(window.location.search)
   const restoreMode = urlParams.has('deleted')
   const [idToEdit, setIdToEdit] = useState(null)
@@ -32,7 +33,7 @@ export default ({units,...props}) => {
       <Head title="medicaments" />
       <SectionTitle title="medicaments" />
       <Table
-        
+
         routeParams={{}}
         initialState={{ columnVisibility }}
         enableRowSelection={false}
@@ -80,7 +81,7 @@ export default ({units,...props}) => {
                       </IconButton>
                   )} */}
                   {props.can(`${routeName}.edit`) && (
-                  
+
                       <IconButton
                       arrow placement="right" title="edit"
                         color="primary"
@@ -94,17 +95,22 @@ export default ({units,...props}) => {
             },
           },
           { accessorKey: 'id', header: 'id' },
-          { accessorKey: 'name', header: 'name' },
           { accessorKey: 'code', header: 'code' },
+          { accessorKey: 'name', header: 'name' },
+          {
+            accessorKey: 'group',
+            header: 'group',
+            accessorFn: ({ group }) => group ? group.name : '',
+          },
+          {
+            accessorKey: 'unit.name',
+            header: 'unit',
+          },
           {
             accessorKey: 'price_sale',
             header: 'price',
             filterVariant: 'range',
             Cell: ({ cell }) => <IntlFormatCurrency value={cell.getValue()} />,
-          },
-          {
-            accessorKey: 'unit.name',
-            header: 'unit',
           },
           /*
 
@@ -177,7 +183,7 @@ export default ({units,...props}) => {
                 ? '00/00/0000 00:00:00'
                 : format(new Date(updated_at), 'hh:mm dd MMMM yyyy'),
           },
-         
+
         ]}
       />
        <MultiButton
@@ -204,7 +210,7 @@ export default ({units,...props}) => {
           }, */
         ]}
       />
-      <EditMedicamentModal   units={units}
+      <EditMedicamentModal  units={units} groups={groups}
         medicaments={[]}
         medicament={{ ..._.find(props.data, { id: idToEdit }) }}
         open={!!idToEdit}

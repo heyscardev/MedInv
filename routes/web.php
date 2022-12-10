@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicamentController;
+use App\Http\Controllers\MedicamentGroupController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PathologyController;
 use App\Http\Controllers\PatientController;
@@ -69,6 +70,9 @@ Route::middleware('auth')->group(function () {
     //* Units
     Route::resource('units', UnitController::class)->except(['create','edit','show'])->names('unit');
 
+    //* Medicament Groups
+    Route::resource('medicament-groups', MedicamentGroupController::class)->except(['create','edit','show'])->names('medicament.group');
+
     //* Modules
     Route::resource('modules', ModuleController::class)->except(['create','edit'])->names('module');
     Route::group(['prefix'=>'modules', 'as'=>'module.'], function()
@@ -87,7 +91,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('buys', BuyController::class)->except(['edit'])->names('buy');
  /*    Route::group(['prefix'=>'buys', 'as'=>'buy.'], function()
     {
-      
+
         Route::get('edit/{buy}/{module?}', [BuyController::class, 'edit'])->name('edit');
     }); */
 

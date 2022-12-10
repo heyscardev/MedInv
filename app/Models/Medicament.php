@@ -16,19 +16,24 @@ class Medicament extends Model
     protected $fillable = [
         'code',
         'name',
+        'medicament_group_id',
+        'unit_id',
         'price_sale',
-        'quantity_exist',
-        'unit_id'
+        'quantity_exist'
     ];
 
     protected $appends = ['quantity_global'];
 
-    protected $with = ['unit'];
+    protected $with = ['group','unit'];
 
 
     /**
      * This are the relations
      */
+    public function group()
+    {
+        return $this->belongsTo(MedicamentGroup::class, 'medicament_group_id','id');
+    }
     public function unit()
     {
         return $this->belongsTo(Unit::class);

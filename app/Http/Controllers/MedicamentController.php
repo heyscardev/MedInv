@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MedicamentRequest;
 use App\Models\Medicament;
+use App\Models\MedicamentGroup;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -28,20 +29,15 @@ class MedicamentController extends Controller
      */
     public function index(MedicamentRequest $request)
     {
-        
-        $paginate = max( min( $request->get('page_size'), 100), 10);
+
+        // $paginate = max( min( $request->get('page_size'), 100), 10);
 
         //start building of query
-        $query = Medicament::with('unit:id,name');
-                    // ->where('id', 'LIKE', "{$search}%")
-                    // ->orWhere('name', 'LIKE', "{$search}%")
-                    // ->orWhere('code', 'LIKE', "{$search}%")
-                    // ->orWhere('price_sale', 'LIKE', "{$search}%")
-                    // ->orWhere('name', 'LIKE', "{$search}%");
+        $query = Medicament::with(['group:id,name','unit:id,name']);
 
         $query = $this->applyFilters($query, $request);
 
-        return Inertia::render('Medicaments/index.employee', ['data' => $query->get(),'units'=>Unit::get()]);
+        return Inertia::render('Medicaments/index.employee', ['data' => $query->get(), 'units' => Unit::get(), 'groups' => MedicamentGroup::get() ]);
     }
 
     /**
