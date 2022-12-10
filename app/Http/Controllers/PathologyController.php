@@ -35,7 +35,15 @@ class PathologyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $valid = $request->validate([
+            "name" => ["required", "unique:pathologies","string", "max:25"],
+            "code" => ["required", "unique:pathologies","string", "max:25"],
+        ]);
+        $pathology = new Pathology(
+            $valid
+        );
+        $pathology->save();
+        return back();
     }
 
     /**
@@ -47,7 +55,14 @@ class PathologyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $valid = $request->validate([
+            "name" => ["required", "unique:pathologies","string", "max:25"],
+            "code" => ["required", "unique:pathologies","string", "max:25"],
+        ]); $service = new Pathology(
+            $valid
+        );
+        $service->save();
+        return back();
     }
 
     /**

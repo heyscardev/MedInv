@@ -1,6 +1,6 @@
 import GenericCrud from "@/Components/Common/GenericCrud";
 import SectionTitle from "@/Components/Common/SectionTitle";
-import EditModal from "@/Components/Layouts/Units/EditUnitModal";
+import EditModal from "@/Components/Layouts/Pathologies/EditPathologyModal";
 import { formatCrtUpdtAt } from "@/Utils/format";
 import { BookmarkAdd } from "@mui/icons-material";
 import { Fragment } from "react";
@@ -35,6 +35,11 @@ export default ({ data }) => {
           {
             accessorKey: "name",
             header: "name",
+            // header: formatMessage({id:"name"}),
+          },
+          {
+            accessorKey: "code",
+            header: "code",
             // header: formatMessage({id:"name"}),
           },
           {

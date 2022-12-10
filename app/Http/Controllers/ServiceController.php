@@ -35,7 +35,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        $valid = $request->validate(["name" => ["required", "string", "max:100"]]);
+        $valid = $request->validate(["name" => ["required", "unique:services","string", "max:100"]]);
         $service = new Service(
             $valid
         );
