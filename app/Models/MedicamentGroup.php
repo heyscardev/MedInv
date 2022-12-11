@@ -11,7 +11,7 @@ class MedicamentGroup extends Model
 
     protected $fillable = ['name','description'];
 
-    // public function medicaments(){
-    //     return $this->hasMany(medicaments::class);
-    // }
+ public function medicaments(){
+       return $this->hasMany(Medicament::class);
+    }
 }

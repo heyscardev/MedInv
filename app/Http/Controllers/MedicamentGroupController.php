@@ -74,6 +74,10 @@ class MedicamentGroupController extends Controller
         if (!$item) {
             return back()->withErrors(['noDelete' => 'Esta Grupo de Medicamento No existe']);
         }
+        $item->medicaments()->each(function($value){
+            $value->medicament_group_id = null;
+            $value->save();
+        });
         return $item->delete() ? back() : back(500)->withErrors('save', 'error al eliminar');
     }
 }

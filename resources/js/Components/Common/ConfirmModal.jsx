@@ -12,7 +12,7 @@ export default ({open,onClose,message,onSubmit}) => {
   return (
     <Dialog
         open={open}
-        maxWidth="lg"
+        maxWidth="sm"
         onClose={onClose}
         TransitionComponent={Transition}
       >
