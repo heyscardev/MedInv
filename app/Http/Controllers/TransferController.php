@@ -60,7 +60,7 @@ class TransferController extends Controller
             $medicaments = $module->medicaments()->wherePivot('quantity_exist', ">", 0)->get();
             $selectedMedicaments =  $module->medicaments()->wherePivot('quantity_exist', ">", 0)->findMany($request->get('selected_medicaments'));
         }
-        $moduleFromTransfers = User::find(auth()->user()->id)->modules()->with('user')->get();
+        $moduleFromTransfers = auth()->user()->hasRole('administrador') ? Module::with('user')->get() : User::find(auth()->user()->id)->modules()->with('user')->get();
         $moduleToTransfers = Module::with('user')->get();
         return inertia('Transfers/Create', compact('moduleToTransfers', 'moduleFromTransfers', 'moduleSelected', 'selectedMedicaments', 'medicaments'));
     }
@@ -85,7 +85,7 @@ class TransferController extends Controller
             return redirect(route('transfer.edit',  ["transfer" => $transfer->id, "module" => $transfer->module_send_id]));
         }
 
-        $moduleFromTransfers = User::find(auth()->user()->id)->modules()->with('user')->get();
+        $moduleFromTransfers = auth()->user()->hasRole('administrador') ? Module::with('user')->get() : User::find(auth()->user()->id)->modules()->with('user')->get();
         $moduleToTransfers = Module::with('user')->get();
         return inertia('Transfers/Create', compact('moduleToTransfers', 'moduleFromTransfers', 'moduleSelected', 'selectedMedicaments', 'medicaments', 'transferToEdit'));
     }
