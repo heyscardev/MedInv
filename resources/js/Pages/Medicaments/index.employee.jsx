@@ -1,4 +1,5 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
+import IntlMessage from '@/Components/Common/IntlMessage'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
 import Table from '@/Components/Common/Table'
@@ -8,20 +9,27 @@ import IntlFormatCurrency from '@/Components/Custom/IntlFormatCurrency'
 import IntlFormatNumber from '@/Components/Custom/IntlFormatNumber'
 import EditMedicamentModal from '@/Components/Layouts/Medicaments/EditMedicamentModal'
 import { visit } from '@/HTTPProvider'
-import { DataSaverOn, Delete, Edit, PersonAdd, Restore, RestoreFromTrash } from '@mui/icons-material'
-import { Box } from '@mui/material'
+import {
+  DataSaverOn,
+  Delete,
+  Edit,
+  PersonAdd,
+  Restore,
+  RestoreFromTrash,
+} from '@mui/icons-material'
+import { Box, Button, Grid } from '@mui/material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
 import toast from 'react-hot-toast'
+
 const columnVisibility = {
   created_at: false,
   updated_at: false,
   price: false,
-  id:false
+  id: false,
 }
-const routeName ="medicaments"
-export default ({units, groups, ...props}) => {
-
+const routeName = 'medicament'
+export default ({ units, groups, ...props }) => {
   const urlParams = new URLSearchParams(window.location.search)
   const restoreMode = urlParams.has('deleted')
   const [idToEdit, setIdToEdit] = useState(null)
@@ -32,8 +40,24 @@ export default ({units, groups, ...props}) => {
     <Fragment>
       <Head title="medicaments" />
       <SectionTitle title="medicaments" />
-      <Table
+      <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
+        {props.can(`${routeName}.store`) && (
+          <Grid item>
+            <Button
+              sx={{  color: 'white.main' }}
+              startIcon={<DataSaverOn />}
+              variant="contained"
+              onClick={(e) => {
+                toggleEdit(-1)
+              }}
+            >
+              <IntlMessage id="newMedicament" />
+            </Button>
+          </Grid>
+        )}
+      </Grid>
 
+      <Table
         routeParams={{}}
         initialState={{ columnVisibility }}
         enableRowSelection={false}
@@ -49,29 +73,30 @@ export default ({units, groups, ...props}) => {
 
             Cell: ({ cell }) => {
               return cell.row.original.deleted_at ? (
-                  <IconButton
-                    color="primary"
-                    placement="right" title="restore"
-                    onClick={(e) => {
-                      const name = cell.row.original.first_name
-                      get(
-                        route(`${routeName}.restore`, cell.row.original.id),
-                        {},
-                        {
-                          onSuccess: () => {
-                            toast.success(
-                              `El medicamento ${name}  fue restaurado`,
-                            )
-                          },
+                <IconButton
+                  color="primary"
+                  placement="right"
+                  title="restore"
+                  onClick={(e) => {
+                    const name = cell.row.original.first_name
+                    get(
+                      route(`${routeName}.restore`, cell.row.original.id),
+                      {},
+                      {
+                        onSuccess: () => {
+                          toast.success(
+                            `El medicamento ${name}  fue restaurado`,
+                          )
                         },
-                      )
-                    }}
-                  >
-                    <Restore />
-                  </IconButton>
+                      },
+                    )
+                  }}
+                >
+                  <Restore />
+                </IconButton>
               ) : (
                 <Fragment>
-          {/*         {props.can(`${routeName}.edit`) && (
+                  {/*         {props.can(`${routeName}.edit`) && (
                       <IconButton
                       arrow placement="right" title="delete"
                         color="error"
@@ -80,15 +105,16 @@ export default ({units, groups, ...props}) => {
                         <Delete />
                       </IconButton>
                   )} */}
-                  {props.can(`${routeName}.edit`) && (
-
-                      <IconButton
-                      arrow placement="right" title="edit"
-                        color="primary"
-                        onClick={(e) => setIdToEdit(cell.getValue())}
-                      >
-                        <Edit />
-                      </IconButton>
+                  {props.can(`${routeName}.update`) && (
+                    <IconButton
+                      arrow
+                      placement="right"
+                      title="edit"
+                      color="primary"
+                      onClick={(e) => setIdToEdit(cell.getValue())}
+                    >
+                      <Edit />
+                    </IconButton>
                   )}
                 </Fragment>
               )
@@ -100,7 +126,7 @@ export default ({units, groups, ...props}) => {
           {
             accessorKey: 'group',
             header: 'group',
-            accessorFn: ({ group }) => group ? group.name : '',
+            accessorFn: ({ group }) => (group ? group.name : ''),
           },
           {
             accessorKey: 'unit.name',
@@ -183,19 +209,15 @@ export default ({units, groups, ...props}) => {
                 ? '00/00/0000 00:00:00'
                 : format(new Date(updated_at), 'hh:mm dd MMMM yyyy'),
           },
-
         ]}
       />
-       <MultiButton
+     {/*  <MultiButton
         actions={[
           {
             icon: <DataSaverOn />,
             name: 'create',
-            onClick: (e) => {
-              toggleEdit(-1)
-            },
           },
-       /*    {
+             {
             icon: <RestoreFromTrash />,
             name: restoreMode ? 'exitRestoreMode' : 'medicamentRestore',
             ...(restoreMode
@@ -207,14 +229,17 @@ export default ({units, groups, ...props}) => {
               }
               return visit(route(`${routeName}.index`, { deleted: true }))
             },
-          }, */
+          },
         ]}
-      />
-      <EditMedicamentModal  units={units} groups={groups}
+      /> */}
+      <EditMedicamentModal
+        units={units}
+        groups={groups}
         medicaments={[]}
         medicament={{ ..._.find(props.data, { id: idToEdit }) }}
         open={!!idToEdit}
-        onClose={() => setIdToEdit(false)} />
+        onClose={() => setIdToEdit(false)}
+      />
     </Fragment>
   )
 }

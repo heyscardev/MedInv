@@ -3,6 +3,7 @@ import InputText from '@/Components/Common/Inputs/InputText'
 import Modal from '@/Components/Common/Modal'
 import IconButton from '@/Components/Custom/IconButton'
 import LogoTypography from '@/Components/LogoTypography'
+import _ from 'lodash'
 import {
   composeValidators,
   greaterOrEqualThanValue,
@@ -30,28 +31,27 @@ export default ({
   const { formatMessage } = useIntl()
   const [openCreateUnit, setOpenCreateUnit] = useState([false, null])
   const update = (data, form) => {
-
-     const dataToSend = {
-            id: data.id,
-        };
-        for (const key in data) {
-            if (Object.hasOwnProperty.call(data, key)) {
-
-                if (form.dirtyFields[key]){
-                  if(key === "unit"){
-                    dataToSend["unit_id"] = data[key].id
-                  }else{
-                    dataToSend[key] = data[key];
-                  }
-                }
-
-            }
+    const dataToSend = {
+      id: data.id,
+    }
+    for (const key in data) {
+      if (Object.hasOwnProperty.call(data, key)) {
+        if (form.dirtyFields[key]) {
+          if (key === 'unit') {
+            dataToSend['unit_id'] = data[key].id
+          } else if (key === 'medicament_group_id') {
+            dataToSend['medicament_group_id'] = data[key].id
+          } else {
+            dataToSend[key] = data[key]
+          }
         }
-        put(route("medicament.update", dataToSend.id), dataToSend, {
-            onSuccess: (e) => {
-                onClose(null);
-            },
-        });
+      }
+    }
+    put(route('medicament.update', dataToSend.id), dataToSend, {
+      onSuccess: (e) => {
+        onClose(null)
+      },
+    })
   }
   const store = (data) => {
     const dataToSend = {
@@ -85,7 +85,12 @@ export default ({
         </Typography>
       </div>
       <Form
-        initialValues={{ ...medicament }}
+        initialValues={{
+          ...medicament,
+          medicament_group_id: medicament
+            ? _.find(groups, { id: medicament.medicament_group_id })
+            : null,
+        }}
         onSubmit={submit}
         render={({ handleSubmit, form, initialValues }) => (
           <form onSubmit={handleSubmit} id="MedicamentForm" autoComplete="off">
@@ -151,7 +156,7 @@ export default ({
                       justifyContent="space-between"
                     >
                       {option.name}{' '}
-                  {/*     <IconButton
+                      {/*     <IconButton
                         onClick={() => {
                           setOpenCreateUnit([true, option])
                         }}
@@ -179,16 +184,13 @@ export default ({
                   <Add color="primary" fontSize="small" />
                 </IconButton>
               </Grid>
+              
               <Grid item xs={11}>
                 <Autocomplete
                   name="medicament_group_id"
                   label="group"
                   options={groups}
-                  defaultValue={
-                    medicament
-                      ? _.find(groups, { id: medicament.medicament_group_id })
-                      : null
-                  }
+                  /* defaultValue={} */
                   renderOption={(props, option) => (
                     <Stack
                       width="100%"

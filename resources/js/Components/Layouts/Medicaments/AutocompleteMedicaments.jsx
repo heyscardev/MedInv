@@ -1,5 +1,5 @@
-import Autocomplete from "@/Components/Custom/Autocomplete";
-import { Box } from "@mui/material";
+import Autocomplete from '@/Components/Custom/Autocomplete'
+import { Box } from '@mui/material'
 
 export default ({
   onChange,
@@ -10,17 +10,19 @@ export default ({
       {`${option.code} (${option.name}) ${option.unit.name}`}
     </Box>
   ),
+  getOptionLabel = (option) =>
+    option.code + option.name + ' ' + option.unit.name,
   ...rest
 }) => {
   return (
     <Autocomplete
       label="medicaments"
       options={medicaments}
-      getOptionLabel={(option) => option.code + option.name + " " +option.unit.name}
+      getOptionLabel={getOptionLabel}
       renderOption={renderOption}
       onChange={onChange}
       onInputChange={onInputChange}
       {...rest}
     />
-  );
-};
+  )
+}

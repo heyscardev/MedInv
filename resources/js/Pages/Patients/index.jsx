@@ -12,10 +12,11 @@ import {
   Delete,
   Edit,
   HighlightOff,
-  PersonAdd, Restore,
-  RestoreFromTrash
+  PersonAdd,
+  Restore,
+  RestoreFromTrash,
 } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
+import { Button, Grid, IconButton, ToggleButton } from '@mui/material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -48,6 +49,43 @@ export default ({ module, ...props }) => {
     <Fragment>
       <Head title="patients" />
       <SectionTitle title="patients" />
+      <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
+        {props.can(`${routeName}.store`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<RestoreFromTrash />}
+              variant="contained"
+              color={restoreMode ? 'warning' : 'error'}
+              onClick={(e) => {
+                if (restoreMode) {
+                  return visit(route(`${routeName}.index`))
+                }
+                return visit(route(`${routeName}.index`, { deleted: true }))
+              }}
+            >
+              <IntlMessage
+                id={restoreMode ? 'exitRestoreMode' : 'patientRestore'}
+              />
+            </Button>
+          </Grid>
+        )}
+        {props.can(`${routeName}.store`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<PersonAdd />}
+              variant="contained"
+              onClick={(e) => {
+                toggleEdit(-1)
+              }}
+            >
+              <IntlMessage id="newPatient" />
+            </Button>
+          </Grid>
+        )}
+      </Grid>
+
       {props.data.data && (
         <AsyncTable
           enableRowSelection={false}
@@ -221,7 +259,7 @@ export default ({ module, ...props }) => {
           ]}
         />
       )}
-      <MultiButton
+      {/*  <MultiButton
         actions={[
           ...(props.can('patient.store')
             ? [
@@ -252,7 +290,7 @@ export default ({ module, ...props }) => {
               ]
             : []),
         ]}
-      />
+      /> */}
       <EditPatientModal
         open={idToEdit ? true : false}
         onClose={() => toggleEdit(null)}

@@ -239,6 +239,7 @@
     "newMedicamentGroup":"Nuevo Grupo de Medicamento",
     "updateMedicamentGroup":"Actualizar Grupo de Medicamento",
     "restoreMedicamentGroupMessage":"Grupo de Medicamentos {value} Restaurado con !Exito",
-    "deleteMedicamentGroupMessage":"Seguro que desea eliminar el grupo {value}? !Esta operacion no es reversible! ¡todos los medicamentos y doctores que esten sujetos seran desasociados de este! ¿desea continuar?"
+    "deleteMedicamentGroupMessage":"Seguro que desea eliminar el grupo {value}? !Esta operacion no es reversible! ¡todos los medicamentos y doctores que esten sujetos seran desasociados de este! ¿desea continuar?",
+    "newPatient":"Nuevo Paciente"
 
 }

@@ -103,6 +103,7 @@ class PatientController extends Controller
                     return $q->where('patients.' . $filter['id'], "<=", $filter['value'][1]);
                 });
             }
+            
             return $query->where('patients.' . $filter['id'], "LIKE", "%" . $filter['value'] . "%");
         }, $filters);
 

@@ -490,6 +490,9 @@ export default ({
                             </span>
                           </Box>
                         )}
+                        getOptionLabel={(option) => (
+                          `${option.code} (${option.name}) ${option.unit.name} Disponible: ${option.pivot && option.pivot.quantity_exist || 0}`
+                        )}
                         onChange={(e, value) => {
                           if (
                             value &&
