@@ -36,7 +36,7 @@ export default ({ auth, can }) => {
   const { permissions: p } = auth
   const { palette } = useTheme()
   const pages = [
-    ['Inicio', route().t.url, <Home />],
+    /* ['Inicio', route().t.url, <Home />], */
     ['Dashboard', route('dashboard'), <Dashboard />],
 
     can('medicament.index')

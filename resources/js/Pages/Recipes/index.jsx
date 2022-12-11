@@ -1,12 +1,15 @@
 import AsyncTable from '@/Components/Common/AsyncTable'
 import ConfirmModal from '@/Components/Common/ConfirmModal'
 import EntityDelete from '@/Components/Common/EntityDeleted'
+import IntlMessage from '@/Components/Common/IntlMessage'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
 import Head from '@/Components/Custom/Head'
 import IconButton from '@/Components/Custom/IconButton'
 import { destroy, visit } from '@/HTTPProvider'
+import { Link } from '@inertiajs/inertia-react'
 import { Delete, PostAdd, Visibility } from '@mui/icons-material'
+import { Button, Grid } from '@mui/material'
 import { format } from 'date-fns'
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
@@ -15,9 +18,8 @@ const columnVisibility = {
   user: false,
   updated_at: false,
 }
-const routeName = "recipe";
+const routeName = 'recipe'
 export default ({ module, ...props }) => {
-
   const { formatMessage } = useIntl()
   const [idToDelete, setIdToDelete] = useState(null)
   const toggleConfirmDelete = (id) => {
@@ -25,52 +27,94 @@ export default ({ module, ...props }) => {
   }
   return (
     <Fragment>
-<Head title="recipes" />
-    <SectionTitle title="recipes" noTranslateSubtitle subtitle={module?module.name:null} />
+      <Head title="recipes" />
+      <SectionTitle
+        title="recipes"
+        noTranslateSubtitle
+        subtitle={module ? module.name : null}
+      />
+      <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
+        {/* {props.can(`${routeName}.restore`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<RestoreFromTrash />}
+              variant="contained"
+              color={restoreMode ? 'warning' : 'error'}
+              onClick={(e) => {
+                if (restoreMode) {
+                  return visit(route(`${routeName}.index`))
+                }
+                return visit(route(`${routeName}.index`, { deleted: true }))
+              }}
+            >
+              <IntlMessage
+                id={restoreMode ? 'exitRestoreMode' : 'recipeRestore'}
+              />
+            </Button>
+          </Grid>
+        )} */}
+        {props.can(`${routeName}.store`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<PostAdd />}
+              variant="contained"
+              component={Link}
+              href={route(`recipe.create`, {
+                module_id: module ? module.id : null,
+              })}
+            
+            >
+              <IntlMessage id="newRecipe" />
+            </Button>
+          </Grid>
+        )}
+      </Grid>
       {props.data.data && (
         <AsyncTable
           enableRowSelection={false}
           initialState={{ columnVisibility }}
-          routeName={ route().current() }
+          routeName={route().current()}
           routeParams={{ module: module ? module.id : null }}
           // onAsync={tableUpdate}
           data={props.data}
           columns={[
-               {
-            id: 'actions',
-            accessorKey: 'id',
-            columnDefType: 'display',
-            header: 'actions',
-            size: 80,
+            {
+              id: 'actions',
+              accessorKey: 'id',
+              columnDefType: 'display',
+              header: 'actions',
+              size: 80,
 
-            Cell: ({ cell }) => {
-              return <>
-                { props.can(`${routeName}.show`) && (
-                <IconButton
-                  title="show"
-                  placement="right"
-                  color="primary"
-                  onClick={(e) => {
-                    const id = cell.row.original.id
-                  visit(route(`${routeName}.show`,id))
-                  }}
-                >
-                  <Visibility />
-                </IconButton>
-              )}
-               
-          
-                  {props.can(`${routeName}.destroy`) && (
-                    <IconButton
-                      title="delete"
-                      color="error"
-                      placement="right"
-                      onClick={(e) => setIdToDelete(cell.getValue())}
-                    >
-                      <Delete />
-                    </IconButton>
-                  )}
-                {/*   {props.can(`${routeName}.update`) && (
+              Cell: ({ cell }) => {
+                return (
+                  <>
+                    {props.can(`${routeName}.show`) && (
+                      <IconButton
+                        title="show"
+                        placement="right"
+                        color="primary"
+                        onClick={(e) => {
+                          const id = cell.row.original.id
+                          visit(route(`${routeName}.show`, id))
+                        }}
+                      >
+                        <Visibility />
+                      </IconButton>
+                    )}
+
+                    {props.can(`${routeName}.destroy`) && (
+                      <IconButton
+                        title="delete"
+                        color="error"
+                        placement="right"
+                        onClick={(e) => setIdToDelete(cell.getValue())}
+                      >
+                        <Delete />
+                      </IconButton>
+                    )}
+                    {/*   {props.can(`${routeName}.update`) && (
                     <IconButton
                       title="edit"
                       placement="right"
@@ -86,11 +130,10 @@ export default ({ module, ...props }) => {
                       <iconsMaterial.Edit />
                     </IconButton>
                   )} */}
-            
-        
-              </>
+                  </>
+                )
+              },
             },
-          },
             { accessorKey: 'id', header: 'id' },
             {
               accessorKey: 'user',
@@ -105,9 +148,15 @@ export default ({ module, ...props }) => {
               accessorFn: ({ module: { name } }) => {
                 return `${name}`
               },
-              Cell:({cell})=>{
-                return <EntityDelete deleted_at={cell.row.original.module.deleted_at}>{cell.getValue()}</EntityDelete>
-              }
+              Cell: ({ cell }) => {
+                return (
+                  <EntityDelete
+                    deleted_at={cell.row.original.module.deleted_at}
+                  >
+                    {cell.getValue()}
+                  </EntityDelete>
+                )
+              },
             },
             {
               accessorKey: 'doctor',
@@ -115,9 +164,15 @@ export default ({ module, ...props }) => {
               accessorFn: ({ doctor }) => {
                 return doctor ? `${doctor.first_name} ${doctor.last_name}` : ''
               },
-              Cell:({cell})=>{
-                return <EntityDelete deleted_at={cell.row.original.doctor.deleted_at}>{cell.getValue()}</EntityDelete>
-              }
+              Cell: ({ cell }) => {
+                return (
+                  <EntityDelete
+                    deleted_at={cell.row.original.doctor.deleted_at}
+                  >
+                    {cell.getValue()}
+                  </EntityDelete>
+                )
+              },
             },
             {
               accessorKey: 'patient',
@@ -125,9 +180,15 @@ export default ({ module, ...props }) => {
               accessorFn: ({ patient: { first_name, last_name } }) => {
                 return `${first_name} ${last_name}`
               },
-              Cell:({cell})=>{
-                return <EntityDelete deleted_at={cell.row.original.patient.deleted_at}>{cell.getValue()}</EntityDelete>
-              }
+              Cell: ({ cell }) => {
+                return (
+                  <EntityDelete
+                    deleted_at={cell.row.original.patient.deleted_at}
+                  >
+                    {cell.getValue()}
+                  </EntityDelete>
+                )
+              },
             },
 
             {
@@ -158,7 +219,7 @@ export default ({ module, ...props }) => {
           ]}
         />
       )}
-      <MultiButton
+      {/*   <MultiButton
         actions={[
           {
             icon: <PostAdd />,
@@ -172,8 +233,8 @@ export default ({ module, ...props }) => {
             },
           },
         ]}
-      />
- <ConfirmModal
+      /> */}
+      <ConfirmModal
         open={_.find(props.data.data, { id: idToDelete }) ? true : false}
         onClose={() => toggleConfirmDelete(null)}
         onSubmit={() => {

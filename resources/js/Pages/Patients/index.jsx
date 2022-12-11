@@ -50,7 +50,7 @@ export default ({ module, ...props }) => {
       <Head title="patients" />
       <SectionTitle title="patients" />
       <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
-        {props.can(`${routeName}.store`) && (
+        {props.can(`${routeName}.restore`) && (
           <Grid item>
             <Button
               sx={{ color: 'white.main' }}

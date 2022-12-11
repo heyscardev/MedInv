@@ -1,4 +1,5 @@
 import ConfirmModal from '@/Components/Common/ConfirmModal'
+import IntlMessage from '@/Components/Common/IntlMessage'
 import MultiButton from '@/Components/Common/MultiButton'
 import SectionTitle from '@/Components/Common/SectionTitle'
 import Table from '@/Components/Common/Table'
@@ -15,6 +16,7 @@ import {
   Restore,
   RestoreFromTrash,
 } from '@mui/icons-material'
+import { Button, Grid } from '@mui/material'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import _ from 'lodash'
@@ -46,6 +48,42 @@ export default ({ users = [], data = [], ...props }) => {
     <Fragment>
       <Head title="modules" />
       <SectionTitle title="modules" />
+      <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
+        {props.can(`${routeName}.restore`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<RestoreFromTrash />}
+              variant="contained"
+              color={restoreMode ? 'warning' : 'error'}
+              onClick={(e) => {
+                if (restoreMode) {
+                  return visit(route(`${routeName}.index`))
+                }
+                return visit(route(`${routeName}.index`, { deleted: true }))
+              }}
+            >
+              <IntlMessage
+                id={restoreMode ? 'exitRestoreMode' : 'moduleRestore'}
+              />
+            </Button>
+          </Grid>
+        )}
+        {props.can(`${routeName}.store`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<AddBusiness />}
+              variant="contained"
+              onClick={(e) => {
+                toggleEdit(-1)
+              }}
+            >
+              <IntlMessage id="newModule" />
+            </Button>
+          </Grid>
+        )}
+      </Grid>
       <Table
         initialState={{ columnVisibility }}
         data={data}
@@ -169,30 +207,7 @@ export default ({ users = [], data = [], ...props }) => {
           },
         ]}
       />
-      <MultiButton
-        actions={[
-          {
-            icon: <AddBusiness />,
-            name: 'createModule',
-            onClick: (e) => {
-              toggleEdit(-1)
-            },
-          },
-          {
-            icon: <RestoreFromTrash />,
-            name: restoreMode ? 'exitRestoreMode' : 'moduleRestore',
-            ...(restoreMode
-              ? { sx: { backgroundColor: 'primary.dark', color: '#fff' } }
-              : {}),
-            onClick: (e) => {
-              if (restoreMode) {
-                return visit(route(`${routeName}.index`))
-              }
-              return visit(route(`${routeName}.index`, { deleted: true }))
-            },
-          },
-        ]}
-      />
+
 
       <ConfirmModal
         open={_.find(data, { id: idToDelete }) ? true : false}

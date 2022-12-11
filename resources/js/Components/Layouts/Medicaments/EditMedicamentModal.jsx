@@ -59,6 +59,7 @@ export default ({
       name: data.name,
       unit_id: data.unit.id,
       price_sale: data.price_sale,
+      medicament_group_id:medicament_group_id.id
     }
 
     post(route('medicament.store'), dataToSend, {
@@ -79,7 +80,7 @@ export default ({
       <div style={{ textAlign: 'center' }}>
         <LogoTypography />
         <Typography variant="h5" color="secondary.dark">
-          {!medicament
+          {!medicament || !medicament.id
             ? formatMessage({ id: 'newMedicament' })
             : formatMessage({ id: 'updateMedicament' })}
         </Typography>

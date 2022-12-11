@@ -16,7 +16,7 @@ export default ({ variant = "h1", color1, color2, colorSubtitle="secondary.dark"
             variant={variant}
             fontWeight={fontWeight}
             fontSize={fontSize}
-            flexWrap="wrap"
+            flexWrap="noWrap"
             display="flex"
             textAlign="center"
             justifyContent={justifyContent}

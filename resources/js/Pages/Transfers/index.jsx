@@ -54,7 +54,44 @@ export default (props) => {
         noTranslateSubtitle
         subtitle={props.module ? props.module.name : null}
       />
-
+ <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
+        {/* {props.can(`${routeName}.restore`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<RestoreFromTrash />}
+              variant="contained"
+              color={restoreMode ? 'warning' : 'error'}
+              onClick={(e) => {
+                if (restoreMode) {
+                  return visit(route(`${routeName}.index`))
+                }
+                return visit(route(`${routeName}.index`, { deleted: true }))
+              }}
+            >
+              <IntlMessage
+                id={restoreMode ? 'exitRestoreMode' : 'recipeRestore'}
+              />
+            </Button>
+          </Grid>
+        )} */}
+        {props.can(`${routeName}.store`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<PostAdd />}
+              variant="contained"
+              component={Link}
+              href={route(`recipe.create`, {
+                module_id: module ? module.id : null,
+              })}
+            
+            >
+              <IntlMessage id="newRecipe" />
+            </Button>
+          </Grid>
+        )}
+      </Grid>
       <AsyncTable
         routeName={route().current()}
         enableRowSelection={false}

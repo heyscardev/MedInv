@@ -8,12 +8,9 @@
 
 body{
   background-color: rgb(234, 234, 234);
-  background-image: linear-gradient(
-    rgba(0, 0, 0, 0.7),
-    rgba(0, 0, 0, 0.7)
-  ), url("/assets/img/backgroundP.jpg") ;
-  background-size: cover;
-/*   background-position: center; */
+  background-image:  url("/assets/img/IVSS.svg") ;
+  background-size: 60vh;
+  background-position: center; 
   background-repeat: no-repeat;
   min-height: 100vh;
 }
