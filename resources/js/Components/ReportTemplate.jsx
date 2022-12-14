@@ -7,6 +7,8 @@ import {
   Grid,
   Typography,
   Divider,
+  Button,
+  Stack,
 } from '@mui/material'
 import { format } from 'date-fns'
 import IntlMessage from './Common/IntlMessage'
@@ -48,7 +50,7 @@ const styles = {
         marginBottom: 0,
     },
 };
-const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', orientation = 'p'  }) => {
+const ReportTemplate = ({ start_date, end_date, children, orientation = 'p', titleReport='report', nameReport = '', typeReport = ''  }) => {
   const { palette } = useTheme()
   const {formatMessage} = useIntl();
   const reportTemplateRef = useRef(null);
@@ -94,7 +96,7 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
                 </Grid>
                 <Grid item xs={4} display="block" padding={2} paddingTop={4}>
                     <Typography variant="h4" color={palette.primary.light} sx={{ fontWeight:"bold", textTransform:"uppercase", lineHeight:1.3 }} >
-                        <IntlMessage id={'report'} />
+                        <IntlMessage id={titleReport} />
                     </Typography>
                     <Typography variant="h5" color={palette.success.main} children={formatMessage({id:nameReport})} ></Typography>
                 </Grid>
@@ -104,22 +106,27 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
                 </Grid>
 
                 <Grid item xs={9} display="flex" justifyContent="star">
+                  {start_date && end_date &&
                     <Typography variant="h6" sx={{ textAlign:'left', fontSize:'.8rem', paddingLeft:1 }}>
                         <IntlMessage id={'report_date'} />:
                         <div>
-                            {start_date
-                                ? format(new Date(start_date), 'dd MMMM yyyy')
-                                : ' -- ---- ----'}
+                            { format(new Date(start_date), 'dd MMMM yyyy') }
                             {' al '}
-                            {end_date
-                                ? format(new Date(end_date), 'dd MMMM yyyy')
-                                : ' -- ---- ----'}
+                            { format(new Date(end_date), 'dd MMMM yyyy') }
                         </div>
                     </Typography>
+                  }
+
+                  { typeReport &&
+                    <Typography variant="h5" sx={{ textAlign:'left', paddingLeft:1 }}>
+                      {typeReport}
+                    </Typography>
+                  }
                 </Grid>
+
                 <Grid item xs={3} display="flex" justifyContent="end">
                     <Typography variant="h6" sx={{ textAlign:'left', fontSize:'.8rem', paddingRight:1 }}>
-                        <IntlMessage id={'emission_date'} />:
+                        <IntlMessage id={'print_date'} />:
                         <div> {format(new Date(),"hh:mm:aa dd MMMM yyyy")} </div>
                     </Typography>
                 </Grid>
@@ -129,8 +136,30 @@ const ReportTemplate = ({ start_date, end_date, children,nameReport = 'report', 
             <Grid item xs={12}>
               {children}
             </Grid>
+
+            {/* <Grid item xs={12} >
+              <Stack
+                  bgcolor="white.main"
+                  borderRadius={2}
+                  padding={2}
+                  width={200}
+              >
+                <Button
+                  sx={{  color: 'white.main' }}
+                  startIcon={<Download />}
+                  variant="contained"
+                  onClick={(e) => {
+                    handleGeneratePdf
+                  }}
+                >
+                  Download
+                </Button>
+              </Stack>
+            </Grid> */}
+
           </Grid>
         </Paper>
+
         <MultiButton
           actions={[
             {

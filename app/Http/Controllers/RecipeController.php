@@ -106,16 +106,16 @@ class RecipeController extends Controller
         $recipe = new Recipe($validated);
         $recipe->user_id = auth()->user()->id;
         $recipe->save();
-   
-         
+
+
             if (array_key_exists('medicaments', $validated)) {
                 array_map(function ($value) use ($recipe) {
                     $recipe->medicaments()->attach($value['id'], ['prescribed_amount' => $value['prescribed_amount'], 'quantity' => $value['quantity_deliver']]);
                 }, $validated['medicaments']);
             }
-           
-  
-       
+
+
+
         return redirect(route("recipe.show",$recipe->id));
     }
 
@@ -249,4 +249,5 @@ class RecipeController extends Controller
 
         return $query;
     }
+
 }

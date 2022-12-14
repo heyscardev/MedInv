@@ -123,4 +123,5 @@ class ReportController extends Controller
                 break;
         }
     }
+
 }
