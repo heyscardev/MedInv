@@ -38,6 +38,7 @@ class MedicamentGroupController extends Controller
     {
         $validData = $request->validate([
             'name'=>[ 'required', 'max:80','unique:medicament_groups'],
+            'restricted'=>['sometimes','required','boolean'],
             'description'=>['max:255']
         ]);
         $item = new MedicamentGroup($validData);
@@ -55,6 +56,7 @@ class MedicamentGroupController extends Controller
     {
         $validData = $request->validate([
             'name'=>['max:80', Rule::unique('units')->ignore($medicament_group->id) ],
+            'restricted'=>['boolean'],
             'description'=>['max:255']
         ]);
         $medicament_group->update($validData);

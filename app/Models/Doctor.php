@@ -31,6 +31,7 @@ class Doctor extends Model
     /**
      * This are the relations
      */
+
     public function recipes()
     {
         return $this->hasMany(Recipe::class);
@@ -39,5 +40,8 @@ class Doctor extends Model
     {
         return $this->belongsTo(Service::class)->withTrashed();
     }
+    public function medicament_groups(){
+        return $this->belongsToMany(MedicamentGroup::class,"doctor_medicament_groups");
+     }
 
 }

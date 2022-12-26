@@ -16,6 +16,8 @@ import {
 import {
   Delete,
   Edit,
+  EditAttributes,
+  EditAttributesRounded,
   PersonAdd,
   Restore,
   RestoreFromTrash,
@@ -26,6 +28,7 @@ import _ from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import toast from 'react-hot-toast'
+import EditDoctorMedicamentGroup from '@/Components/Layouts/Doctors/EditDoctorMedicamentGroup'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)
@@ -48,7 +51,7 @@ const columnVisibility = {
 }
 const routeName = 'doctor'
 
-export default ({ services=[],...props }) => {
+export default ({ services = [], medicamentGroups, ...props }) => {
   const urlParams = new URLSearchParams(window.location.search)
   const restoreMode = urlParams.has('deleted')
   //Accedemos a los valores
@@ -68,6 +71,10 @@ export default ({ services=[],...props }) => {
   const [idToEdit, setIdToEdit] = useState(null)
   const toggleEdit = (id) => {
     setIdToEdit(id ? id : null)
+  }
+  const [idToEditGroup, setIdToEditGroup] = useState(null)
+  const toggleEditGroup = (id) => {
+    setIdToEditGroup(id ? id : null)
   }
   return (
     <Fragment>
@@ -96,9 +103,7 @@ export default ({ services=[],...props }) => {
                         {},
                         {
                           onSuccess: () => {
-                            toast.success(
-                              `El doctor ${name}  fue restaurado`,
-                            )
+                            toast.success(`El doctor ${name}  fue restaurado`)
                           },
                         },
                       )
@@ -110,24 +115,36 @@ export default ({ services=[],...props }) => {
               ) : (
                 <Fragment>
                   {props.can(`${routeName}.edit`) && (
-                    <Tooltip arrow placement="right" title="delete">
-                      <IconButton
-                        color="error"
-                        onClick={(e) => setIdToDelete(cell.getValue())}
-                      >
-                        <Delete />
-                      </IconButton>
-                    </Tooltip>
+                    <IconButton
+                      arrow
+                      placement="right"
+                      title="delete"
+                      color="error"
+                      onClick={(e) => setIdToDelete(cell.getValue())}
+                    >
+                      <Delete />
+                    </IconButton>
                   )}
                   {props.can(`${routeName}.delete`) && (
-                    <Tooltip arrow placement="right" title="edit">
-                      <IconButton
-                        color="primary"
-                        onClick={(e) => setIdToEdit(cell.getValue())}
-                      >
-                        <Edit />
-                      </IconButton>
-                    </Tooltip>
+                    <IconButton
+                      placement="right"
+                      title="edit"
+                      color="primary"
+                      onClick={(e) => setIdToEdit(cell.getValue())}
+                    >
+                      <Edit />
+                    </IconButton>
+                  )}
+                  {props.can(`${routeName}.medicament.group.edit`) && (
+                    <IconButton
+                      arrow
+                      placement="right"
+                      title="editMedicamentGroup"
+                      color="primary"
+                      onClick={(e) => setIdToEditGroup(cell.getValue())}
+                    >
+                      <EditAttributes />
+                    </IconButton>
                   )}
                 </Fragment>
               )
@@ -305,10 +322,16 @@ export default ({ services=[],...props }) => {
       />
 
       <EditDoctorModal
-      services={services}
+        services={services}
         open={idToEdit ? true : false}
         onClose={() => toggleEdit(null)}
         item={{ ..._.find(dataTable, { id: idToEdit }) }}
+      />
+      <EditDoctorMedicamentGroup
+        medicamentGroups={medicamentGroups || []}
+        open={!!idToEditGroup}
+        onClose={() => toggleEditGroup(null)}
+        item={{ ..._.find(dataTable, { id: idToEditGroup }) }}
       />
     </Fragment>
   )

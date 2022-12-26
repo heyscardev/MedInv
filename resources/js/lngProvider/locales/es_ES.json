@@ -244,6 +244,7 @@
     "newPatient":"Nuevo Paciente",
     "newPathology":"Nueva Patotogía",
     "newDoctor":"Nuevo Doctor",
-    "newModule":"Nuevo Modulo"
-
+    "newModule":"Nuevo Modulo",
+    "restricted":"restringido",
+    "editMedicamentGroup":"Editar grupos de Medicamentos"
 }

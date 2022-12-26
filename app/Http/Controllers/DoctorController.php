@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DoctorRequest;
 use App\Models\Doctor;
+use App\Models\MedicamentGroup;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -27,10 +28,11 @@ class DoctorController extends Controller
     public function index(Request $request)
     {
         $data = $request->has('deleted')
-            ? Doctor::onlyTrashed()->orderBy('deleted_at', 'desc')->get()
-            : Doctor::withoutTrashed()->get();
+            ? Doctor::with('medicament_groups')->onlyTrashed()->orderBy('deleted_at', 'desc')->get()
+            : Doctor::with('medicament_groups')->withoutTrashed()->get();
         $services = Service::get();
-        return Inertia::render('Doctors/index', compact('data', 'services'));
+        $medicamentGroups = MedicamentGroup::get();
+        return Inertia::render('Doctors/index', compact('data', 'services', 'medicamentGroups'));
     }
 
     /**
@@ -58,10 +60,10 @@ class DoctorController extends Controller
     {
         $doctor = Doctor::withTrashed()->whereId($id)->first();
         $recipes = $doctor->recipes()
-                          ->with(['patient:id,first_name,last_name', 'module:id,name', 'pathology:id,name'])
-                          ->paginate( 10 );
+            ->with(['patient:id,first_name,last_name', 'module:id,name', 'pathology:id,name'])
+            ->paginate(10);
 
-        return Inertia::render('Doctors/show', ['doctor' => $doctor, 'recipes' => $recipes ]);
+        return Inertia::render('Doctors/show', ['doctor' => $doctor, 'recipes' => $recipes]);
     }
 
     /**
@@ -73,9 +75,12 @@ class DoctorController extends Controller
      */
     public function update(DoctorRequest $request, Doctor $doctor)
     {
+
         $validated = $request->validated();
         $doctor->update($validated);
-
+        if (array_key_exists("medicament_groups", $validated)) {
+            $doctor->medicament_groups()->sync($validated["medicament_groups"]);
+        }
         return back();
     }
 

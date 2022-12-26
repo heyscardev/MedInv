@@ -9,18 +9,22 @@ import {
   PersonAdd,
   Restore,
 } from '@mui/icons-material'
+import { Button, Grid } from '@mui/material'
 import _ from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import IconButton from '../Custom/IconButton'
+import IntlMessage from './IntlMessage'
 import Table from './Table'
 
 export default ({
   columns,
-  enableEditAction,
-  enableDeleteAction,
-  enableRestoreAction,
-  enableShowAction,
+  enableEditAction=false,
+  enableDeleteAction=false,
+  enableRestoreAction=false,
+  enableCreateAction=true,
+  enableShowAction=false,
+  createButtonTitle="create",
   messageSuccessRestore = (item) => `El recurso N° ${item.id}  fue restaurado`,
   messageDelete = (item) =>
     `Esta Seguro que desea eliminar el recurso N° ${item.id}`,
@@ -45,6 +49,42 @@ export default ({
 
   return (
     <Fragment>
+       <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
+       {/*  {props.can(`${routeName}.restore`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<RestoreFromTrash />}
+              variant="contained"
+              color={restoreMode ? 'warning' : 'error'}
+              onClick={(e) => {
+                if (restoreMode) {
+                  return visit(route(`${routeName}.index`))
+                }
+                return visit(route(`${routeName}.index`, { deleted: true }))
+              }}
+            >
+              <IntlMessage
+                id={restoreMode ? 'exitRestoreMode' : 'moduleRestore'}
+              />
+            </Button>
+          </Grid>
+        )} */}
+        {enableCreateAction && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<DataSaverOn />}
+              variant="contained"
+              onClick={(e) => {
+                toggleEdit(-1)
+              }}
+            >
+              <IntlMessage id={createButtonTitle} />
+            </Button>
+          </Grid>
+        )}
+      </Grid>
       <Table
         actions={actions}
         initialState={{ columnVisibility }}
@@ -113,18 +153,7 @@ export default ({
           ...(columns ? columns : generatorTableColumns(data)),
         ]}
       />
-      <MultiButton
-        actions={[
-          {
-            icon: <DataSaverOn />,
-            name: 'create',
-            onClick: (e) => {
-              toggleEdit(-1)
-            },
-          },
-        ]}
-        // actions={ multiButtonActions }
-      />
+     
 
       <ConfirmModal
         open={_.find(data, { id: idToDelete }) ? true : false}

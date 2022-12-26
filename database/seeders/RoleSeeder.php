@@ -68,6 +68,7 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'doctor.store'])->syncRoles([$managerRole]);
         Permission::create(['name' => 'doctor.destroy'])->syncRoles([$managerRole]);
         Permission::create(['name' => 'doctor.restore'])->syncRoles([$managerRole]);
+        Permission::create(['name' => 'doctor.medicament.group.edit'])->syncRoles([$managerRole]);
 
         Permission::create(['name' => 'pathology.index'])->syncRoles([$managerRole, $employeeRole]);
         Permission::create(['name' => 'pathology.show'])->syncRoles([$managerRole, $employeeRole]);

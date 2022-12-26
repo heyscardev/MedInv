@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('medicament_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name',80)->unique();
+            $table->boolean('restricted')->default(false);
             $table->string('description', 250)->nullable();
             $table->timestamps();
         });
