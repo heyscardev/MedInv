@@ -246,5 +246,8 @@
     "newDoctor":"Nuevo Doctor",
     "newModule":"Nuevo Modulo",
     "restricted":"restringido",
-    "editMedicamentGroup":"Editar grupos de Medicamentos"
+    "editMedicamentGroup":"Editar grupos de Medicamentos",
+    "addUser":"Nuevo Usuario",
+    "groups_authorize":"Grupos autorizados",
+    "noContentGroups":"No contiene grupos"
 }

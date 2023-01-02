@@ -14,6 +14,7 @@ import {
   formatGenderFromDataBase,
 } from '@/Utils/format'
 import {
+  AddBusiness,
   Delete,
   Edit,
   EditAttributes,
@@ -29,6 +30,8 @@ import { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import toast from 'react-hot-toast'
 import EditDoctorMedicamentGroup from '@/Components/Layouts/Doctors/EditDoctorMedicamentGroup'
+import { Button, Grid } from '@mui/material'
+import IntlMessage from '@/Components/Common/IntlMessage'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)
@@ -80,6 +83,42 @@ export default ({ services = [], medicamentGroups, ...props }) => {
     <Fragment>
       <Head title="doctors" />
       <SectionTitle title="doctors" />
+      <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
+        {props.can(`${routeName}.restore`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<RestoreFromTrash />}
+              variant="contained"
+              color={restoreMode ? 'warning' : 'error'}
+              onClick={(e) => {
+                if (restoreMode) {
+                  return visit(route(`${routeName}.index`))
+                }
+                return visit(route(`${routeName}.index`, { deleted: true }))
+              }}
+            >
+              <IntlMessage
+                id={restoreMode ? 'exitRestoreMode' : 'doctorRestore'}
+              />
+            </Button>
+          </Grid>
+        )}
+        {props.can(`${routeName}.store`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<PersonAdd />}
+              variant="contained"
+              onClick={(e) => {
+                toggleEdit(-1)
+              }}
+            >
+              <IntlMessage id="newDoctor" />
+            </Button>
+          </Grid>
+        )}
+      </Grid>
       <Table
         initialState={{ columnVisibility }}
         data={dataTable}
@@ -259,51 +298,6 @@ export default ({ services = [], medicamentGroups, ...props }) => {
           },
         ]}
       />
-
-      {(props.can(`${routeName}.create`) ||
-        props.can(`${routeName}.delete`)) && (
-        <MultiButton
-          actions={[
-            ...(props.can(`${routeName}.create`)
-              ? [
-                  {
-                    icon: <PersonAdd />,
-                    name: 'addDoctor',
-                    disabled: !props.can(`${routeName}.create`),
-                    onClick: (e) => {
-                      toggleEdit(-1)
-                    },
-                  },
-                ]
-              : []),
-
-            ...(props.can(`${routeName}.delete`)
-              ? [
-                  {
-                    icon: <RestoreFromTrash />,
-                    name: restoreMode ? 'exitRestoreMode' : 'doctorRestore',
-                    ...(restoreMode
-                      ? {
-                          sx: {
-                            backgroundColor: 'primary.dark',
-                            color: '#fff',
-                          },
-                        }
-                      : {}),
-                    onClick: (e) => {
-                      if (restoreMode) {
-                        return visit(route(`${routeName}.index`))
-                      }
-                      return visit(
-                        route(`${routeName}.index`, { deleted: true }),
-                      )
-                    },
-                  },
-                ]
-              : []),
-          ]}
-        />
-      )}
 
       <ConfirmModal
         open={_.find(dataTable, { id: idToDelete }) ? true : false}

@@ -24,10 +24,11 @@ import { destroy, get, put, visit } from '@/HTTPProvider'
 import _ from 'lodash'
 import Tooltip from '@/Components/Custom/Tooltip'
 import IconButton from '@/Components/Custom/IconButton'
-import { Switch } from '@mui/material'
+import { Button, Grid, Switch } from '@mui/material'
 import { Head, usePage } from '@inertiajs/inertia-react'
 import SectionTitle from '@/Components/Common/SectionTitle'
 import toast from 'react-hot-toast'
+import IntlMessage from '@/Components/Common/IntlMessage'
 
 const formatDataUser = (user) => {
   const birth_date = formatDateFromDataBase(user.birth_date)
@@ -71,6 +72,42 @@ export default ({ ...props }) => {
     <Fragment>
       <Head title={formatMessage({ id: 'users' })} />
       <SectionTitle title="users" />
+      <Grid container spacing={1} justifyContent="flex-end" paddingRight={2}>
+        {props.can(`${routeName}.restore`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<RestoreFromTrash />}
+              variant="contained"
+              color={restoreMode ? 'warning' : 'error'}
+              onClick={(e) => {
+                if (restoreMode) {
+                  return visit(route(`${routeName}.index`))
+                }
+                return visit(route(`${routeName}.index`, { deleted: true }))
+              }}
+            >
+              <IntlMessage
+                id={restoreMode ? 'exitRestoreMode' : 'usersRestore'}
+              />
+            </Button>
+          </Grid>
+        )}
+        {props.can(`${routeName}.store`) && (
+          <Grid item>
+            <Button
+              sx={{ color: 'white.main' }}
+              startIcon={<PersonAdd />}
+              variant="contained"
+              onClick={(e) => {
+                toggleEdit(-1)
+              }}
+            >
+              <IntlMessage id="addUser" />
+            </Button>
+          </Grid>
+        )}
+      </Grid>
       <Table
         initialState={{ columnVisibility }}
         data={dataTable}
@@ -233,30 +270,7 @@ export default ({ ...props }) => {
           },
         ]}
       />
-      <MultiButton
-        actions={[
-          {
-            icon: <PersonAdd />,
-            name: 'user',
-            onClick: (e) => {
-              toggleEdit(-1)
-            },
-          },
-          {
-            icon: <RestoreFromTrash />,
-            name: restoreMode ? 'exitRestoreMode' : 'usersRestore',
-            ...(restoreMode
-              ? { sx: { backgroundColor: 'primary.dark', color: '#fff' } }
-              : {}),
-            onClick: (e) => {
-              if (restoreMode) {
-                return visit(route(`${routeName}.index`))
-              }
-              return visit(route(`${routeName}.index`, { deleted: true }))
-            },
-          },
-        ]}
-      />
+    
 
       <ConfirmModal
         open={_.find(dataTable, { id: idToDelete }) ? true : false}

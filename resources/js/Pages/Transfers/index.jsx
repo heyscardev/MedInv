@@ -84,10 +84,15 @@ export default (props) => {
               sx={{ color: 'white.main' }}
               startIcon={<iconsMaterial.MoveDown />}
               variant="contained"
-              component={Link}
-              href={route(`${routeName}.create`, {
-                module_id: props.module ? props.module.id : null,
-              })}
+             
+              onClick={()=>{
+                visit(
+                  route(`${routeName}.create`, {
+                    module_id: props.module ? props.module.id : null,
+                  }),
+                )
+              }}
+            
             >
               <IntlMessage id="newTransfer" />
             </Button>

@@ -60,11 +60,13 @@ export default ({ module, ...props }) => {
               sx={{ color: 'white.main' }}
               startIcon={<PostAdd />}
               variant="contained"
-              component={Link}
-              href={route(`recipe.create`, {
-                module_id: module ? module.id : null,
-              })}
-            
+              onClick={()=>{
+                visit(
+                  route(`recipe.create`, {
+                    module_id: module ? module.id : null,
+                  }),
+                )
+              }}
             >
               <IntlMessage id="newRecipe" />
             </Button>

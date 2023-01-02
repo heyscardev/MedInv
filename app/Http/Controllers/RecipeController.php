@@ -67,7 +67,7 @@ class RecipeController extends Controller
         }
 
         if ($doctorsFind !== null) {
-            $doctors = Doctor::where('c_i', "LIKE", "%" . $doctorsFind . "%")
+            $doctors = Doctor::with('medicament_groups')->where('c_i', "LIKE", "%" . $doctorsFind . "%")
                 ->orWhere('first_name', "LIKE", "%" . $doctorsFind . "%")
                 ->orWhere('last_name', "LIKE", "%" . $doctorsFind . "%")
                 ->orWhere('code', "LIKE", "%" . $doctorsFind . "%")
@@ -79,7 +79,7 @@ class RecipeController extends Controller
 
             if ($module) {
                 if (!auth()->user()->hasRole('administrador') && ($module->user_id != auth()->user()->id)) return abort(403);
-                $medicaments = $module->medicaments()->with('unit')->get();
+                $medicaments = $module->medicaments()->with('unit','group')->get();
             }
         }
         $moduleDeliver = $module ?? null;

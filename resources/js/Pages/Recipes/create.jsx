@@ -17,6 +17,7 @@ import { post, visit } from '@/HTTPProvider'
 import { Add, Article, Clear, Masks, MoveDown, Sick } from '@mui/icons-material'
 import {
   Button,
+  Chip,
   Divider,
   FormControl,
   FormHelperText,
@@ -29,12 +30,13 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import { Box } from '@mui/system'
 import arrayMutators from 'final-form-arrays'
 import _ from 'lodash'
-import { Fragment, useEffect, useState,useMemo } from 'react'
+import { Fragment, useEffect, useState, useMemo } from 'react'
 import { Field, Form } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { useIntl } from 'react-intl'
@@ -43,6 +45,8 @@ import CellNumberBox from '@/Components/Common/CellNumberBox'
 import { format } from 'date-fns'
 import Autocomplete from '@/Components/Common/Inputs/Autocomplete'
 import Select from '@/Components/Common/Inputs/Select'
+import Head from '@/Components/Custom/Head'
+import toast from 'react-hot-toast'
 
 export default ({
   medicaments,
@@ -96,11 +100,12 @@ export default ({
 
   return (
     <Fragment>
+      <Head title="newRecipe" />
       <Form
         onSubmit={submit}
         mutators={{ ...arrayMutators }}
         initialValues={{
-          moduleDeliver:moduleDeliver,
+          moduleDeliver: moduleDeliver,
           medicaments: selectedMedicaments,
           description: null,
         }}
@@ -223,7 +228,7 @@ export default ({
                                 {
                                   noLoader: true,
                                   preserveState: true,
-                                  replace:true ,
+                                  replace: true,
                                   only: ['patients'],
                                 },
                               )
@@ -238,6 +243,9 @@ export default ({
                           margin="10px 0"
                           label="doctor"
                           fullWidth
+                          onChange={(value) => {
+                            form.change('medicaments', [])
+                          }}
                           options={doctors}
                           getOptionLabel={(option) =>
                             `C.I: ${option.c_i} ${option.first_name} ${option.last_name}  #:${option.code} `
@@ -255,7 +263,7 @@ export default ({
                               }),
                               {
                                 noLoader: true,
-                                replace:true ,
+                                replace: true,
                                 preserveState: true,
                                 only: ['doctors'],
                               },
@@ -456,10 +464,45 @@ export default ({
                             {values.doctor.phone}
                           </Typography>
                         </Grid>
+
+                        <Grid item xs={12}>
+                          <Typography variant="body1">
+                            <b>
+                              <IntlMessage id={'groups_authorize'} />
+                            </b>
+                          </Typography>
+                          <div style={{ dispay: 'flex', columnGap: '5px' }}>
+                            {values.doctor.medicament_groups.length ? (
+                              values.doctor.medicament_groups.map((item) => (
+                                <Tooltip title={item.description}>
+                                  <Chip
+                                    key={item.id}
+                                    size="small"
+                                    label={
+                                      item.name +
+                                      (item.restricted
+                                        ? ' (solo autorizados)'
+                                        : '')
+                                    }
+                                    color={
+                                      item.restricted ? 'error' : 'primary'
+                                    }
+                                    variant="outlined"
+                                    sx={{ margin: '0px 5px' }}
+                                  />
+                                </Tooltip>
+                              ))
+                            ) : (
+                              <Typography variant="body2" color="blue">
+                                <IntlMessage id="noContentGroups" />
+                              </Typography>
+                            )}
+                          </div>
+                        </Grid>
                       </Grid>
                     </Stack>
                   )}
-                  {moduleDeliver && values.recipe_type && (
+                  {moduleDeliver && values.recipe_type && values.doctor && (
                     <Stack
                       bgcolor="white.main"
                       borderRadius={2}
@@ -488,19 +531,56 @@ export default ({
                               <IntlMessage id="available" />:{' '}
                               {option.pivot && option.pivot.quantity_exist}
                             </span>
+                            {option.group && (
+                              <Tooltip title={option.group.description}>
+                                <Chip
+                                  size="small"
+                                  label={
+                                    option.group.name +
+                                    (option.group.restricted
+                                      ? ' (solo autorizados)'
+                                      : '')
+                                  }
+                                  color={
+                                    option.group.restricted
+                                      ? 'error'
+                                      : 'primary'
+                                  }
+                                  variant="outlined"
+                                  sx={{ margin: '0px 5px' }}
+                                />
+                              </Tooltip>
+                            )}
                           </Box>
                         )}
-                        getOptionLabel={(option) => (
-                          `${option.code} (${option.name}) ${option.unit.name} Disponible: ${option.pivot && option.pivot.quantity_exist || 0}`
-                        )}
+                        getOptionLabel={(option) =>
+                          `${option.code} (${option.name}) ${
+                            option.unit.name
+                          } Disponible: ${
+                            (option.pivot && option.pivot.quantity_exist) || 0
+                          }`
+                        }
                         onChange={(e, value) => {
                           if (
                             value &&
                             !_.find(values.medicaments, {
                               id: value.id,
                             })
-                          )
+                          ) {
+                            if (
+                              value.group &&
+                              value.group.restricted &&
+                              !_.find(values.doctor.medicament_groups, {
+                                id: value.group.id,
+                              })
+                            ) {
+                              return toast.error(
+                                'este medicamento esta en un grupo restringido y solo puede ser entregado por doctores que esten autorizados a este grupo!',
+                              )
+                            }
+                            console.log(value)
                             fields.push(value)
+                          }
                         }}
                       />
                       <InputText
@@ -687,7 +767,12 @@ export default ({
                     }}
                     onSelect={(value) => {
                       form.change('medicaments', [])
-                      visit( route('recipe.create',  { module_id: value.id,replace:true }  ))
+                      visit(
+                        route('recipe.create', {
+                          module_id: value.id,
+                          replace: true,
+                        }),
+                      )
                       form.change('moduleDeliver', value)
                     }}
                     label="selectModuleToTransfer"

@@ -21,6 +21,7 @@ export default ({
   autoComplete = 'off',
   margin = 10,
   name,
+  onChange,
   renderOption = (props, options) => options,
   ...rest
 }) => {
@@ -36,6 +37,7 @@ export default ({
           value={input.value || null}
           onChange={(e, value) => {
             input.onChange(value)
+            if(onChange)onChange(value,e);
           }}
           renderOption={(props, option) => (
             <Box component="li" {...props}>
