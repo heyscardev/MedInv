@@ -249,5 +249,7 @@
     "editMedicamentGroup":"Editar grupos de Medicamentos",
     "addUser":"Nuevo Usuario",
     "groups_authorize":"Grupos autorizados",
-    "noContentGroups":"No contiene grupos"
+    "noContentGroups":"No contiene grupos",
+    "back":"Atras",
+    "SystemInformation":"Información del Sistema"
 }

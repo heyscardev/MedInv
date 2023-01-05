@@ -9,18 +9,20 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import theme from './Themes/MedinvTheme'
 import { es } from 'date-fns/locale'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { Box, ThemeProvider } from '@mui/material'
+import { Box, Container, ThemeProvider } from '@mui/material'
 
-import { removeLoader } from './Config/Loader'
+import { removeLoader, showLoader } from './Config/Loader'
 import NotificationContainer from './Components/NotificationContainer'
 import NavBar from './Components/Common/NavBar'
 import { IntlProvider } from 'react-intl'
 import appLocale from '@/lngProvider'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { setDefaultOptions } from 'date-fns'
+import { Inertia } from '@inertiajs/inertia'
+import BackButton from './Components/BackButton'
 
 const appName =
-  window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
+  window.document.getElementsByTagName('title')[0]?.innerText || 'MedInv'
 const can = (permissions, user) => (PermissionName) => {
   if (
     user.roles &&
@@ -43,7 +45,7 @@ createInertiaApp({
     ),
   setup({ el, App, props }) {
     removeLoader()
-setDefaultOptions({locale:es})
+    setDefaultOptions({ locale: es })
     return render(
       <ThemeProvider theme={theme}>
         <IntlProvider locale="es" messages={appLocale.es}>
@@ -51,18 +53,19 @@ setDefaultOptions({locale:es})
             {({ Component, key, props }) => (
               <LocalizationProvider
                 adapterLocale={es}
-                
                 dateAdapter={AdapterDateFns}
               >
                 <div>
-                
-                  {route().t.url !== props.ziggy.location && 
+                  {route().t.url !== props.ziggy.location &&
                     props.auth.user && (
                       <NavBar
                         auth={props.auth}
                         can={can(props.auth.permissions, props.auth.user)}
                       />
                     )}
+                  <Container maxWidth="xl">
+                    <BackButton />
+                  </Container>
                   <Box sx={{ margin: 0, marginBottom: 3 }}>
                     <Component
                       {...props}

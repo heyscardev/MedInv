@@ -1,10 +1,12 @@
 import {
+  Assessment,
   Dashboard,
   Home,
   Masks,
   Medication,
   MoveDown,
   People,
+  PeopleAltOutlined,
   Receipt,
   Scale,
   ShoppingCart,
@@ -38,7 +40,11 @@ export default ({ auth, can }) => {
   const pages = [
     /* ['Inicio', route().t.url, <Home />], */
     ['Dashboard', route('dashboard'), <Dashboard />],
-
+ can('user.index') ? ['Usuarios', route('user.index'), <People />] : null,
+    can('doctor.index') ? ['Doctores', route('doctor.index'), <Masks />] : null,
+    can('patient.index')
+      ? ['Pacientes', route('patient.index'), <Sick />]
+      : null,
     can('medicament.index')
       ? ['Medicamentos', route('medicament.index'), <Medication />]
       : null,
@@ -51,10 +57,21 @@ export default ({ auth, can }) => {
     can('recipe.index')
       ? ['Recipes', route('recipe.index'), <Receipt />]
       : null,
-    can('user.index') ? ['Usuarios', route('user.index'), <People />] : null,
-    can('doctor.index') ? ['Doctores', route('doctor.index'), <Masks />] : null,
-    can('patient.index')
-      ? ['Pacientes', route('patient.index'), <Sick />]
+      can('user.activity.index')
+      ? [
+        'Actividad del Usuario',
+         route('user.activity.index'),
+          <PeopleAltOutlined />,
+      ]
+      : null,
+    can('report.index')
+      ? 
+        [
+          'Reportes',
+         route('report.index'),
+        <Assessment />,
+        ]
+        
       : null,
   ]
 
@@ -81,23 +98,23 @@ export default ({ auth, can }) => {
           backgroundColor: 'transparent',
         }}
       >
-        <Toolbar variant="dense">
+        <Toolbar variant="regular">
           <IconButton
             size="large"
             edge="start"
-            sx={{ display: { lg: 'none' }, mr: 2 }}
+            sx={{ mr: 2 }}
             color="info"
             onClick={toggleSideBar}
           >
             <MenuIcon />
           </IconButton>
-          <LogoTypography variant="h4" WelcomeLink />
+          <LogoTypography variant="h4" WelcomeLink imgSize={40} />
 
           <Box sx={{ flexGrow: 1 }} />
           <Box
             sx={{
               flexGrow: 1,
-              display: { xs: 'none', lg: 'flex' },
+              display: { xs: 'none'},
             }}
           >
             {pages.map((page) =>

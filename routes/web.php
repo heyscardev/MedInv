@@ -107,5 +107,8 @@ Route::middleware('auth')->group(function () {
     Route::get('reports/{report_type}',[ReportController::class,'show'])->name('report.show');
 
 });
+Route::get('/information', function () {
+    return Inertia::render('SystemInformation/index');
+});
 
 require __DIR__ . '/auth.php';

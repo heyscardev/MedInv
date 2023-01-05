@@ -14,10 +14,12 @@ import {
   Sick,
   Store,
 } from '@mui/icons-material'
-import { Grid, Paper, Typography } from '@mui/material'
+import { Box, Grid, Paper, Typography } from '@mui/material'
 import { Fragment } from 'react'
 
 import imgHome from '@/assets/images/welcome-principal.jpg'
+import imgDashboard from '@/assets/images/home.jpg'
+
 import imgUnits from '@/assets/images/units.jpg'
 import imgServices from '@/assets/images/services.png'
 import imgPathologies from '@/assets/images/pathologies.jpg'
@@ -31,6 +33,7 @@ import imgBuys from '@/assets/images/buys.jpg'
 import imgTransfers from '@/assets/images/transfers.jpg'
 import imgReports from '@/assets/images/reports.jpg'
 import imgActivities from '@/assets/images/activities.jpg'
+import imgGroups from '@/assets/images/medicament-groups.jpeg'
 
 export default ({ can, auth, page }) => {
   let pages
@@ -40,7 +43,7 @@ export default ({ can, auth, page }) => {
       {
         name: 'dashboard',
         route: route('dashboard'),
-        Icon: Dashboard,
+        image: imgDashboard
       },
       can('pathology.index')
         ? {
@@ -62,8 +65,8 @@ export default ({ can, auth, page }) => {
         ? {
             name: 'medicamentGroups',
             route: route('medicament.group.index'),
-            Icon: Medication,
-            //   image: imgUnits,
+            /* Icon: Medication, */
+             image: imgGroups,
           }
         : null,
       can('unit.index')
@@ -172,7 +175,8 @@ export default ({ can, auth, page }) => {
   return (
     <Fragment>
       <Head title="DashBoard" />
-      <Paper sx={{ marginTop: 2, padding: 2, width: '50%', marginLeft: 3 }}>
+      <Paper sx={{ marginTop: 2,  width: '50%', marginLeft: 3 }}>
+        <Box sx={{padding:1}}>
         Bienvenido a{' '}
         <Typography variant="span" fontWeight="500" color="primary">
           MedInv
@@ -188,6 +192,9 @@ export default ({ can, auth, page }) => {
             {auth.user.roles[0].name}
           </Typography>
         )}
+
+
+        </Box>
       </Paper>
       <Grid
         container

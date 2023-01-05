@@ -7,6 +7,7 @@ import SingInModal from "../../Auth/SingInModal";
 import { showLoader } from "@/Config/Loader";
 import BtnUserSession from "@/Components/Auth/BtnUserSession";
 import { visit } from "@/HTTPProvider";
+import logo from "@/assets/images/ivss.png";
 
 export default ({ styleContainer,auth,can }) => {
 
@@ -59,6 +60,7 @@ export default ({ styleContainer,auth,can }) => {
         marginBottom={12}
       >
         <Grid>
+        
           <Typography
             gutterBottom={false}
             variant="h1"
@@ -67,26 +69,32 @@ export default ({ styleContainer,auth,can }) => {
             fontWeight="bolder"
             flexWrap="wrap"
             display="flex"
-          >
+            alignItems={"center"}
+          ><img
+          src={logo}
+          alt="ivss-logo"
+          style={{height:120}}
+          />
             <span style={{ color: palette.primary.main }}>Med</span>
             <span style={{ color: palette.primary.light }}>Inv</span>
-          </Typography>
+          </Typography>  
         </Grid>
         <Grid>
-          <Typography
+        {/*   <Typography
             variant="h3"
             gutterBottom
             color="secondary.dark"
             fontWeight="bolder"
-            children="Medicament Inventory"
-          />
+            children="Instituto Venezolano de Seguros Sociales"
+          /> */}
+      
         </Grid>
         <Grid>
           <Typography
             variant="subtitle1"
             fontWeight="normal"
             color="primary.light"
-            children="Llevamos la organización de los Medicamentos a otro nivel"
+            children="Sistema de organizacion de inventarios del hospital Dr Pastor Oropeza Riera"
             paragraph
           />
         </Grid>
