@@ -21,7 +21,7 @@ export default () => {
       <Container maxWidth="md">
         <Paper sx={{ marginTop: 2, padding: 2 }}>
           <p>
-            MedInv es un sistema creado para el manejo de iventarios del seguro
+            MedInv es un sistema creado para el manejo de inventarios del seguro
             pastor oropeza con la finalidad de tener un control de los
             medicamento a travez de la compra transferencia y entrega (a travez
             de recipes) y llevar un registro completo de las transaccones de los
@@ -84,7 +84,7 @@ export default () => {
           </List>
           <Grid container marginTop={2}>
             <Grid item xs={12} sm={4}>
-              informacion sobre el desarrollador:
+              información sobre el desarrollador:
             </Grid>
             <Grid item xs={12} sm={4}>
               <b>Correo: </b>heyscarromero@gmail.com

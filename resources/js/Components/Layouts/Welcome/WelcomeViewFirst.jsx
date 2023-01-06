@@ -1,48 +1,64 @@
-import { Box, Button, Grid, IconButton, Typography, useTheme, Container, Paper } from "@mui/material";
-import PrincipalImage from "@/assets/images/welcome-principal.jpg";
-import SkewOrnament from "@/Components/Ornaments/SkewOrnament";
-import { KeyboardArrowDown, PersonOutline } from "@mui/icons-material";
-import { useState } from "react";
-import SingInModal from "../../Auth/SingInModal";
-import { showLoader } from "@/Config/Loader";
-import BtnUserSession from "@/Components/Auth/BtnUserSession";
-import { visit } from "@/HTTPProvider";
-import logo from "@/assets/images/ivss.png";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Typography,
+  useTheme,
+  Container,
+  Paper,
+} from '@mui/material'
+import PrincipalImage from '@/assets/images/welcome-principal.jpg'
+import SkewOrnament from '@/Components/Ornaments/SkewOrnament'
+import { KeyboardArrowDown, PersonOutline } from '@mui/icons-material'
+import { useState } from 'react'
+import SingInModal from '../../Auth/SingInModal'
+import { showLoader } from '@/Config/Loader'
+import BtnUserSession from '@/Components/Auth/BtnUserSession'
+import { visit } from '@/HTTPProvider'
+import logo from '@/assets/images/ivss.png'
 
-export default ({ styleContainer,auth,can }) => {
-
-  const { palette } = useTheme();
-  const [openSigIn, setOpenSigIn] = useState(false);
+export default ({ styleContainer, auth, can }) => {
+  console.log(auth)
+  const { palette } = useTheme()
+  const [openSigIn, setOpenSigIn] = useState(false)
   return (
     <Grid
       container
       sx={{
         ...styleContainer,
         background: `${palette.gradientTransparent.black75},url(${PrincipalImage})`,
-        backgroundSize: "cover",
-        backgroundAttachment: "fixed",
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
       }}
       justifyContent="center"
     >
-      <div style={{ position: "absolute", height: "100%", display: "flex", left: 0 }}>
+      <div
+        style={{
+          position: 'absolute',
+          height: '100%',
+          display: 'flex',
+          left: 0,
+        }}
+      >
         <SkewOrnament color={palette.skewOrnament.main} />
         <SkewOrnament color={palette.skewOrnament.light} />
       </div>
-      <Box sx={{ top: 15, right: 15, position: "absolute", zIndex: "9" }}>
-        {auth.user 
-        ?(<BtnUserSession auth={auth} can={can}/>)
-        :(<IconButton
-          size="small"
-          sx={{ border: `1px solid`, borderColor: "primary.light" }}
-          color="primary"
-          onClick={() => {
-            
-            setOpenSigIn(true);
-          }}
-        >
-          <PersonOutline color="white" />
-        </IconButton>
-      )}
+      <Box sx={{ top: 15, right: 15, position: 'absolute', zIndex: '9' }}>
+        {auth.user ? (
+          <BtnUserSession auth={auth} can={can} />
+        ) : (
+          <IconButton
+            size="small"
+            sx={{ border: `1px solid`, borderColor: 'primary.light' }}
+            color="primary"
+            onClick={() => {
+              setOpenSigIn(true)
+            }}
+          >
+            <PersonOutline color="white" />
+          </IconButton>
+        )}
       </Box>
 
       <Grid
@@ -60,7 +76,6 @@ export default ({ styleContainer,auth,can }) => {
         marginBottom={12}
       >
         <Grid>
-        
           <Typography
             gutterBottom={false}
             variant="h1"
@@ -69,25 +84,21 @@ export default ({ styleContainer,auth,can }) => {
             fontWeight="bolder"
             flexWrap="wrap"
             display="flex"
-            alignItems={"center"}
-          ><img
-          src={logo}
-          alt="ivss-logo"
-          style={{height:120}}
-          />
+            alignItems={'center'}
+          >
+            <img src={logo} alt="ivss-logo" style={{ height: 120 }} />
             <span style={{ color: palette.primary.main }}>Med</span>
             <span style={{ color: palette.primary.light }}>Inv</span>
-          </Typography>  
+          </Typography>
         </Grid>
         <Grid>
-        {/*   <Typography
+          {/*   <Typography
             variant="h3"
             gutterBottom
             color="secondary.dark"
             fontWeight="bolder"
             children="Instituto Venezolano de Seguros Sociales"
           /> */}
-      
         </Grid>
         <Grid>
           <Typography
@@ -100,11 +111,11 @@ export default ({ styleContainer,auth,can }) => {
         </Grid>
         <Grid>
           <IconButton
-            onClick={() => {
-              visit(route('dashboard'))
-            }}
+            onClick={() =>
+              auth.user ? visit(route('dashboard')) : setOpenSigIn(true)
+            }
             size="large"
-            sx={{ border: `3px solid`, borderColor: "primary.light" }}
+            sx={{ border: `3px solid`, borderColor: 'primary.light' }}
           >
             <KeyboardArrowDown color="primary" fontSize="large" />
           </IconButton>
@@ -113,9 +124,9 @@ export default ({ styleContainer,auth,can }) => {
       <SingInModal
         open={openSigIn}
         onClose={() => {
-          setOpenSigIn(false);
+          setOpenSigIn(false)
         }}
       />
     </Grid>
-  );
-};
+  )
+}

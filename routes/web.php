@@ -109,6 +109,6 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/information', function () {
     return Inertia::render('SystemInformation/index');
-});
+})->name("information");
 
 require __DIR__ . '/auth.php';

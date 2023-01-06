@@ -73,6 +73,11 @@ export default ({ auth, can }) => {
         ]
         
       : null,
+      [
+        'Información del Sistema',
+       route('information'),
+      <Assessment />,
+      ]
   ]
 
   const toggleSideBar = (event) => {
